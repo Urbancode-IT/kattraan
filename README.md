@@ -1,131 +1,106 @@
 # Kattraan LMS
 
-Kattraan LMS is a comprehensive Learning Management System designed to streamline education and training processes. Developed by the Urbancode IT Team, Kattraan provides a robust platform for course management, user interaction, and learning analytics.
+**Kattraan LMS** is a cutting-edge Learning Management System designed and developed by the **Urbancode IT Team**. It offers a seamless learning experience for students, trainers, and administrators, with robust features to manage courses, batches, and user roles efficiently.
 
 ---
 
 ## Features
 
-### User Management
-- Role-based access for Admin, Trainers, and Students.
-- Secure user authentication using JWT.
-- Profile management for all user roles.
+### General Features
+- User authentication and authorization.
+- Role-based access: **Master Admin**, **Admin**, **Trainer**, and **Student**.
+- Responsive design for web and mobile devices.
+- Dashboard for personalized views based on roles.
 
-### Course Management
-- CRUD operations for courses (Create, Read, Update, Delete).
-- Batch scheduling and management.
-- Upload and manage course materials.
+### Master Admin Features
+- Manage all admins, trainers, and students.
+- Access and control over all system data.
+- Generate advanced analytics and reports.
+- Full access to course and batch management.
 
-### Dashboard
-- Personalized dashboards for Students, Trainers, and Admin.
-- Progress tracking for enrolled courses.
-- Notifications for upcoming classes and important updates.
+### Admin Features
+- Create, update, and delete courses and batches.
+- Manage user roles (trainers and students).
+- View and track user activity and progress.
 
-### Analytics
-- Insights into course performance and user engagement.
-- Exportable reports for Admin and Trainers.
+### Trainer Features
+- Create and manage course content.
+- Track student progress and provide feedback.
+- Schedule and manage batches.
 
-### Responsive Design
-- Fully responsive UI for desktop and mobile devices.
-- Optimized for cross-browser compatibility.
-
-### Deployment
-- Hosted on scalable platforms with CI/CD pipelines for seamless updates.
+### Student Features
+- Enroll in courses and view progress.
+- Access learning materials and assignments.
+- Participate in discussions and assessments.
 
 ---
 
-## Installation
+## Project Structure
+
+### Client (Frontend)
+- Built with **React.js** for a dynamic and interactive user interface.
+- Styled using **Tailwind CSS** for responsive and modern designs.
+- State management with **Context API** or **Redux**.
+
+### Server (Backend)
+- Built with **Express.js** for a scalable RESTful API.
+- Database integration using **MongoDB**.
+- Secure authentication with **JWT** (JSON Web Tokens).
+
+---
+
+## Installation and Setup
 
 ### Prerequisites
-- **Node.js** (v14 or later)
-- **MongoDB** (local or cloud-based, e.g., MongoDB Atlas)
-- **Git**
+- Node.js (v16 or higher)
+- MongoDB
 
 ### Steps
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/kattraan-lms.git
+   git clone https://github.com/urbancode-it/kattraan-lms.git
+   ```
+2. Navigate to the project folder:
+   ```bash
    cd kattraan-lms
    ```
-
-2. Install dependencies:
+3. Install dependencies for both client and server:
    ```bash
-   cd backend
-   npm install
-   cd ../frontend
-   npm install
+   cd client && npm install
+   cd ../server && npm install
    ```
+4. Set up environment variables in `.env` files for both client and server:
+   - Client: `client/.env`
+   - Server: `server/.env`
 
-3. Set up environment variables:
-   - Create `.env` files in both `frontend` and `backend` directories.
-   - Example for **backend** `.env`:
-     ```env
-     PORT=5000
-     DB_URI=mongodb://localhost:27017/kattraan
-     JWT_SECRET=your_jwt_secret
-     ```
-
-4. Start the development servers:
-   - Backend:
-     ```bash
-     cd backend
-     npm run dev
-     ```
-   - Frontend:
-     ```bash
-     cd frontend
-     npm start
-     ```
-
-5. Access the application at:
+5. Start the development environment:
    ```bash
-   http://localhost:3000
+   # Start client
+   cd client
+   npm start
+
+   # Start server
+   cd ../server
+   npm run dev
    ```
 
 ---
 
 ## Technologies Used
 
-### Frontend
-- React.js
-- Tailwind CSS / Material-UI
+### Client (Frontend)
+- **React.js**
+- **Tailwind CSS**
+- **Axios** for API communication
 
-### Backend
-- Node.js with Express.js
-- MongoDB
-
-### Tools
-- JWT for authentication
-- Nodemon for development server
-- Postman for API testing
-- ESLint and Prettier for code quality
+### Server (Backend)
+- **Express.js**
+- **MongoDB**
+- **JWT** for authentication
 
 ---
 
-## Contributing
-We welcome contributions! Please follow these steps:
-1. Fork the repository.
-2. Create a new branch:
-   ```bash
-   git checkout -b feature-name
-   ```
-3. Commit your changes:
-   ```bash
-   git commit -m "Add your message here"
-   ```
-4. Push to the branch:
-   ```bash
-   git push origin feature-name
-   ```
-5. Submit a pull request.
+## Contact
 
----
-
-## Support
-- **Team:** Urbancode IT Team
-- **Email:** [urbancodeitteam@gmail.com](mailto:urbancodeitteam@gmail.com)
-
----
-
-## License
-This project is licensed under the [MIT License](LICENSE).
+**Urbancode IT Team**  
+**Email:** [urbancodeitteam@gmail.com](mailto:urbancodeitteam@gmail.com)
