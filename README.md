@@ -58,11 +58,11 @@
 ### Steps
 1. Clone the repository:
    ```bash
-   git clone https://github.com/urbancode-it/kattraan-lms.git
+   git clone https://github.com/urbancode-it/kattraan.git
    ```
 2. Navigate to the project folder:
    ```bash
-   cd kattraan-lms
+   cd kattraan
    ```
 3. Install dependencies for both client and server:
    ```bash
