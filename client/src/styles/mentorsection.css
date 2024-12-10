@@ -1,0 +1,72 @@
+.mentor-section {
+  padding: 40px;
+  background-color: hsl(0, 0%, 99%);
+  text-align: center;
+}
+
+.mentor-section h2 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+  color: #003366;
+}
+
+.mentor-section .highlight {
+  color: #020b0a;
+  text-decoration: underline;
+}
+
+.mentor-cards {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.mentor-card {
+  background: #ffffff;
+  border: 1px solid #d9d9d9;
+  border-radius: 10px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  width: 250px;
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.mentor-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.mentor-image {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin-bottom: 15px;
+}
+
+.mentor-card h3 {
+  font-size: 1.25rem;
+  margin-bottom: 5px;
+}
+
+.mentor-card .role {
+  font-size: 1rem;
+  color: #666;
+  margin-bottom: 10px;
+}
+
+.mentor-card .description {
+  font-size: 0.9rem;
+  color: #777;
+  margin-bottom: 15px;
+}
+
+.mentor-card .rating {
+  font-size: 0.9rem;
+  color: #444;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}

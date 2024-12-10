@@ -1,0 +1,137 @@
+/* Hero Section Styling */
+.hero-section {
+    display: flex;
+    flex-wrap: wrap; /* Allows the content to wrap on smaller screens */
+    align-items: center;
+    justify-content: space-between;
+    background-color: #f5f5f5;
+    padding: 40px 20px;
+    position: relative;
+    max-height:50pv;
+    overflow: hidden;
+  }
+  
+  .hero-content {
+    max-width: 50%;
+    padding-right: 20px; /* Adds some space on the right side of the content */
+  }
+  
+  .hero-content h1 {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    color: #333;
+  }
+  
+  .hero-content p {
+    font-size: 1.2rem;
+    color: #555;
+    line-height: 1.5;
+  }
+  
+  /* Hero Image */
+  .hero-image {
+    flex-shrink: 0;
+    max-width: 100%;
+  }
+  
+  .hero-image img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    max-width: 500px; /* Maximum width for the image */
+  }
+  
+  /* Navigation buttons */
+  .hero-nav-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: #000;
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+  
+  .left-btn {
+    left: 10px;
+  }
+  
+  .right-btn {
+    right: 10px;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 1024px) {
+    .hero-section {
+      padding: 30px 15px;
+    }
+  
+    .hero-content {
+      max-width: 60%; /* Reducing the width for medium-sized screens */
+    }
+  
+    .hero-content h1 {
+      font-size: 2rem; /* Slightly smaller heading */
+    }
+  
+    .hero-content p {
+      font-size: 1rem; /* Smaller paragraph text */
+    }
+  
+    .hero-image img {
+      max-width: 400px; /* Adjust the image width */
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .hero-section {
+      flex-direction: column; /* Stack content on smaller screens */
+      align-items: center; /* Center the content */
+      padding: 20px 10px;
+    }
+  
+    .hero-content {
+      max-width: 100%; /* Take up full width on smaller screens */
+      text-align: center; /* Center the text */
+      margin-bottom: 20px; /* Add spacing below text */
+    }
+  
+    .hero-content h1 {
+      font-size: 1.8rem; /* Adjust heading size */
+    }
+  
+    .hero-content p {
+      font-size: 1rem; /* Adjust paragraph size */
+    }
+  
+    .hero-image img {
+      max-width: 90%; /* Make image responsive */
+      margin: 0 auto; /* Center the image */
+    }
+  
+    .hero-nav-btn {
+      display: none; /* Hide navigation buttons on mobile */
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .hero-content h1 {
+      font-size: 1.5rem; /* Smaller heading for mobile */
+    }
+  
+    .hero-content p {
+      font-size: 0.9rem; /* Smaller paragraph for mobile */
+    }
+  
+    .hero-image img {
+      max-width: 90%; /* Further reduce the image size */
+    }
+  }
+  
