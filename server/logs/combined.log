@@ -1,0 +1,117 @@
+{"level":"error","message":"Error during signup: Error: User validation failed: role: `general` is not a valid enum value for path `role`.\n    at ValidationError.inspect (D:\\kattraan\\server\\node_modules\\mongoose\\lib\\error\\validation.js:52:26)\n    at formatValue (node:internal/util/inspect:806:19)\n    at inspect (node:internal/util/inspect:365:10)\n    at formatWithOptionsInternal (node:internal/util/inspect:2241:25)\n    at Object.format (node:internal/util/inspect:2161:10)\n    at Splatter._splat (D:\\kattraan\\server\\node_modules\\logform\\splat.js:71:25)\n    at Splatter.transform (D:\\kattraan\\server\\node_modules\\logform\\splat.js:119:19)\n    at Format.transform (D:\\kattraan\\server\\node_modules\\logform\\combine.js:20:24)\n    at DerivedLogger._transform (D:\\kattraan\\server\\node_modules\\winston\\lib\\winston\\logger.js:314:29)\n    at Transform._read (D:\\kattraan\\server\\node_modules\\readable-stream\\lib\\_stream_transform.js:166:10) {\n  [stack]: 'Error: User validation failed: role: `general` is not a valid enum value for path `role`.\\n' +\n    '    at ValidationError.inspect (D:\\\\kattraan\\\\server\\\\node_modules\\\\mongoose\\\\lib\\\\error\\\\validation.js:52:26)\\n' +\n    '    at formatValue (node:internal/util/inspect:806:19)\\n' +\n    '    at inspect (node:internal/util/inspect:365:10)\\n' +\n    '    at formatWithOptionsInternal (node:internal/util/inspect:2241:25)\\n' +\n    '    at Object.format (node:internal/util/inspect:2161:10)\\n' +\n    '    at Splatter._splat (D:\\\\kattraan\\\\server\\\\node_modules\\\\logform\\\\splat.js:71:25)\\n' +\n    '    at Splatter.transform (D:\\\\kattraan\\\\server\\\\node_modules\\\\logform\\\\splat.js:119:19)\\n' +\n    '    at Format.transform (D:\\\\kattraan\\\\server\\\\node_modules\\\\logform\\\\combine.js:20:24)\\n' +\n    '    at DerivedLogger._transform (D:\\\\kattraan\\\\server\\\\node_modules\\\\winston\\\\lib\\\\winston\\\\logger.js:314:29)\\n' +\n    '    at Transform._read (D:\\\\kattraan\\\\server\\\\node_modules\\\\readable-stream\\\\lib\\\\_stream_transform.js:166:10)',\n  [message]: 'User validation failed: role: `general` is not a valid enum value for path `role`.',\n  errors: {\n    role: ValidatorError: `general` is not a valid enum value for path `role`.\n        at validate (D:\\kattraan\\server\\node_modules\\mongoose\\lib\\schemaType.js:1385:13)\n        at SchemaType.doValidate (D:\\kattraan\\server\\node_modules\\mongoose\\lib\\schemaType.js:1369:7)\n        at D:\\kattraan\\server\\node_modules\\mongoose\\lib\\document.js:3071:18\n        at process.processTicksAndRejections (node:internal/process/task_queues:77:11) {\n      [stack]: 'ValidatorError: `general` is not a valid enum value for path `role`.\\n' +\n        '    at validate (D:\\\\kattraan\\\\server\\\\node_modules\\\\mongoose\\\\lib\\\\schemaType.js:1385:13)\\n' +\n        '    at SchemaType.doValidate (D:\\\\kattraan\\\\server\\\\node_modules\\\\mongoose\\\\lib\\\\schemaType.js:1369:7)\\n' +\n        '    at D:\\\\kattraan\\\\server\\\\node_modules\\\\mongoose\\\\lib\\\\document.js:3071:18\\n' +\n        '    at process.processTicksAndRejections (node:internal/process/task_queues:77:11)',\n      [message]: '`general` is not a valid enum value for path `role`.',\n      properties: {\n        validator: [Function (anonymous)] {\n          [length]: 1,\n          [name]: '',\n          [prototype]: [Object]\n        },\n        message: '`general` is not a valid enum value for path `role`.',\n        type: 'enum',\n        enumValues: [ 'learner', 'trainer', 'admin', 'master_admin', [length]: 4 ],\n        path: 'role',\n        fullPath: undefined,\n        value: 'general'\n      },\n      kind: 'enum',\n      path: 'role',\n      value: 'general',\n      reason: undefined,\n      [Symbol(mongoose#validatorError)]: true,\n      [name]: 'ValidatorError'\n    }\n  },\n  _message: 'User validation failed'\n}","service":"user-service","timestamp":"2024-12-01 21:23:26"}
+{"level":"info","message":"User created successfully with email: pushparajraje52141@gmail.com","service":"user-service","timestamp":"2024-12-01 21:27:08"}
+{"level":"warn","message":"Invalid password for email: pushparajraje52141@gmail.com","service":"user-service","timestamp":"2024-12-01 21:29:48"}
+{"level":"warn","message":"Invalid password for email: pushparajraje52141@gmail.com","service":"user-service","timestamp":"2024-12-01 21:31:34"}
+{"level":"warn","message":"Invalid password for email: pushparajraje52141@gmail.com","service":"user-service","timestamp":"2024-12-01 21:34:31"}
+{"level":"warn","message":"Invalid password for email: pushparajraje52141@gmail.com","service":"user-service","timestamp":"2024-12-01 21:36:22"}
+{"level":"warn","message":"Invalid password for email: pushparajraje52141@gmail.com","service":"user-service","timestamp":"2024-12-01 21:37:30"}
+{"level":"warn","message":"User already exists with email: pushparajraje52141@gmail.com","service":"user-service","timestamp":"2024-12-01 21:38:41"}
+{"level":"info","message":"User created successfully with email: pushparajraj1@gmail.com","service":"user-service","timestamp":"2024-12-01 21:38:49"}
+{"level":"warn","message":"Invalid password for email: pushparajraj1@gmail.com","service":"user-service","timestamp":"2024-12-01 21:39:04"}
+{"level":"warn","message":"Invalid password for email: pushparajraj1@gmail.com","service":"user-service","timestamp":"2024-12-01 21:39:36"}
+{"level":"warn","message":"Invalid password for email: pushparajraj1@gmail.com","service":"user-service","timestamp":"2024-12-01 21:41:32"}
+{"level":"info","message":"User created successfully with email: pushparajraj11@gmail.com","service":"user-service","timestamp":"2024-12-01 21:48:50"}
+{"level":"warn","message":"Invalid password for email: pushparajraj11@gmail.com","service":"user-service","timestamp":"2024-12-01 21:49:01"}
+{"level":"warn","message":"Invalid password for email: pushparajraj11@gmail.com","service":"user-service","timestamp":"2024-12-01 21:49:53"}
+{"level":"warn","message":"Invalid password for email: pushparajraj11@gmail.com","service":"user-service","timestamp":"2024-12-01 21:49:57"}
+{"0":"$","1":"2","10":"3","11":"7","12":"o","13":"Z","14":"B","15":"1","16":"G","17":"c","18":"7","19":"i","2":"a","20":"k","21":"u","22":"H","23":"F","24":"C","25":"O","26":"H","27":"8","28":"e","29":"J","3":"$","30":"C","31":"0","32":"l","33":"v","34":"P","35":"0","36":"M","37":"g","38":"N","39":"C","4":"1","40":"e","41":"B","42":"m","43":"7","44":"F","45":"T","46":"2","47":"Q","48":"U","49":"p","5":"0","50":"m","51":"u","52":"2","53":"G","54":"A","55":"q","56":"Z","57":"f","58":"x","59":"e","6":"$","7":"6","8":"4","9":"D","level":"info","message":"Hashed Password for Signup:","service":"user-service","timestamp":"2024-12-01 21:50:18"}
+{"level":"info","message":"User created successfully with email: pushparajraj12@gmail.com","service":"user-service","timestamp":"2024-12-01 21:50:19"}
+{"level":"warn","message":"Invalid password for email: pushparajraj12@gmail.com","service":"user-service","timestamp":"2024-12-01 21:50:31"}
+{"level":"info","message":"Login - Password Provided: SecurePassword123!","service":"user-service","timestamp":"2024-12-01 21:52:16"}
+{"level":"info","message":"Login - Password Stored in DB: $2a$10$zooiaasL67/kZEXjtKq7TupLYi7QJRejsXsu4XM082CjnyKuPRTKe","service":"user-service","timestamp":"2024-12-01 21:52:16"}
+{"level":"info","message":"Login - Password Comparison Result: false","service":"user-service","timestamp":"2024-12-01 21:52:16"}
+{"level":"warn","message":"Invalid password for email: pushparajraj12@gmail.com","service":"user-service","timestamp":"2024-12-01 21:52:16"}
+{"level":"info","message":"Signup - Hashed Password: $2a$10$gtw8mQh5ZZ3knpjnEkPnwe5sVsz9yoNsxt0wVBatDEptrQDlsMDOi","service":"user-service","timestamp":"2024-12-01 21:52:55"}
+{"level":"info","message":"User created successfully with email: pushparajraj13@gmail.com","service":"user-service","timestamp":"2024-12-01 21:52:56"}
+{"level":"info","message":"Login - Password Provided: SecurePassword123!","service":"user-service","timestamp":"2024-12-01 21:53:09"}
+{"level":"info","message":"Login - Password Stored in DB: $2a$10$QF4txl0B95JyjGR/o4VvTek98fcjSev4aookxcywCmkNtLHM8J5RG","service":"user-service","timestamp":"2024-12-01 21:53:09"}
+{"level":"info","message":"Login - Password Comparison Result: false","service":"user-service","timestamp":"2024-12-01 21:53:09"}
+{"level":"warn","message":"Invalid password for email: pushparajraj13@gmail.com","service":"user-service","timestamp":"2024-12-01 21:53:09"}
+{"level":"info","message":"User created successfully with email: pushparajraj113@gmail.com","service":"user-service","timestamp":"2024-12-01 21:56:36"}
+{"level":"warn","message":"Invalid password for email: pushparajraj113@gmail.com","service":"user-service","timestamp":"2024-12-01 21:56:49"}
+{"level":"info","message":"Signup - Hashed Password: $argon2id$v=19$m=65536,t=3,p=4$MSO1hiXh9ZDhswykQHPI4g$R5ju/UEux2SbKsLigoQoRN3a9vF9Ro92i08Io1V8KXk","service":"user-service","timestamp":"2024-12-01 22:02:20"}
+{"level":"info","message":"User created successfully with email: johndoe@example.com","service":"user-service","timestamp":"2024-12-01 22:02:20"}
+{"level":"info","message":"Login - Password Verification Result: false","service":"user-service","timestamp":"2024-12-01 22:02:31"}
+{"level":"warn","message":"Invalid password for email: johndoe@example.com","service":"user-service","timestamp":"2024-12-01 22:02:31"}
+{"level":"info","message":"Signup - Hashed Password: $argon2id$v=19$m=65536,t=3,p=4$6DyX13lqquYtgjL3sDF3bw$k6lGJZV7WZeINuOYbAcaxgFDBG/iwqGVgV3bwdb6GMw","service":"user-service","timestamp":"2024-12-01 22:04:10"}
+{"level":"info","message":"User created successfully with email: janedoe@example.com","service":"user-service","timestamp":"2024-12-01 22:04:10"}
+{"level":"info","message":"Login - Password Verification Result: false","service":"user-service","timestamp":"2024-12-01 22:04:19"}
+{"level":"warn","message":"Invalid password for email: janedoe@example.com","service":"user-service","timestamp":"2024-12-01 22:04:19"}
+{"level":"info","message":"Login - Password Verification Result: false","service":"user-service","timestamp":"2024-12-01 22:07:30"}
+{"level":"warn","message":"Invalid password for email: janedoe@example.com","service":"user-service","timestamp":"2024-12-01 22:07:30"}
+{"level":"warn","message":"User already exists with email: johndoe@example.com","service":"user-service","timestamp":"2024-12-01 22:14:49"}
+{"level":"info","message":"Signup - Hashed Password: $2a$10$791SYwDZvC8RZSNp9yJmt.Ce3ax5SHGSPwzEiA0J/MJTnS3iN3cc6","service":"user-service","timestamp":"2024-12-01 22:14:55"}
+{"level":"info","message":"User created successfully with email: johndodvde@example.com","service":"user-service","timestamp":"2024-12-01 22:14:55"}
+{"level":"warn","message":"Invalid password for email: johndodvde@example.com","service":"user-service","timestamp":"2024-12-01 22:15:04"}
+{"level":"warn","message":"No user found with email: Pachaiamman@example.com","service":"user-service","timestamp":"2024-12-01 22:17:21"}
+{"level":"info","message":"Signup - Hashed Password: $2a$10$grCs2gveym7DMQ9jUT.Vtu8hpbD3snd9.I8jvv/MGYag6Af0idgqK","service":"user-service","timestamp":"2024-12-01 22:17:27"}
+{"level":"info","message":"User created successfully with email: Pachaiamman@example.com","service":"user-service","timestamp":"2024-12-01 22:17:27"}
+{"level":"info","message":"Login - Password Comparison Result: false","service":"user-service","timestamp":"2024-12-01 22:17:34"}
+{"level":"warn","message":"Invalid password for email: Pachaiamman@example.com","service":"user-service","timestamp":"2024-12-01 22:17:34"}
+{"level":"info","message":"Signup - Hashed Password: $2a$10$rJ/OULgJQ.HlTkrQb1lYG.5VE4zhkdK9U4V6WR0HXCm09YCQKnf0a","service":"user-service","timestamp":"2024-12-01 22:20:04"}
+{"level":"info","message":"User created successfully with email: Pachaiamman1@example.com","service":"user-service","timestamp":"2024-12-01 22:20:04"}
+{"level":"info","message":"Login - Password Comparison Result: true","service":"user-service","timestamp":"2024-12-01 22:20:14"}
+{"level":"info","message":"User logged in successfully with email: Pachaiamman1@example.com","service":"user-service","timestamp":"2024-12-01 22:20:14"}
+{"level":"info","message":"Signup - Hashed Password: $2a$10$Pgi9S8fxMF5JPFc0wRdkbO7hTgVYTrkL5na2DnB/Wtkwvsenz3NeC","service":"user-service","timestamp":"2024-12-01 22:22:35"}
+{"level":"info","message":"User created successfully with email: Pachaiamman2@example.com","service":"user-service","timestamp":"2024-12-01 22:22:35"}
+{"level":"info","message":"Login - Password Comparison Result: false","service":"user-service","timestamp":"2024-12-01 22:22:41"}
+{"level":"warn","message":"Invalid password for email: Pachaiamman2@example.com","service":"user-service","timestamp":"2024-12-01 22:22:41"}
+{"level":"info","message":"Signup - Hashed Password: $2a$10$5z5ZviaOPHKTT4MfKTRrZuO4e5EsYygPRsXJVLJJyrdJdqJgD34jq","service":"user-service","timestamp":"2024-12-01 22:25:02"}
+{"level":"info","message":"User created successfully with email: Pachaiamman3@example.com","service":"user-service","timestamp":"2024-12-01 22:25:03"}
+{"level":"info","message":"Login - Password Comparison Result: false","service":"user-service","timestamp":"2024-12-01 22:25:08"}
+{"level":"warn","message":"Invalid password for email: Pachaiamman3@example.com","service":"user-service","timestamp":"2024-12-01 22:25:08"}
+{"level":"info","message":"Login - Password Comparison Result: false","service":"user-service","timestamp":"2024-12-01 22:26:14"}
+{"level":"warn","message":"Invalid password for email: Pachaiamman3@example.com","service":"user-service","timestamp":"2024-12-01 22:26:14"}
+{"level":"warn","message":"No user found with email: Pachaiamman4@example.com","service":"user-service","timestamp":"2024-12-01 22:26:25"}
+{"level":"info","message":"Signup - Hashed Password: $2a$10$4ygKYQH4YF3lEszZZheP3.G5DqxJTogBYJA9R10doBPSB5vDu.kvW","service":"user-service","timestamp":"2024-12-01 22:26:34"}
+{"level":"info","message":"User created successfully with email: Pachaiamman4@example.com","service":"user-service","timestamp":"2024-12-01 22:26:35"}
+{"level":"info","message":"Login - Password Comparison Result: true","service":"user-service","timestamp":"2024-12-01 22:26:51"}
+{"level":"info","message":"User logged in successfully with email: Pachaiamman4@example.com","service":"user-service","timestamp":"2024-12-01 22:26:51"}
+{"level":"info","message":"All required environment variables are defined","service":"user-service","timestamp":"2024-12-02 12:04:48"}
+{"level":"info","message":"All required environment variables are defined","service":"user-service","timestamp":"2024-12-02 12:05:11"}
+{"level":"info","message":"All required environment variables are defined","service":"user-service","timestamp":"2024-12-02 12:05:48"}
+{"level":"info","message":"All required environment variables are defined","service":"user-service","timestamp":"2024-12-02 12:20:52"}
+{"level":"warn","message":"No user found with email: pachaiamman4@example.com","service":"user-service","timestamp":"2024-12-02 12:23:54"}
+{"level":"warn","message":"Unauthorized role assignment attempt: undefined","service":"user-service","timestamp":"2024-12-02 12:24:17"}
+{"level":"warn","message":"Unauthorized role assignment attempt: undefined","service":"user-service","timestamp":"2024-12-02 12:25:23"}
+{"level":"info","message":"All required environment variables are defined","service":"user-service","timestamp":"2024-12-02 12:26:49"}
+{"level":"info","message":"All required environment variables are defined","service":"user-service","timestamp":"2024-12-02 12:26:51"}
+{"level":"info","message":"User created successfully with email: Pachaiamman45@example.com","service":"user-service","timestamp":"2024-12-02 12:26:55"}
+{"level":"warn","message":"No user found with email: pachaiamman45@example.com","service":"user-service","timestamp":"2024-12-02 12:27:03"}
+{"level":"warn","message":"No user found with email: pachaiamman45@example.com","service":"user-service","timestamp":"2024-12-02 12:28:08"}
+{"level":"warn","message":"No user found with email: pachaiamman45@example.com","service":"user-service","timestamp":"2024-12-02 12:28:17"}
+{"level":"info","message":"All required environment variables are defined","service":"user-service","timestamp":"2024-12-02 12:28:49"}
+{"level":"info","message":"All required environment variables are defined","service":"user-service","timestamp":"2024-12-02 12:28:50"}
+{"level":"info","message":"All required environment variables are defined","service":"user-service","timestamp":"2024-12-02 12:29:03"}
+{"level":"info","message":"All required environment variables are defined","service":"user-service","timestamp":"2024-12-02 12:29:06"}
+{"level":"info","message":"All required environment variables are defined","service":"user-service","timestamp":"2024-12-02 12:30:25"}
+{"level":"info","message":"All required environment variables are defined","service":"user-service","timestamp":"2024-12-02 12:30:27"}
+{"level":"info","message":"All required environment variables are defined","service":"user-service","timestamp":"2024-12-02 12:30:51"}
+{"level":"info","message":"All required environment variables are defined","service":"user-service","timestamp":"2024-12-02 12:31:00"}
+{"level":"info","message":"All required environment variables are defined","service":"user-service","timestamp":"2024-12-02 12:31:04"}
+{"level":"info","message":"All required environment variables are defined","service":"user-service","timestamp":"2024-12-02 12:31:07"}
+{"level":"info","message":"All required environment variables are defined","service":"user-service","timestamp":"2024-12-02 13:36:00"}
+{"level":"info","message":"All required environment variables are defined","service":"user-service","timestamp":"2024-12-02 13:36:04"}
+{"level":"info","message":"All required environment variables are defined","service":"user-service","timestamp":"2024-12-02 13:45:05"}
+{"level":"info","message":"All required environment variables are defined","service":"user-service","timestamp":"2024-12-02 14:36:51"}
+{"level":"info","message":"All required environment variables are defined","service":"user-service","timestamp":"2024-12-02 14:38:09"}
+{"level":"info","message":"All required environment variables are defined","service":"user-service","timestamp":"2024-12-02 16:56:20"}
+{"level":"info","message":"All required environment variables are defined","service":"user-service","timestamp":"2024-12-02 16:57:41"}
+{"level":"info","message":"All required environment variables are defined","service":"user-service","timestamp":"2024-12-02 17:02:45"}
+{"level":"info","message":"All required environment variables are defined","service":"user-service","timestamp":"2024-12-02 17:03:04"}
+{"level":"info","message":"All required environment variables are defined","service":"user-service","timestamp":"2024-12-02 17:03:34"}
+{"level":"info","message":"All required environment variables are defined","service":"user-service","timestamp":"2024-12-02 17:03:53"}
+{"level":"info","message":"All required environment variables are defined","service":"user-service","timestamp":"2024-12-02 17:04:07"}
+{"level":"info","message":"All required environment variables are defined","service":"user-service","timestamp":"2024-12-02 17:04:11"}
+{"level":"info","message":"All required environment variables are defined","service":"user-service","timestamp":"2024-12-02 17:10:27"}
+{"level":"info","message":"All required environment variables are defined","service":"user-service","timestamp":"2024-12-02 17:11:45"}
+{"level":"info","message":"All required environment variables are defined","service":"user-service","timestamp":"2024-12-02 20:31:21"}
+{"level":"info","message":"All required environment variables are defined","service":"user-service","timestamp":"2024-12-02 20:31:28"}
+{"level":"info","message":"All required environment variables are defined","service":"user-service","timestamp":"2024-12-02 20:31:33"}
+{"level":"info","message":"All required environment variables are defined","service":"user-service","timestamp":"2024-12-02 20:31:38"}
+{"level":"info","message":"All required environment variables are defined","service":"user-service","timestamp":"2024-12-02 20:31:43"}
+{"level":"info","message":"All required environment variables are defined","service":"user-service","timestamp":"2024-12-02 20:31:50"}
+{"level":"info","message":"All required environment variables are defined","service":"user-service","timestamp":"2024-12-02 20:35:13"}
+{"level":"info","message":"All required environment variables are defined","service":"user-service","timestamp":"2024-12-02 20:35:22"}
+{"level":"info","message":"All required environment variables are defined","service":"user-service","timestamp":"2024-12-02 20:35:52"}
+{"level":"info","message":"All required environment variables are defined","service":"user-service","timestamp":"2024-12-02 20:36:17"}
