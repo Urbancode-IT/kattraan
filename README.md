@@ -8,7 +8,7 @@
 
 ### General Features
 - User authentication and authorization.
-- Role-based access: **Master Admin**, **Admin**, **Trainer**, and **Learner**.
+- Role-based access: **Master Admin**, **Admin**, **Instructor**, and **Learner**.
 - Responsive design for web and mobile devices.
 - Dashboard for personalized views based on roles.
 
