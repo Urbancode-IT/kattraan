@@ -1,0 +1,187 @@
+/* Basic Navbar Styling */
+.navbar {
+    width: 100%;
+    background-color: #fff;
+    border-bottom: 1px solid #ddd;
+    font-family: Arial, sans-serif;
+    padding: 10px 2rem; /* Padding for spacing on both left and right */
+    box-sizing: border-box;
+    position: relative; /* Ensure dropdown is positioned correctly */
+    z-index: 10; /* Prevent overlap issues */
+}
+
+/* Container to align content */
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 1200px; /* Restrict the navbar width */
+    margin: 0 auto; /* Center align the content */
+    padding: 0 1rem; /* Padding for smaller screens */
+}
+
+/* Logo */
+.logo a {
+    text-decoration: none;
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
+    display: flex;
+    align-items: center;
+}
+
+.logo-icon {
+    font-size: 24px;
+    color: #6c63ff;
+    margin-right: 5px; /* Add space between the logo and text */
+}
+
+/* Categories */
+.categories a {
+    margin-left: 20px;
+    text-decoration: none;
+    font-size: 14px;
+    color: #333;
+    font-weight: 500;
+}
+
+/* Search bar */
+.search-bar {
+    display: flex;
+    align-items: center;
+    flex-grow: 1;
+    margin: 0 2rem; /* Add spacing between search bar and adjacent elements */
+}
+
+.search-bar input {
+    width: 100%;
+    max-width: 400px; /* Restrict the search bar width */
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    outline: none;
+    font-size: 14px;
+}
+
+.search-bar .search-button {
+    margin-left: -40px; /* Overlap search button inside input */
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    color: #aaa;
+}
+
+/* Navigation links */
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem; /* Use rem for consistent spacing */
+    transition: all 0.3s ease-in-out;
+}
+
+.nav-links a {
+    text-decoration: none;
+    font-size: 14px;
+    color: #333;
+    font-weight: 500;
+}
+
+.cart-icon {
+    font-size: 18px;
+}
+
+.language-icon {
+    font-size: 18px;
+}
+
+/* Buttons */
+.login-button,
+.signup-button {
+    border: 1px solid #333;
+    border-radius: 4px;
+    padding: 5px 15px;
+    font-size: 14px;
+    cursor: pointer;
+    background-color: transparent;
+    color: #333;
+    font-weight: bold;
+}
+
+.signup-button {
+    background-color: #333;
+    color: #fff;
+}
+
+.signup-button:hover {
+    background-color: #555;
+}
+
+.login-button:hover {
+    background-color: #f0f0f0;
+}
+
+/* Hamburger Menu */
+.hamburger {
+    display: none; /* Hidden by default */
+    font-size: 24px;
+    cursor: pointer;
+    margin-left: auto;
+}
+
+/* Mobile Dropdown */
+.nav-links.open {
+    display: block;
+    position: absolute;
+    top: 60px; /* Position below the navbar */
+    left: 0;
+    width: 100%;
+    background-color: #fff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 1rem;
+}
+
+.nav-links.open a,
+.nav-links.open button {
+    display: block;
+    margin: 10px 0; /* Vertical spacing for dropdown items */
+    text-align: left;
+}
+
+/* Responsive Design */
+@media (max-width: 992px) {
+    .search-bar {
+        margin: 0 1rem; /* Adjust margins for medium screens */
+    }
+
+    .nav-links {
+        gap: 1rem; /* Reduce spacing between links */
+    }
+}
+
+@media (max-width: 768px) {
+    .search-bar {
+        display: none; /* Hide the search bar on smaller screens */
+    }
+
+    .nav-links {
+        display: none; /* Hide by default */
+        flex-direction: column; /* Stack links vertically */
+    }
+
+    .hamburger {
+        display: block; /* Show hamburger icon */
+    }
+
+    .container {
+        padding: 0 0.5rem; /* Reduce container padding */
+    }
+}
+
+@media (max-width: 576px) {
+    .nav-links a,
+    .login-button,
+    .signup-button {
+        font-size: 12px; /* Reduce font size for very small screens */
+    }
+}

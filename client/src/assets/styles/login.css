@@ -1,0 +1,144 @@
+/* Background and Form Styling */
+.bg-white {
+  border-radius: 12px;
+}
+
+.shadow-soft {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+}
+
+/* Links */
+.link-hover {
+  text-decoration: none;
+  color: black; /* Primary blue */
+}
+
+.link-hover:hover {
+  color: black; /* Darker blue on hover */
+  text-decoration: underline;
+}
+
+/* Buttons */
+.btn-dark-blue {
+  background-color: #003580; /* Deep blue */
+  border-color: #003580;
+}
+
+.btn-dark-blue:hover {
+  background-color: #002e6c;
+  border-color: #002e6c;
+}
+
+.btn-icon-only {
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Text */
+.text-primary {
+  color: black !important; /* Matches the link hover */
+}
+
+.text-muted {
+  color: #6c757d !important;
+}
+
+.text-dark {
+  color: #343a40 !important;
+}
+.btn-facebook {
+  background-color: #4267b2; /* Facebook blue */
+  color: white;
+  border: none;
+}
+
+.btn-facebook:hover {
+  background-color: #365899;
+}
+
+.btn-twitter {
+  background-color: #1da1f2; /* Twitter blue */
+  color: white;
+  border: none;
+}
+
+.btn-twitter:hover {
+  background-color: #0d95e8;
+}
+
+.btn-github {
+  background-color: #333; /* GitHub black */
+  color: white;
+  border: none;
+}
+
+.btn-github:hover {
+  background-color: #24292e;
+}
+
+/* General Styles */
+.login-container {
+  background-image: url('../img/image.svg');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center top;
+  padding: 20px;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Remove background image on mobile */
+@media (max-width: 576px) {
+  body{
+    margin: 0 ;
+  }
+  .login-container {
+    background-image: none;
+    padding: 10px;
+  }
+
+  .btn-icon-only {
+    width: 40px;
+    height: 40px;
+  }
+
+  .bg-white {
+    padding: 1.5rem !important;
+  }
+
+  .text-center h3 {
+    font-size: 1.25rem;
+  }
+}
+
+/* Tablet Styles */
+@media (min-width: 577px) and (max-width: 768px) {
+  body{
+    margin: 0 ;
+  }
+  .login-container {
+    background-image: none;
+    padding: 10px;
+  }
+
+  .btn-icon-only {
+    width: 40px;
+    height: 40px;
+  }
+
+  .bg-white {
+    padding: 1.5rem !important;
+  }
+
+  .text-center h3 {
+    font-size: 1.25rem;
+  }
+  
+}
+
