@@ -6,9 +6,14 @@ import { StudentContext } from "@/context/student-context";
 import { AuthContext } from "@/context/auth-context";
 import { useNavigate } from "react-router-dom";
 import Footer from "@/components/student-view/footer";
+import {
+  checkCoursePurchaseInfoService,
+  fetchStudentViewCourseListService,
+} from "@/services";
 
 function StudentHomePage() {
-  const { studentViewCoursesList, setStudentViewCoursesList } = useContext(StudentContext);
+  const { studentViewCoursesList, setStudentViewCoursesList } =
+    useContext(StudentContext);
   const { auth } = useContext(AuthContext);
   const navigate = useNavigate();
 
@@ -26,17 +31,32 @@ function StudentHomePage() {
       if (response?.success) {
         setStudentViewCoursesList(response?.data);
       } else {
-        console.error('Failed to fetch courses:', response?.message);
+        console.error("Failed to fetch courses:", response?.message);
       }
     } catch (error) {
-      console.error('Error fetching courses:', error);
+      console.error("Error fetching courses:", error);
     }
   }
 
   async function handleCourseNavigate(getCurrentCourseId) {
-    const response = await checkCoursePurchaseInfoService(getCurrentCourseId, auth?.user?._id);
-    if (response?.success) {
-      navigate(response?.data ? `/course-progress/${getCurrentCourseId}` : `/course/details/${getCurrentCourseId}`);
+    try {
+      const response = await checkCoursePurchaseInfoService(
+        getCurrentCourseId,
+        auth?.user?._id
+      );
+
+      if (response?.success) {
+        navigate(
+          response?.data
+            ? `/course-progress/${getCurrentCourseId}`
+            : `/course/details/${getCurrentCourseId}`
+        );
+      } else {
+        alert("Unable to navigate to the course. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error navigating to the course:", error);
+      alert("An error occurred while checking course access.");
     }
   }
 
@@ -48,13 +68,22 @@ function StudentHomePage() {
     <div className="min-h-screen bg-white">
       <section className="flex flex-col lg:flex-row items-center justify-between py-8 px-4 lg:px-8">
         <div className="lg:w-1/2 lg:pr-12">
-          <h1 className="text-4xl font-bold mb-4">Start your path to success with us!</h1>
+          <h1 className="text-4xl font-bold mb-4">
+            Start your path to success with us!
+          </h1>
           <p className="text-xl">
-            Prepare for a brighter future with skills that count. Join us and start learning today!
+            Prepare for a brighter future with skills that count. Join us and
+            start learning today!
           </p>
         </div>
         <div className="lg:w-full mb-8 lg:mb-0">
-          <img src={banner} alt="Educational Banner" width={600} height={400} className="w-full h-full rounded-lg shadow-lg"/>
+          <img
+            src={banner}
+            alt="Educational Banner"
+            width={600}
+            height={400}
+            className="w-full h-full rounded-lg shadow-lg"
+          />
         </div>
       </section>
       <section className="py-8 px-4 lg:px-8 bg-gray-100">

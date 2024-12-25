@@ -188,3 +188,5 @@ export const filterOptions = {
   level: courseLevelOptions,
   primaryLanguage: languageOptions,
 };
+
+export const RAZORPAY_KEY = "rzp_test_aa4kkvlbjJYcvJ"; // Replace with your Razorpay Key ID

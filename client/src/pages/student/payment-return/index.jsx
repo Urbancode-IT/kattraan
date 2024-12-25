@@ -1,34 +1,38 @@
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
-import { captureAndFinalizePaymentService } from "@/services";
+import { capturePaymentService } from "@/services";
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 
-function PaypalPaymentReturnPage() {
+function PaymentReturnPage() {
   const location = useLocation();
   const params = new URLSearchParams(location.search);
-  const paymentId = params.get("paymentId");
-  const payerId = params.get("PayerID");
+  const paymentId = params.get("razorpay_payment_id");
+  const orderId = params.get("razorpay_order_id");
 
   useEffect(() => {
-    if (paymentId && payerId) {
+    if (paymentId && orderId) {
       async function capturePayment() {
-        const orderId = JSON.parse(sessionStorage.getItem("currentOrderId"));
+        try {
+          const response = await capturePaymentService({
+            paymentId,
+            orderId,
+          });
 
-        const response = await captureAndFinalizePaymentService(
-          paymentId,
-          payerId,
-          orderId
-        );
-
-        if (response?.success) {
-          sessionStorage.removeItem("currentOrderId");
-          window.location.href = "/student-courses";
+          if (response?.success) {
+            sessionStorage.removeItem("currentOrderId");
+            window.location.href = "/student-courses";
+          } else {
+            alert("Payment capture failed. Please contact support.");
+          }
+        } catch (error) {
+          console.error("Error capturing payment:", error);
+          alert("An error occurred while processing your payment.");
         }
       }
 
       capturePayment();
     }
-  }, [payerId, paymentId]);
+  }, [orderId, paymentId]);
 
   return (
     <Card>
@@ -39,4 +43,4 @@ function PaypalPaymentReturnPage() {
   );
 }
 
-export default PaypalPaymentReturnPage;
+export default PaymentReturnPage;
