@@ -1,5 +1,7 @@
-import { Link } from "react-router-dom"; // Optional: Adjust based on your routing library
-import { ArrowLeft } from "lucide-react"; // Optional: Replace with any other icon if needed
+import { Link } from "react-router-dom"; 
+import { ArrowLeft } from "lucide-react"; 
+import notfound from "@/assets/img/not-found.svg";
+
 
 function NotFoundPage() {
   return (
@@ -22,7 +24,7 @@ function NotFoundPage() {
       </div>
       <div className="mt-10 max-w-md">
         <img
-          src="https://via.placeholder.com/400x300?text=404+Image" // Replace with your custom image
+          src={notfound} // Replace with your custom image
           alt="Page not found illustration"
           className="rounded-lg shadow-lg"
         />

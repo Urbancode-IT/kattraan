@@ -30,6 +30,19 @@ function StudentViewCommonHeader() {
           >
             Explore Courses
           </Button>
+          {/* Search Bar */}
+        <div className="flex items-center relative w-full max-w-full md:max-w-[400px]">
+          <input
+            type="text"
+            placeholder="Search for anything"
+            className="w-full pl-4 pr-12 py-2 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+          />
+          <button
+            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+          >
+            🔍
+          </button>
+        </div>
         </nav>
         <div className="flex items-center space-x-4">
           <Button onClick={() => navigate("/student-courses")}>
