@@ -12,6 +12,14 @@ import {
   Clipboard,
 } from "lucide-react";
 
+// Import the new components
+import InstructorAnnouncements from "@/components/instructor-view/announcements";
+import InstructorFeedback from "@/components/instructor-view/feedback";
+import InstructorScheduling from "@/components/instructor-view/scheduling";
+import InstructorCertificates from "@/components/instructor-view/certificates";
+import InstructorStudentNotifications from "@/components/instructor-view/student-notifications";
+
+// Existing imports
 import InstructorDashboard from "@/components/instructor-view/dashboard";
 import InstructorCourses from "@/components/instructor-view/courses";
 import InstructorQuizzes from "@/components/instructor-view/quizzes";
@@ -59,6 +67,12 @@ function InstructorDashboardPage() {
     { icon: MessageSquare, label: "Messages", value: "messages", component: <InstructorMessages /> },
     { icon: Calendar, label: "Calendar", value: "calendar", component: <InstructorCalendar /> },
     { icon: Book, label: "Resources", value: "resources", component: <InstructorResources /> },
+    // New menu items for the requested pages
+    { icon: FileText, label: "Announcements", value: "announcements", component: <InstructorAnnouncements /> },
+    { icon: Clipboard, label: "Feedback", value: "feedback", component: <InstructorFeedback /> },
+    { icon: Calendar, label: "Scheduling", value: "scheduling", component: <InstructorScheduling /> },
+    { icon: FileText, label: "Certificates", value: "certificates", component: <InstructorCertificates /> },
+    { icon: MessageSquare, label: "Student Notifications", value: "student-notifications", component: <InstructorStudentNotifications /> },
     { icon: LogOut, label: "Logout", value: "logout", component: null, action: handleLogout },
   ];
 
