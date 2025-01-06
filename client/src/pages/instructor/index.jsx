@@ -12,13 +12,6 @@ import {
   Clipboard,
 } from "lucide-react";
 
-// Import the new components
-import InstructorAnnouncements from "@/components/instructor-view/announcements";
-import InstructorFeedback from "@/components/instructor-view/feedback";
-import InstructorScheduling from "@/components/instructor-view/scheduling";
-import InstructorCertificates from "@/components/instructor-view/certificates";
-import InstructorStudentNotifications from "@/components/instructor-view/student-notifications";
-
 // Existing imports
 import InstructorDashboard from "@/components/instructor-view/dashboard";
 import InstructorCourses from "@/components/instructor-view/courses";
@@ -29,6 +22,11 @@ import InstructorStudents from "@/components/instructor-view/students";
 import InstructorMessages from "@/components/instructor-view/messages";
 import InstructorCalendar from "@/components/instructor-view/calendar";
 import InstructorResources from "@/components/instructor-view/resources";
+import InstructorAnnouncements from "@/components/instructor-view/announcements";
+import InstructorFeedback from "@/components/instructor-view/feedback";
+import InstructorScheduling from "@/components/instructor-view/scheduling";
+import InstructorCertificates from "@/components/instructor-view/certificates";
+import InstructorStudentNotifications from "@/components/instructor-view/student-notifications";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
 import { AuthContext } from "@/context/auth-context";
