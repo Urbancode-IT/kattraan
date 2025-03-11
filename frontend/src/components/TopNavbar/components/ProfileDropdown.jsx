@@ -1,7 +1,7 @@
 import { useLayoutContext } from '@/context/useLayoutContext';
 import { Dropdown, DropdownDivider, DropdownItem, DropdownMenu, DropdownToggle } from 'react-bootstrap';
 import { BsGear, BsInfoCircle, BsPerson, BsPower } from 'react-icons/bs';
-import avatar1 from '@/assets/images/avatar/01.jpg';
+import avatar1 from '@/assets/images/avatar/ranjith.png';
 import { toSentenceCase } from '@/utils/change-casing';
 import clsx from 'clsx';
 import { Link } from 'react-router-dom';
@@ -48,9 +48,9 @@ const ProfileDropdown = ({
             </div>
             <div>
               <a className="h6" href="#">
-                Lori Ferguson
+                Coding Ranjith
               </a>
-              <p className="small m-0">example@gmail.com</p>
+              <p className="small m-0">admin@gmail.com</p>
             </div>
           </div>
         </li>

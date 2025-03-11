@@ -1,5 +1,5 @@
-import logo from '@/assets/images/logo.svg';
-import logoLight from '@/assets/images/logo-light.svg';
+import logo from '@/assets/images/logo.png';
+import logoLight from '@/assets/images/logo-light.png';
 import { Link } from 'react-router-dom';
 const LogoBox = ({
   height,
