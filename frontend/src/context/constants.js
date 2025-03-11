@@ -1,9 +1,9 @@
 export const currency = '$';
 export const currentYear = new Date().getFullYear();
-export const developedByLink = 'https://stackbros.com/';
-export const developedBy = 'Stackbros';
-export const contactUs = 'mailto:stackbros07@gmail.com';
+export const developedByLink = 'https://urbancode.in/';
+export const developedBy = ' Urbancode';
+export const contactUs = 'mailto:admin@urbancode.in';
 export const buyLink = '';
 export const basePath = '';
-export const DEFAULT_PAGE_TITLE = 'Eduport Next | LMS,Education and Course Theme';
+export const DEFAULT_PAGE_TITLE = 'Kattraan | LMS,Education and Course';
 export const colorVariants = ['primary', 'secondary', 'success', 'danger', 'warning', 'info', 'dark', 'light'];
