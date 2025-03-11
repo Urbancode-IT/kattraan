@@ -2,8 +2,7 @@ import { lazy } from 'react'
 import { Navigate } from 'react-router-dom'
 
 // Demos Pages
-const DemosDefault = lazy(() => import('@/app/demos/default/home/page'))
-
+const Home = lazy(() => import('@/app/home/page'))
 
 // pages
 const Categories = lazy(() => import('@/app/pages/course/categories/page'))
@@ -101,16 +100,15 @@ const initialRoutes = [
   {
     path: '/',
     name: 'root',
-    element: <Navigate to="/demos/default/home" />,
+    element: <Navigate to="/home" />,
   },
 ]
-export const demosRoutes = [
+export const homeRoutes = [
   {
-    path: '/demos/default/home',
-    name: 'Demos',
-    element: <DemosDefault />,
-  }
-  
+    path: '/home',
+    name: 'Home',
+    element: <Home />,
+  },
 ]
 const pagesRoutes = [
   {
