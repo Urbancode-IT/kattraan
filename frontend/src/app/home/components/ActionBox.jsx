@@ -20,21 +20,21 @@ const ActionBox = () => {
                   </svg>
                 </figure>
                 <Col xs={11} className="mx-auto position-relative">
-                  <Row className="align-items-center">
-                    <Col lg={7}>
-                      <h3 className="text-white">Become an Instructor!</h3>
-                      <p className="text-white mb-3 mb-lg-0">
-                        Speedily say has suitable disposal add boy. On forth doubt miles of child. Exercise joy man children rejoiced. Yet uncommonly
-                        his ten who diminution astonished.
-                      </p>
-                    </Col>
-                    <Col lg={5} className="text-lg-end">
-                      <Button variant="outline-warning" className="mb-0">
-                        Start Teaching Today
-                      </Button>
-                    </Col>
-                  </Row>
-                </Col>
+  <Row className="align-items-center">
+    <Col lg={7}>
+      <h3 className="text-white">Become an Instructor with Kattraan!</h3>
+      <p className="text-white mb-3 mb-lg-0">
+        Share your expertise and inspire thousands of learners. Join Kattraan's growing community of instructors and create high-quality courses that shape the future of education.
+      </p>
+    </Col>
+    <Col lg={5} className="text-lg-end">
+      <Button variant="outline-warning" className="mb-0">
+        Start Teaching Today
+      </Button>
+    </Col>
+  </Row>
+</Col>
+
               </Row>
             </div>
           </Col>
