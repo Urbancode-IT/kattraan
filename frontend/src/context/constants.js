@@ -1,0 +1,9 @@
+export const currency = '$';
+export const currentYear = new Date().getFullYear();
+export const developedByLink = 'https://urbancode.in/';
+export const developedBy = ' Urbancode';
+export const contactUs = 'mailto:admin@urbancode.in';
+export const buyLink = '';
+export const basePath = '';
+export const DEFAULT_PAGE_TITLE = 'Kattraan | LMS,Education and Course';
+export const colorVariants = ['primary', 'secondary', 'success', 'danger', 'warning', 'info', 'dark', 'light'];
