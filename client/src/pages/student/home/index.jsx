@@ -3,13 +3,12 @@ import banner from "../../../../public/banner-img.png";
 import { Button } from "@/components/ui/button";
 import { useContext, useEffect } from "react";
 import { StudentContext } from "@/context/student-context";
-import { AuthContext } from "@/context/auth-context";
-import { useNavigate } from "react-router-dom";
-import Footer from "@/components/student-view/footer";
 import {
   checkCoursePurchaseInfoService,
   fetchStudentViewCourseListService,
 } from "@/services";
+import { AuthContext } from "@/context/auth-context";
+import { useNavigate } from "react-router-dom";
 
 function StudentHomePage() {
   const { studentViewCoursesList, setStudentViewCoursesList } =
@@ -20,43 +19,32 @@ function StudentHomePage() {
   function handleNavigateToCoursesPage(getCurrentId) {
     console.log(getCurrentId);
     sessionStorage.removeItem("filters");
-    const currentFilter = { category: [getCurrentId] };
+    const currentFilter = {
+      category: [getCurrentId],
+    };
+
     sessionStorage.setItem("filters", JSON.stringify(currentFilter));
+
     navigate("/courses");
   }
 
   async function fetchAllStudentViewCourses() {
-    try {
-      const response = await fetchStudentViewCourseListService();
-      if (response?.success) {
-        setStudentViewCoursesList(response?.data);
-      } else {
-        console.error("Failed to fetch courses:", response?.message);
-      }
-    } catch (error) {
-      console.error("Error fetching courses:", error);
-    }
+    const response = await fetchStudentViewCourseListService();
+    if (response?.success) setStudentViewCoursesList(response?.data);
   }
 
   async function handleCourseNavigate(getCurrentCourseId) {
-    try {
-      const response = await checkCoursePurchaseInfoService(
-        getCurrentCourseId,
-        auth?.user?._id
-      );
+    const response = await checkCoursePurchaseInfoService(
+      getCurrentCourseId,
+      auth?.user?._id
+    );
 
-      if (response?.success) {
-        navigate(
-          response?.data
-            ? `/course-progress/${getCurrentCourseId}`
-            : `/course/details/${getCurrentCourseId}`
-        );
+    if (response?.success) {
+      if (response?.data) {
+        navigate(`/course-progress/${getCurrentCourseId}`);
       } else {
-        alert("Unable to navigate to the course. Please try again.");
+        navigate(`/course/details/${getCurrentCourseId}`);
       }
-    } catch (error) {
-      console.error("Error navigating to the course:", error);
-      alert("An error occurred while checking course access.");
     }
   }
 
@@ -68,21 +56,17 @@ function StudentHomePage() {
     <div className="min-h-screen bg-white">
       <section className="flex flex-col lg:flex-row items-center justify-between py-8 px-4 lg:px-8">
         <div className="lg:w-1/2 lg:pr-12">
-          <h1 className="text-4xl font-bold mb-4">
-            Start your path to success with us!
-          </h1>
+          <h1 className="text-4xl font-bold mb-4">Learning thet gets you</h1>
           <p className="text-xl">
-            Prepare for a brighter future with skills that count. Join us and
-            start learning today!
+            Skills for your present and your future. Get Started with US
           </p>
         </div>
         <div className="lg:w-full mb-8 lg:mb-0">
           <img
             src={banner}
-            alt="Educational Banner"
             width={600}
             height={400}
-            className="w-full h-full rounded-lg shadow-lg"
+            className="w-full h-auto rounded-lg shadow-lg"
           />
         </div>
       </section>
@@ -102,18 +86,16 @@ function StudentHomePage() {
         </div>
       </section>
       <section className="py-12 px-4 lg:px-8">
-        <h2 className="text-2xl font-bold mb-6">Featured Courses</h2>
+        <h2 className="text-2xl font-bold mb-6">Featured COourses</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {studentViewCoursesList && studentViewCoursesList.length > 0 ? (
             studentViewCoursesList.map((courseItem) => (
-              <button
+              <div
                 onClick={() => handleCourseNavigate(courseItem?._id)}
                 className="border rounded-lg overflow-hidden shadow cursor-pointer"
-                key={courseItem?._id}
               >
                 <img
                   src={courseItem?.image}
-                  alt={`${courseItem?.title} Cover`}
                   width={300}
                   height={150}
                   className="w-full h-40 object-cover"
@@ -124,17 +106,16 @@ function StudentHomePage() {
                     {courseItem?.instructorName}
                   </p>
                   <p className="font-bold text-[16px]">
-                    ₹{courseItem?.pricing}
+                    ${courseItem?.pricing}
                   </p>
                 </div>
-              </button>
+              </div>
             ))
           ) : (
             <h1>No Courses Found</h1>
           )}
         </div>
       </section>
-      <Footer />
     </div>
   );
 }

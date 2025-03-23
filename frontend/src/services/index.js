@@ -3,11 +3,12 @@ import axiosInstance from "@/api/axiosInstance";
 export async function registerService(formData) {
   const { data } = await axiosInstance.post("/auth/register", {
     ...formData,
-    role: "user",
+    roles: ["learner"],
   });
 
   return data;
 }
+
 
 export async function loginService(formData) {
   const { data } = await axiosInstance.post("/auth/login", formData);
@@ -104,20 +105,24 @@ export async function checkCoursePurchaseInfoService(courseId, studentId) {
   return data;
 }
 
-// Updated Razorpay Integration
+export async function createPaymentService(formData) {
+  const { data } = await axiosInstance.post(`/student/order/create`, formData);
 
-export async function createPaymentService(orderDetails) {
-  // Sends user, course, and pricing details to the backend to create Razorpay order
-  const { data } = await axiosInstance.post(`/student/order/create`, orderDetails);
-
-  return data; // Contains razorpayOrderId
+  return data;
 }
 
-export async function capturePaymentService(paymentDetails) {
-  // Sends paymentId and orderId to capture and finalize the payment
-  const { data } = await axiosInstance.post(`/student/order/capture`, paymentDetails);
+export async function captureAndFinalizePaymentService(
+  paymentId,
+  payerId,
+  orderId
+) {
+  const { data } = await axiosInstance.post(`/student/order/capture`, {
+    paymentId,
+    payerId,
+    orderId,
+  });
 
-  return data; // Contains success or failure of payment capture
+  return data;
 }
 
 export async function fetchStudentBoughtCoursesService(studentId) {

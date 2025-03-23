@@ -41,7 +41,7 @@ function StudentViewCourseProgressPage() {
     const response = await getCurrentCourseProgressService(auth?.user?._id, id);
     if (response?.success) {
       if (!response?.data?.isPurchased) {
-        setLockCourse(false);
+        setLockCourse(true);
       } else {
         setStudentCurrentCourseProgress({
           courseDetails: response?.data?.courseDetails,

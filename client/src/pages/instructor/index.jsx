@@ -1,77 +1,47 @@
-import { useContext, useEffect, useState } from "react";
-import { format } from "date-fns";
-import {
-  BarChart,
-  Book,
-  MessageSquare,
-  Calendar,
-  Users,
-  FileText,
-  LogOut,
-  Layers,
-  Clipboard,
-} from "lucide-react";
-
-// Existing imports
-import InstructorDashboard from "@/components/instructor-view/dashboard";
 import InstructorCourses from "@/components/instructor-view/courses";
-import InstructorQuizzes from "@/components/instructor-view/quizzes";
-import InstructorAssessments from "@/components/instructor-view/assessments";
-import InstructorReports from "@/components/instructor-view/reports";
-import InstructorStudents from "@/components/instructor-view/students";
-import InstructorMessages from "@/components/instructor-view/messages";
-import InstructorCalendar from "@/components/instructor-view/calendar";
-import InstructorResources from "@/components/instructor-view/resources";
-import InstructorAnnouncements from "@/components/instructor-view/announcements";
-import InstructorFeedback from "@/components/instructor-view/feedback";
-import InstructorScheduling from "@/components/instructor-view/scheduling";
-import InstructorCertificates from "@/components/instructor-view/certificates";
-import InstructorStudentNotifications from "@/components/instructor-view/student-notifications";
+import InstructorDashboard from "@/components/instructor-view/dashboard";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
 import { AuthContext } from "@/context/auth-context";
 import { InstructorContext } from "@/context/instructor-context";
 import { fetchInstructorCourseListService } from "@/services";
+import { BarChart, Book, LogOut } from "lucide-react";
+import { useContext, useEffect, useState } from "react";
 
-function InstructorDashboardPage() {
+function InstructorDashboardpage() {
   const [activeTab, setActiveTab] = useState("dashboard");
-  const [currentTime, setCurrentTime] = useState(new Date()); // Declare `currentTime` state
   const { resetCredentials } = useContext(AuthContext);
-  const { instructorCoursesList, setInstructorCoursesList } = useContext(InstructorContext);
+  const { instructorCoursesList, setInstructorCoursesList } =
+    useContext(InstructorContext);
 
   async function fetchAllCourses() {
     const response = await fetchInstructorCourseListService();
-    if (response?.success) setInstructorCoursesList(response.data);
+    if (response?.success) setInstructorCoursesList(response?.data);
   }
 
   useEffect(() => {
     fetchAllCourses();
   }, []);
 
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentTime(new Date()); // Update the current time every second
-    }, 1000);
-    return () => clearInterval(timer); // Clean up the timer
-  }, []);
-
   const menuItems = [
-    { icon: BarChart, label: "Dashboard", value: "dashboard", component: <InstructorDashboard listOfCourses={instructorCoursesList} /> },
-    { icon: Book, label: "Courses", value: "courses", component: <InstructorCourses listOfCourses={instructorCoursesList} /> },
-    { icon: Layers, label: "Quizzes", value: "quizzes", component: <InstructorQuizzes /> },
-    { icon: Clipboard, label: "Assessments", value: "assessments", component: <InstructorAssessments /> },
-    { icon: FileText, label: "Reports", value: "reports", component: <InstructorReports /> },
-    { icon: Users, label: "Students", value: "students", component: <InstructorStudents /> },
-    { icon: MessageSquare, label: "Messages", value: "messages", component: <InstructorMessages /> },
-    { icon: Calendar, label: "Calendar", value: "calendar", component: <InstructorCalendar /> },
-    { icon: Book, label: "Resources", value: "resources", component: <InstructorResources /> },
-    // New menu items for the requested pages
-    { icon: FileText, label: "Announcements", value: "announcements", component: <InstructorAnnouncements /> },
-    { icon: Clipboard, label: "Feedback", value: "feedback", component: <InstructorFeedback /> },
-    { icon: Calendar, label: "Scheduling", value: "scheduling", component: <InstructorScheduling /> },
-    { icon: FileText, label: "Certificates", value: "certificates", component: <InstructorCertificates /> },
-    { icon: MessageSquare, label: "Student Notifications", value: "student-notifications", component: <InstructorStudentNotifications /> },
-    { icon: LogOut, label: "Logout", value: "logout", component: null, action: handleLogout },
+    {
+      icon: BarChart,
+      label: "Dashboard",
+      value: "dashboard",
+      component: <InstructorDashboard listOfCourses={instructorCoursesList} />,
+    },
+    {
+      icon: Book,
+      label: "Courses",
+      value: "courses",
+      component: <InstructorCourses listOfCourses={instructorCoursesList} />,
+    },
+    {
+      icon: LogOut,
+      label: "Logout",
+      value: "logout",
+      component: null,
+    },
   ];
 
   function handleLogout() {
@@ -79,21 +49,24 @@ function InstructorDashboardPage() {
     sessionStorage.clear();
   }
 
+  console.log(instructorCoursesList, "instructorCoursesList");
+
   return (
     <div className="flex h-full min-h-screen bg-gray-100">
       <aside className="w-64 bg-white shadow-md hidden md:block">
         <div className="p-4">
-          <h2 className="text-2xl font-bold mb-4">Kattraan Instructor</h2>
-          <p className="text-sm text-gray-500">
-            {format(currentTime, "eeee, MMMM d, yyyy")} | {currentTime.toLocaleTimeString()}
-          </p>
+          <h2 className="text-2xl font-bold mb-4">Instructor View</h2>
           <nav>
             {menuItems.map((menuItem) => (
               <Button
                 className="w-full justify-start mb-2"
                 key={menuItem.value}
                 variant={activeTab === menuItem.value ? "secondary" : "ghost"}
-                onClick={() => menuItem.action ? menuItem.action() : setActiveTab(menuItem.value)}
+                onClick={
+                  menuItem.value === "logout"
+                    ? handleLogout
+                    : () => setActiveTab(menuItem.value)
+                }
               >
                 <menuItem.icon className="mr-2 h-4 w-4" />
                 {menuItem.label}
@@ -104,10 +77,11 @@ function InstructorDashboardPage() {
       </aside>
       <main className="flex-1 p-8 overflow-y-auto">
         <div className="max-w-7xl mx-auto">
+          <h1 className="text-3xl font-bold mb-8">Dashboard</h1>
           <Tabs value={activeTab} onValueChange={setActiveTab}>
             {menuItems.map((menuItem) => (
-              <TabsContent value={menuItem.value} key={menuItem.value}>
-                {menuItem.component}
+              <TabsContent value={menuItem.value}>
+                {menuItem.component !== null ? menuItem.component : null}
               </TabsContent>
             ))}
           </Tabs>
@@ -117,4 +91,4 @@ function InstructorDashboardPage() {
   );
 }
 
-export default InstructorDashboardPage;
+export default InstructorDashboardpage;

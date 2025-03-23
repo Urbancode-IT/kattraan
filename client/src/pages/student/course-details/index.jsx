@@ -20,8 +20,6 @@ import {
 import { CheckCircle, Globe, Lock, PlayCircle } from "lucide-react";
 import { useContext, useEffect, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { RAZORPAY_KEY } from "@/config";
-
 
 function StudentViewCourseDetailsPage() {
   const {
@@ -44,19 +42,19 @@ function StudentViewCourseDetailsPage() {
   const location = useLocation();
 
   async function fetchStudentViewCourseDetails() {
-    const checkCoursePurchaseInfoResponse =
-      await checkCoursePurchaseInfoService(
-        currentCourseDetailsId,
-        auth?.user._id
-      );
+    // const checkCoursePurchaseInfoResponse =
+    //   await checkCoursePurchaseInfoService(
+    //     currentCourseDetailsId,
+    //     auth?.user._id
+    //   );
 
-    if (
-      checkCoursePurchaseInfoResponse?.success &&
-      checkCoursePurchaseInfoResponse?.data
-    ) {
-      navigate(`/course-progress/${currentCourseDetailsId}`);
-      return;
-    }
+    // if (
+    //   checkCoursePurchaseInfoResponse?.success &&
+    //   checkCoursePurchaseInfoResponse?.data
+    // ) {
+    //   navigate(`/course-progress/${currentCourseDetailsId}`);
+    //   return;
+    // }
 
     const response = await fetchStudentViewCourseDetailsService(
       currentCourseDetailsId
@@ -77,58 +75,33 @@ function StudentViewCourseDetailsPage() {
   }
 
   async function handleCreatePayment() {
-    try {
-      const paymentPayload = {
-        userId: auth?.user?._id,
-        courseId: studentViewCourseDetails?._id,
-        coursePricing: studentViewCourseDetails?.pricing,
-        courseTitle: studentViewCourseDetails?.title,
-      };
+    const paymentPayload = {
+      userId: auth?.user?._id,
+      userName: auth?.user?.userName,
+      userEmail: auth?.user?.userEmail,
+      orderStatus: "pending",
+      paymentMethod: "paypal",
+      paymentStatus: "initiated",
+      orderDate: new Date(),
+      paymentId: "",
+      payerId: "",
+      instructorId: studentViewCourseDetails?.instructorId,
+      instructorName: studentViewCourseDetails?.instructorName,
+      courseImage: studentViewCourseDetails?.image,
+      courseTitle: studentViewCourseDetails?.title,
+      courseId: studentViewCourseDetails?._id,
+      coursePricing: studentViewCourseDetails?.pricing,
+    };
 
-      const response = await createPaymentService(paymentPayload);
+    console.log(paymentPayload, "paymentPayload");
+    const response = await createPaymentService(paymentPayload);
 
-      if (response.success) {
-        const { razorpayOrderId } = response.data;
-
-        const options = {
-          key: RAZORPAY_KEY ,
-          amount: studentViewCourseDetails?.pricing * 100,
-          currency: "INR",
-          name: "Urbancode Training and Solutions",
-          description: studentViewCourseDetails?.title,
-          order_id: razorpayOrderId,
-          handler: async (paymentResponse) => {
-            const captureResponse = await capturePaymentService({
-              orderId: razorpayOrderId,
-              paymentId: paymentResponse.razorpay_payment_id,
-            });
-
-            if (captureResponse.success) {
-              alert("Payment Successful!");
-              navigate(`/course-progress/${studentViewCourseDetails?._id}`);
-            } else {
-              alert("Payment failed. Please try again.");
-            }
-          },
-          prefill: {
-            name: auth?.user?.userName,
-            email: auth?.user?.userEmail,
-          },
-          theme: {
-            color: "#F37254",
-          },
-        };
-
-        const razorpay = new Razorpay(options);
-        razorpay.open();
-
-        razorpay.on("payment.failed", (response) => {
-          alert("Payment failed. Please try again.");
-        });
-      }
-    } catch (error) {
-      console.error("Error creating payment:", error);
-      alert("An error occurred while initiating payment.");
+    if (response.success) {
+      sessionStorage.setItem(
+        "currentOrderId",
+        JSON.stringify(response?.data?.orderId)
+      );
+      setApprovalUrl(response?.data?.approveUrl);
     }
   }
 
@@ -260,7 +233,7 @@ function StudentViewCourseDetailsPage() {
               </div>
               <div className="mb-4">
                 <span className="text-3xl font-bold">
-                 ₹{studentViewCourseDetails?.pricing}
+                  ${studentViewCourseDetails?.pricing}
                 </span>
               </div>
               <Button onClick={handleCreatePayment} className="w-full">

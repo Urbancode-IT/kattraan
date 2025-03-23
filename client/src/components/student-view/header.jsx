@@ -1,4 +1,4 @@
-import { TvMinimalPlay } from "lucide-react";
+import { GraduationCap, TvMinimalPlay } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "../ui/button";
 import { useContext } from "react";
@@ -11,49 +11,46 @@ function StudentViewCommonHeader() {
   function handleLogout() {
     resetCredentials();
     sessionStorage.clear();
-    navigate('/login'); // Assuming '/login' is your login route
   }
 
   return (
-    <>
-      <header className="flex items-center justify-between p-4 border-b relative">
-        <nav className="flex items-center space-x-4">
-          <Link to="/home" className="flex items-center hover:text-black">
-            <span className="font-extrabold md:text-xl text-[14px]">
-              Kattraan
-            </span>
-          </Link>
+    <header className="flex items-center justify-between p-4 border-b relative">
+      <div className="flex items-center space-x-4">
+        <Link to="/home" className="flex items-center hover:text-black">
+          <GraduationCap className="h-8 w-8 mr-4 " />
+          <span className="font-extrabold md:text-xl text-[14px]">
+            LMS LEARN
+          </span>
+        </Link>
+        <div className="flex items-center space-x-1">
           <Button
             variant="ghost"
-            onClick={() => navigate("/courses", { replace: true })}
+            onClick={() => {
+              location.pathname.includes("/courses")
+                ? null
+                : navigate("/courses");
+            }}
             className="text-[14px] md:text-[16px] font-medium"
           >
             Explore Courses
           </Button>
-          {/* Search Bar */}
-        <div className="flex items-center relative w-full max-w-full md:max-w-[400px]">
-          <input
-            type="text"
-            placeholder="Search for anything"
-            className="w-full pl-4 pr-12 py-2 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
-          />
-          <button
-            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+        </div>
+      </div>
+      <div className="flex items-center space-x-4">
+        <div className="flex gap-4 items-center">
+          <div
+            onClick={() => navigate("/student-courses")}
+            className="flex cursor-pointer items-center gap-3"
           >
-            🔍
-          </button>
-        </div>
-        </nav>
-        <div className="flex items-center space-x-4">
-          <Button onClick={() => navigate("/student-courses")}>
-            My Courses
-            <TvMinimalPlay className="w-8 h-8 ml-2" />
-          </Button>
+            <span className="font-extrabold md:text-xl text-[14px]">
+              My Courses
+            </span>
+            <TvMinimalPlay className="w-8 h-8 cursor-pointer" />
+          </div>
           <Button onClick={handleLogout}>Sign Out</Button>
         </div>
-      </header>
-      
-    </>
+      </div>
+    </header>
   );
 }
 
