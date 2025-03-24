@@ -6,6 +6,7 @@ export const signUpFormControls = [
     type: "text",
     componentType: "input",
   },
+
   {
     name: "userEmail",
     label: "User Email",
@@ -19,6 +20,14 @@ export const signUpFormControls = [
     placeholder: "Enter your password",
     type: "password",
     componentType: "input",
+  },
+
+  {
+    label: "Re-enter Password",
+    name: "confirmPassword",
+    type: "password",
+    placeholder: "Re-enter your password",
+    required: true,
   },
 ];
 
@@ -37,17 +46,29 @@ export const signInFormControls = [
     type: "password",
     componentType: "input",
   },
+  {
+    name: "mathAnswer",
+    label: "Enter the answer to the math question below",
+    placeholder: "Answer",
+    type: "text",
+    componentType: "input",
+  },
 ];
+
+
 
 export const initialSignInFormData = {
   userEmail: "",
   password: "",
+  mathAnswer: "", 
 };
+
 
 export const initialSignUpFormData = {
   userName: "",
   userEmail: "",
   password: "",
+  confirmPassword: "", 
 };
 
 export const languageOptions = [
