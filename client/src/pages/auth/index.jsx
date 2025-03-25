@@ -8,6 +8,7 @@ import avatar2 from "../../assets/avatar/02.jpg";
 import avatar3 from "../../assets/avatar/03.jpg";
 import avatar4 from "../../assets/avatar/04.jpg";
 import elementImg from "../../assets/element/02.svg";
+import StudentHomePage from "./pages/student/home";
 
 function AuthPage() {
   const [activeTab, setActiveTab] = useState("signin");
