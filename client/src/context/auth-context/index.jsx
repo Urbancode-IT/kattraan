@@ -15,23 +15,7 @@ export default function AuthProvider({ children }) {
   const [auth, setAuth] = useState({ authenticate: false, user: null });
   const [loading, setLoading] = useState(true);
 
-  // ✅ Math Challenge
-  const [mathChallenge, setMathChallenge] = useState({ question: "", answer: "" });
-
-  // ✅ Generate math question
-  const generateMathChallenge = () => {
-    const num1 = Math.floor(Math.random() * 10) + 1;
-    const num2 = Math.floor(Math.random() * 10) + 1;
-    setMathChallenge({
-      question: `${num1} + ${num2}`,
-      answer: String(num1 + num2),
-    });
-  };
-
-  // ✅ Generate math question on mount
-  useEffect(() => {
-    generateMathChallenge();
-  }, []);
+  
 
   // ✅ Register Handler
   const handleRegisterUser = async (event) => {
@@ -69,23 +53,9 @@ export default function AuthProvider({ children }) {
     }
   };
 
-  // ✅ Login Handler with Math Challenge Check
+  // ✅ Login Handler (cleaned)
   const handleLoginUser = async (event) => {
     event.preventDefault();
-
-    const userAnswer = String(signInFormData.mathAnswer || "").trim();
-    const correctAnswer = String(mathChallenge.answer).trim();
-
-    if (userAnswer !== correctAnswer) {
-      Swal.fire({
-        icon: "warning",
-        title: "Incorrect Answer",
-        text: "Please solve the math question correctly.",
-      });
-      generateMathChallenge();
-      return;
-    }
-
     try {
       const data = await loginService(signInFormData);
       if (data.success) {
@@ -140,7 +110,6 @@ export default function AuthProvider({ children }) {
     }
   };
 
-  // ✅ Reset Credentials
   const resetCredentials = () => {
     setAuth({ authenticate: false, user: null });
   };
@@ -160,8 +129,6 @@ export default function AuthProvider({ children }) {
         handleLoginUser,
         auth,
         resetCredentials,
-        mathChallenge,
-        generateMathChallenge,
       }}
     >
       {loading ? <Skeleton /> : children}

@@ -1,6 +1,6 @@
 import CommonForm from "@/components/common-form";
 import { AuthContext } from "@/context/auth-context";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { signInFormControls, signUpFormControls } from "@/config";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import avatar1 from "../../assets/avatar/01.jpg";
@@ -11,7 +11,6 @@ import elementImg from "../../assets/element/02.svg";
 
 function AuthPage() {
   const [activeTab, setActiveTab] = useState("signin");
-  const [mathChallenge, setMathChallenge] = useState({ question: "", answer: "" });
 
   const {
     signInFormData,
@@ -22,21 +21,8 @@ function AuthPage() {
     handleLoginUser,
   } = useContext(AuthContext);
 
-  useEffect(() => {
-    if (activeTab === "signin") {
-      const num1 = Math.floor(Math.random() * 10) + 1;
-      const num2 = Math.floor(Math.random() * 10) + 1;
-      setMathChallenge({
-        question: `${num1} + ${num2} = ?`,
-        answer: (num1 + num2).toString(),
-      });
-    }
-  }, [activeTab]);
-
   const checkIfSignInFormIsValid = () =>
-    signInFormData.userEmail &&
-    signInFormData.password &&
-    signInFormData.mathAnswer === mathChallenge.answer;
+    signInFormData.userEmail && signInFormData.password;
 
   const checkIfSignUpFormIsValid = () =>
     signUpFormData.userName &&
@@ -72,12 +58,6 @@ function AuthPage() {
                 : "Fill the details to get started."}
             </p>
           </div>
-
-          {activeTab === "signin" && (
-            <p className="text-center text-sm font-semibold text-gray-700 mb-2">
-              Solve to continue: <span className="text-blue-600">{mathChallenge.question}</span>
-            </p>
-          )}
 
           <CommonForm
             formControls={activeTab === "signin" ? signInFormControls : signUpFormControls}

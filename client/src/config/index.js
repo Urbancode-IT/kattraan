@@ -46,13 +46,6 @@ export const signInFormControls = [
     type: "password",
     componentType: "input",
   },
-  {
-    name: "mathAnswer",
-    label: "Enter the answer to the math question below",
-    placeholder: "Answer",
-    type: "text",
-    componentType: "input",
-  },
 ];
 
 
@@ -60,7 +53,6 @@ export const signInFormControls = [
 export const initialSignInFormData = {
   userEmail: "",
   password: "",
-  mathAnswer: "", 
 };
 
 
