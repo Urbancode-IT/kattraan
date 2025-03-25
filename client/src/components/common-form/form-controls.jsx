@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import {
@@ -8,103 +7,102 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
-import { Textarea } from "../ui/textarea"; // Include if not already
-
-import { Eye, EyeOff } from "lucide-react"; // ✅ Using Lucide icons for show/hide
+import { Textarea } from "../ui/textarea";
 
 function FormControls({ formControls = [], formData, setFormData }) {
-  const [showPasswords, setShowPasswords] = useState({});
+  function renderComponentByType(getControlItem) {
+    let element = null;
+    const currentControlItemValue = formData[getControlItem.name] || "";
 
-  const togglePasswordVisibility = (fieldName) => {
-    setShowPasswords((prev) => ({
-      ...prev,
-      [fieldName]: !prev[fieldName],
-    }));
-  };
-
-  function renderComponentByType(control) {
-    const value = formData[control.name] || "";
-
-    switch (control.componentType) {
-      case "select":
-        return (
-          <Select
-            onValueChange={(value) =>
-              setFormData({ ...formData, [control.name]: value })
-            }
-            value={value}
-          >
-            <SelectTrigger className="w-full">
-              <SelectValue placeholder={control.label} />
-            </SelectTrigger>
-            <SelectContent>
-              {control.options?.map((option) => (
-                <SelectItem key={option.id} value={option.id}>
-                  {option.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        );
-
-      case "textarea":
-        return (
-          <Textarea
-            id={control.name}
-            name={control.name}
-            placeholder={control.placeholder}
-            value={value}
-            onChange={(e) =>
-              setFormData({ ...formData, [control.name]: e.target.value })
+    switch (getControlItem.componentType) {
+      case "input":
+        element = (
+          <Input
+            id={getControlItem.name}
+            name={getControlItem.name}
+            placeholder={getControlItem.placeholder}
+            type={getControlItem.type}
+            value={currentControlItemValue}
+            onChange={(event) =>
+              setFormData({
+                ...formData,
+                [getControlItem.name]: event.target.value,
+              })
             }
           />
         );
-
-      case "input":
-      default:
-        const isPassword = control.type === "password";
-        const inputType = isPassword
-          ? showPasswords[control.name]
-            ? "text"
-            : "password"
-          : control.type;
-
-        return (
-          <div className="relative">
-            <Input
-              id={control.name}
-              name={control.name}
-              placeholder={control.placeholder}
-              type={inputType}
-              value={value}
-              onChange={(e) =>
-                setFormData({ ...formData, [control.name]: e.target.value })
-              }
-            />
-            {isPassword && (
-              <button
-                type="button"
-                onClick={() => togglePasswordVisibility(control.name)}
-                className="absolute top-2 right-3 text-gray-600"
-              >
-                {showPasswords[control.name] ? (
-                  <EyeOff size={18} />
-                ) : (
-                  <Eye size={18} />
-                )}
-              </button>
-            )}
-          </div>
+        break;
+      case "select":
+        element = (
+          <Select
+            onValueChange={(value) =>
+              setFormData({
+                ...formData,
+                [getControlItem.name]: value,
+              })
+            }
+            value={currentControlItemValue}
+          >
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder={getControlItem.label} />
+            </SelectTrigger>
+            <SelectContent>
+              {getControlItem.options && getControlItem.options.length > 0
+                ? getControlItem.options.map((optionItem) => (
+                    <SelectItem key={optionItem.id} value={optionItem.id}>
+                      {optionItem.label}
+                    </SelectItem>
+                  ))
+                : null}
+            </SelectContent>
+          </Select>
         );
+        break;
+      case "textarea":
+        element = (
+          <Textarea
+            id={getControlItem.name}
+            name={getControlItem.name}
+            placeholder={getControlItem.placeholder}
+            value={currentControlItemValue}
+            onChange={(event) =>
+              setFormData({
+                ...formData,
+                [getControlItem.name]: event.target.value,
+              })
+            }
+          />
+        );
+        break;
+
+      default:
+        element = (
+          <Input
+            id={getControlItem.name}
+            name={getControlItem.name}
+            placeholder={getControlItem.placeholder}
+            type={getControlItem.type}
+            value={currentControlItemValue}
+            onChange={(event) =>
+              setFormData({
+                ...formData,
+                [getControlItem.name]: event.target.value,
+              })
+            }
+          />
+        );
+        break;
     }
+
+    return element;
   }
 
   return (
     <div className="flex flex-col gap-3">
-      {formControls.map((control) => (
-        <div key={control.name}>
-          <Label htmlFor={control.name}>{control.label}</Label>
-          {renderComponentByType(control)}
+      {formControls.map((controleItem) => (
+        <div key={controleItem.name}>
+          <Label htmlFor={controleItem.name}>{controleItem.label}</Label>
+          {renderComponentByType(controleItem)}
         </div>
       ))}
     </div>

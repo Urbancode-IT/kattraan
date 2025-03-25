@@ -2,13 +2,15 @@ import CommonForm from "@/components/common-form";
 import { AuthContext } from "@/context/auth-context";
 import { useContext, useState } from "react";
 import { signInFormControls, signUpFormControls } from "@/config";
-import 'bootstrap/dist/css/bootstrap.min.css';
 import avatar1 from "../../assets/avatar/01.jpg";
 import avatar2 from "../../assets/avatar/02.jpg";
 import avatar3 from "../../assets/avatar/03.jpg";
 import avatar4 from "../../assets/avatar/04.jpg";
 import elementImg from "../../assets/element/02.svg";
-import StudentHomePage from "./pages/student/home";
+import Footer from "@/components/student-view/footer";
+import Header from "@/components/student-view/header";
+
+
 
 function AuthPage() {
   const [activeTab, setActiveTab] = useState("signin");
@@ -30,8 +32,11 @@ function AuthPage() {
     signUpFormData.userEmail &&
     signUpFormData.password &&
     signUpFormData.password === signUpFormData.confirmPassword;
+    
 
   return (
+    <div>
+      <Header />
     <div className="min-h-screen flex justify-center items-center bg-gray-100 px-4">
       <div className="w-full max-w-6xl bg-white rounded-lg shadow-lg flex flex-col md:flex-row overflow-hidden">
         {/* Left Panel */}
@@ -86,6 +91,8 @@ function AuthPage() {
           </div>
         </div>
       </div>
+    </div>
+    <Footer />
     </div>
   );
 }

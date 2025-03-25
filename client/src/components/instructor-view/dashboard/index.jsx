@@ -7,7 +7,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { DollarSign, Users } from "lucide-react";
+import { Users } from "lucide-react";
+import { FaRupeeSign } from 'react-icons/fa';  // Importing Rupee Sign
 
 function InstructorDashboard({ listOfCourses }) {
   function calculateTotalStudentsAndProfit() {
@@ -50,7 +51,7 @@ function InstructorDashboard({ listOfCourses }) {
       value: calculateTotalStudentsAndProfit().totalStudents,
     },
     {
-      icon: DollarSign,
+      icon: FaRupeeSign,
       label: "Total Revenue",
       value: calculateTotalStudentsAndProfit().totalProfit,
     },

@@ -19,8 +19,8 @@ function StudentViewCommonHeader() {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
 
-  const userName = auth.user?.userName || "User"; // ✅ fixed field name
-  const userEmail = auth.user?.userEmail || "email@example.com"; // ✅ fixed field name
+  const userName = auth.user?.userName || "User";
+  const userEmail = auth.user?.userEmail || "email@example.com";
   const userInitial = userName.charAt(0).toUpperCase();
   const bgColor = getRandomBgColor(userInitial);
 
@@ -53,7 +53,7 @@ function StudentViewCommonHeader() {
           Teach Me Kattraan
         </Button>
 
-        {/* ✅ Search Form */}
+        {/* Search Input */}
         <form onSubmit={handleSearch} className="relative">
           <input
             type="text"
@@ -70,35 +70,47 @@ function StudentViewCommonHeader() {
 
       {/* Right Section */}
       <div className="flex items-center space-x-4">
-        <div onClick={() => navigate("/student-courses")} className="flex cursor-pointer items-center space-x-2">
-          <span className="font-semibold text-sm md:text-base">My Courses</span>
-          <TvMinimalPlay className="w-6 h-6" />
-        </div>
-
-        {/* Profile Dropdown */}
-        <div className="relative">
-          <div
-            className={`w-9 h-9 flex items-center justify-center rounded-full text-white font-bold cursor-pointer ${bgColor}`}
-            onClick={() => setDropdownOpen(!dropdownOpen)}
-          >
-            {userInitial}
+        {/* My Courses - only if authenticated */}
+        {auth.authenticate && (
+          <div onClick={() => navigate("/student-courses")} className="flex cursor-pointer items-center space-x-2">
+            <span className="font-semibold text-sm md:text-base">My Courses</span>
+            <TvMinimalPlay className="w-6 h-6" />
           </div>
+        )}
 
-          {dropdownOpen && (
-            <ul className="absolute right-0 mt-2 w-60 bg-white shadow-lg rounded-md p-3 space-y-2 z-50 text-sm">
-              <li className="flex items-center space-x-2">
-                <User className="w-4 h-4" />
-                <span className="font-semibold">{userName}</span>
-              </li>
-              <li className="text-gray-600 truncate">{userEmail}</li>
-              <li className="border-t pt-2">
-                <Button className="w-full" variant="destructive" onClick={handleLogout}>
-                  Sign Out
-                </Button>
-              </li>
-            </ul>
-          )}
-        </div>
+        {/* Sign In Button (if not signed in) */}
+        {!auth.authenticate && (
+          <Button onClick={() => navigate("/auth")} className="text-sm md:text-base">
+            Sign In
+          </Button>
+        )}
+
+        {/* Profile Dropdown (only when signed in) */}
+        {auth.authenticate && (
+          <div className="relative">
+            <div
+              className={`w-9 h-9 flex items-center justify-center rounded-full text-white font-bold cursor-pointer ${bgColor}`}
+              onClick={() => setDropdownOpen(!dropdownOpen)}
+            >
+              {userInitial}
+            </div>
+
+            {dropdownOpen && (
+              <ul className="absolute right-0 mt-2 w-60 bg-white shadow-lg rounded-md p-3 space-y-2 z-50 text-sm">
+                <li className="flex items-center space-x-2">
+                  <User className="w-4 h-4" />
+                  <span className="font-semibold">{userName}</span>
+                </li>
+                <li className="text-gray-600 truncate">{userEmail}</li>
+                <li className="border-t pt-2">
+                  <Button className="w-full" variant="destructive" onClick={handleLogout}>
+                    Sign Out
+                  </Button>
+                </li>
+              </ul>
+            )}
+          </div>
+        )}
       </div>
     </header>
   );

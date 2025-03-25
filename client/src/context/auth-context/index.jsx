@@ -15,7 +15,7 @@ export default function AuthProvider({ children }) {
   const [auth, setAuth] = useState({ authenticate: false, user: null });
   const [loading, setLoading] = useState(true);
 
-  
+   
 
   // ✅ Register Handler
   const handleRegisterUser = async (event) => {
@@ -58,20 +58,30 @@ export default function AuthProvider({ children }) {
     event.preventDefault();
     try {
       const data = await loginService(signInFormData);
+  
       if (data.success) {
-        sessionStorage.setItem("accessToken", JSON.stringify(data.data.accessToken));
-        setAuth({ authenticate: true, user: data.data.user });
-
+        const user = data.data.user;
+        const token = data.data.accessToken;
+  
+        sessionStorage.setItem("accessToken", JSON.stringify(token));
+        setAuth({ authenticate: true, user });
+  
         Swal.fire({
           icon: "success",
           title: "Login Successful",
-          text: "Redirecting to your Kattraan...",
+          text: "Redirecting...",
           timer: 2000,
           showConfirmButton: false,
           timerProgressBar: true,
         });
-
-        setTimeout(() => navigate("/home"), 2000);
+  
+        setTimeout(() => {
+          if (user?.role === "instructor") {
+            navigate("/instructor");
+          } else {
+            navigate("/home");
+          }
+        }, 2000);
       } else {
         Swal.fire({
           icon: "error",
@@ -88,11 +98,12 @@ export default function AuthProvider({ children }) {
           error?.response?.data?.error ||
           "Server Error. Please try again.",
       });
-
+  
       setAuth({ authenticate: false, user: null });
       console.error("Login error:", error);
     }
   };
+  
 
   // ✅ Check Auth on Load
   const checkAuthUser = async () => {
