@@ -1,8 +1,9 @@
-import { Route, Routes } from "react-router-dom";
-import AuthPage from "./pages/auth";
-import RouteGuard from "./components/route-guard";
+import { Route, Routes, Navigate } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "./context/auth-context";
+
+import AuthPage from "./pages/auth";
+import RouteGuard from "./components/route-guard";
 import InstructorDashboardpage from "./pages/instructor";
 import StudentViewCommonLayout from "./components/student-view/common-layout";
 import StudentHomePage from "./pages/student/home";
@@ -19,6 +20,13 @@ function App() {
 
   return (
     <Routes>
+      {/* ✅ Public: Home Page and root redirect */}
+      <Route path="/" element={<StudentViewCommonLayout />}>
+        <Route path="" element={<Navigate to="/home" replace />} />
+        <Route path="home" element={<StudentHomePage />} />
+      </Route>
+
+      {/* 🔐 Protected Routes */}
       <Route
         path="/auth"
         element={
@@ -59,6 +67,7 @@ function App() {
           />
         }
       />
+
       <Route
         path="/"
         element={
@@ -69,20 +78,13 @@ function App() {
           />
         }
       >
-        <Route path="" element={<StudentHomePage />} />
-        <Route path="home" element={<StudentHomePage />} />
         <Route path="courses" element={<StudentViewCoursesPage />} />
-        <Route
-          path="course/details/:id"
-          element={<StudentViewCourseDetailsPage />}
-        />
+        <Route path="course/details/:id" element={<StudentViewCourseDetailsPage />} />
         <Route path="payment-return" element={<PaypalPaymentReturnPage />} />
         <Route path="student-courses" element={<StudentCoursesPage />} />
-        <Route
-          path="course-progress/:id"
-          element={<StudentViewCourseProgressPage />}
-        />
+        <Route path="course-progress/:id" element={<StudentViewCourseProgressPage />} />
       </Route>
+
       <Route path="*" element={<NotFoundPage />} />
     </Routes>
   );

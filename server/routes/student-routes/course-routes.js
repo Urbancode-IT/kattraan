@@ -11,3 +11,4 @@ router.get("/get/details/:id", getStudentViewCourseDetails);
 router.get("/purchase-info/:id/:studentId", checkCoursePurchaseInfo);
 
 module.exports = router;
+

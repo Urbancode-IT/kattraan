@@ -6,6 +6,7 @@ export const signUpFormControls = [
     type: "text",
     componentType: "input",
   },
+
   {
     name: "userEmail",
     label: "User Email",
@@ -19,6 +20,14 @@ export const signUpFormControls = [
     placeholder: "Enter your password",
     type: "password",
     componentType: "input",
+  },
+
+  {
+    label: "Re-enter Password",
+    name: "confirmPassword",
+    type: "password",
+    placeholder: "Re-enter your password",
+    required: true,
   },
 ];
 
@@ -39,28 +48,36 @@ export const signInFormControls = [
   },
 ];
 
+
+
 export const initialSignInFormData = {
   userEmail: "",
   password: "",
 };
 
+
 export const initialSignUpFormData = {
   userName: "",
   userEmail: "",
   password: "",
+  confirmPassword: "", 
 };
 
 export const languageOptions = [
+  { id: "tamil", label: "Tamil" },
   { id: "english", label: "English" },
+  { id: "telugu", label: "Telugu" },
+  { id: "hindi", label: "Hindi" },
+  { id: "german", label: "German" },
   { id: "spanish", label: "Spanish" },
   { id: "french", label: "French" },
-  { id: "german", label: "German" },
   { id: "chinese", label: "Chinese" },
   { id: "japanese", label: "Japanese" },
   { id: "korean", label: "Korean" },
   { id: "portuguese", label: "Portuguese" },
   { id: "arabic", label: "Arabic" },
   { id: "russian", label: "Russian" },
+  
 ];
 
 export const courseLevelOptions = [
@@ -184,3 +201,5 @@ export const filterOptions = {
   level: courseLevelOptions,
   primaryLanguage: languageOptions,
 };
+
+export const RAZORPAY_KEY = "rzp_test_aa4kkvlbjJYcvJ"; // Replace with your Razorpay Key ID
