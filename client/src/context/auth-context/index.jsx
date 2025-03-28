@@ -1,0 +1,148 @@
+import { Skeleton } from "@/components/ui/skeleton";
+import { initialSignInFormData, initialSignUpFormData } from "@/config";
+import { checkAuthService, loginService, registerService } from "@/services";
+import { createContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
+
+export const AuthContext = createContext(null);
+
+export default function AuthProvider({ children }) {
+  const navigate = useNavigate();
+
+  const [signInFormData, setSignInFormData] = useState(initialSignInFormData);
+  const [signUpFormData, setSignUpFormData] = useState(initialSignUpFormData);
+  const [auth, setAuth] = useState({ authenticate: false, user: null });
+  const [loading, setLoading] = useState(true);
+
+   
+
+  // ✅ Register Handler
+  const handleRegisterUser = async (event) => {
+    event.preventDefault();
+    try {
+      const data = await registerService(signUpFormData);
+      if (data.success) {
+        Swal.fire({
+          icon: "success",
+          title: "Registration Successful",
+          text: "Redirecting to Kattraan...",
+          timer: 2000,
+          showConfirmButton: false,
+          timerProgressBar: true,
+        });
+
+        setTimeout(() => navigate("/home"), 2000);
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "Registration Failed",
+          text: data.message || "Please try again.",
+        });
+      }
+    } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Something went wrong",
+        text:
+          error?.response?.data?.message ||
+          error?.response?.data?.error ||
+          "Server Error. Please try again.",
+      });
+      console.error("Registration error:", error);
+    }
+  };
+
+  // ✅ Login Handler (cleaned)
+  const handleLoginUser = async (event) => {
+    event.preventDefault();
+    try {
+      const data = await loginService(signInFormData);
+  
+      if (data.success) {
+        const user = data.data.user;
+        const token = data.data.accessToken;
+  
+        sessionStorage.setItem("accessToken", JSON.stringify(token));
+        setAuth({ authenticate: true, user });
+  
+        Swal.fire({
+          icon: "success",
+          title: "Login Successful",
+          text: "Redirecting...",
+          timer: 2000,
+          showConfirmButton: false,
+          timerProgressBar: true,
+        });
+  
+        setTimeout(() => {
+          if (user?.role === "instructor") {
+            navigate("/instructor");
+          } else {
+            navigate("/home");
+          }
+        }, 2000);
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "Login Failed",
+          text: data.message || "Invalid email or password",
+        });
+      }
+    } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Login Error",
+        text:
+          error?.response?.data?.message ||
+          error?.response?.data?.error ||
+          "Server Error. Please try again.",
+      });
+  
+      setAuth({ authenticate: false, user: null });
+      console.error("Login error:", error);
+    }
+  };
+  
+
+  // ✅ Check Auth on Load
+  const checkAuthUser = async () => {
+    try {
+      const data = await checkAuthService();
+      if (data.success) {
+        setAuth({ authenticate: true, user: data.data.user });
+      } else {
+        setAuth({ authenticate: false, user: null });
+      }
+    } catch {
+      setAuth({ authenticate: false, user: null });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const resetCredentials = () => {
+    setAuth({ authenticate: false, user: null });
+  };
+
+  useEffect(() => {
+    checkAuthUser();
+  }, []);
+
+  return (
+    <AuthContext.Provider
+      value={{
+        signInFormData,
+        setSignInFormData,
+        signUpFormData,
+        setSignUpFormData,
+        handleRegisterUser,
+        handleLoginUser,
+        auth,
+        resetCredentials,
+      }}
+    >
+      {loading ? <Skeleton /> : children}
+    </AuthContext.Provider>
+  );
+}
