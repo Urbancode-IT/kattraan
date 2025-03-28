@@ -1,0 +1,98 @@
+/* Highlighted yellow brush text */
+.highlighted-text {
+    position: relative;
+    display: inline-block;
+    z-index: 1;
+    font-weight: 800;
+  }
+  
+  .highlighted-text::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 85%;
+    transform: translate(-50%, -50%) scaleX(1.1); /* 💡 Center and scale */
+    background: url("../../../assets/img/brush-effect.png") no-repeat center/cover;
+    z-index: -1;
+    height: 1.1em;
+    width: 100%;
+  }
+  
+ 
+
+  /* Slow vertical bounce */
+@keyframes bounceSlow {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-12px);
+    }
+  }
+  
+  .animate-bounce-slow {
+    animation: bounceSlow 4s ease-in-out infinite;
+  }
+  
+  /* Subtle rotate */
+  @keyframes rotate {
+    0% {
+      transform: rotate(0deg);
+    }
+    
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+  
+  .animate-rotate {
+    animation: rotate 5s ease-in-out infinite;
+  }
+  
+  /* Gentle up and down float */
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-8px);
+    }
+  }
+  
+  .animate-float {
+    animation: float 5s ease-in-out infinite;
+  }
+  
+  
+  .floating-icon {
+    animation: float 3s ease-in-out infinite;
+    opacity: 0.9;
+  }
+  
+  .floating-icon.delay-0 {
+    animation-delay: 0s;
+  }
+  .floating-icon.delay-200 {
+    animation-delay: 0.2s;
+  }
+  .floating-icon.delay-400 {
+    animation-delay: 0.4s;
+  }
+  
+  .animate-transform {
+    animation: transformScale 7s ease-in-out infinite;
+    transition: transform 0.5s ease-in-out;
+  }
+  
+  @keyframes transformScale {
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.5);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+  
