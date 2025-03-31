@@ -18,21 +18,29 @@ export default function AuthProvider({ children }) {
    
 
   // ✅ Register Handler
-  const handleRegisterUser = async (event) => {
+  const handleRegisterUser = async (event, customRole = "user") => {
     event.preventDefault();
     try {
-      const data = await registerService(signUpFormData);
+      const formData = { ...signUpFormData };
+      const data = await registerService(formData, customRole); // Pass role
+  
       if (data.success) {
         Swal.fire({
           icon: "success",
           title: "Registration Successful",
-          text: "Redirecting to Kattraan...",
+          text: "Redirecting...",
           timer: 2000,
           showConfirmButton: false,
           timerProgressBar: true,
         });
-
-        setTimeout(() => navigate("/home"), 2000);
+  
+        setTimeout(() => {
+          if (customRole === "instructor") {
+            navigate("/instructor");
+          } else {
+            navigate("/home");
+          }
+        }, 2000);
       } else {
         Swal.fire({
           icon: "error",
@@ -52,6 +60,7 @@ export default function AuthProvider({ children }) {
       console.error("Registration error:", error);
     }
   };
+  
 
   // ✅ Login Handler (cleaned)
   const handleLoginUser = async (event) => {

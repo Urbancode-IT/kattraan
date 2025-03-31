@@ -4,6 +4,8 @@ import { StudentContext } from "@/context/student-context";
 import { AuthContext } from "@/context/auth-context";
 import { checkCoursePurchaseInfoService } from "@/services";
 import { Star } from "lucide-react";
+import { FaRegClock } from "react-icons/fa";
+import { PiChalkboardTeacher } from "react-icons/pi";
 
 function FeaturedCourses() {
   const { studentViewCoursesList } = useContext(StudentContext);
@@ -13,7 +15,6 @@ function FeaturedCourses() {
   async function handleCourseNavigate(courseId) {
     try {
       const response = await checkCoursePurchaseInfoService(courseId, auth?.user?._id);
-
       if (response?.success) {
         const path = response.data
           ? `/course-progress/${courseId}`
@@ -28,6 +29,25 @@ function FeaturedCourses() {
     }
   }
 
+  function formatTotalDuration(curriculum) {
+    let totalSeconds = 0;
+
+    curriculum?.forEach((item) => {
+      if (item?.duration) {
+        const parts = item.duration.split(":").map(Number).reverse();
+        if (parts.length === 2) {
+          totalSeconds += parts[0] + parts[1] * 60;
+        } else if (parts.length === 3) {
+          totalSeconds += parts[0] + parts[1] * 60 + parts[2] * 3600;
+        }
+      }
+    });
+
+    const hours = Math.floor(totalSeconds / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
+    return `${hours > 0 ? `${hours}h ` : ""}${minutes}m`;
+  }
+
   return (
     <section className="py-12 px-4 lg:px-20 bg-white">
       <h2 className="text-3xl font-bold mb-3 text-center">Most Popular Courses</h2>
@@ -37,49 +57,67 @@ function FeaturedCourses() {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
         {studentViewCoursesList && studentViewCoursesList.length > 0 ? (
-          studentViewCoursesList.map((courseItem) => (
-            <div
-              key={courseItem?._id}
-              onClick={() => handleCourseNavigate(courseItem?._id)}
-              className="bg-white rounded-xl overflow-hidden shadow-md border hover:shadow-lg transition cursor-pointer"
-            >
-              <img
-                src={courseItem?.image}
-                alt={courseItem?.title}
-                className="w-full h-40 object-cover"
-              />
+          studentViewCoursesList.map((courseItem) => {
+            const lectureCount = courseItem?.curriculum?.length || 0;
+            const totalDuration = formatTotalDuration(courseItem?.curriculum);
 
-              <div className="p-4">
-                {/* Badge */}
-                <span className="inline-block px-2 py-1 text-xs font-medium bg-purple-100 text-purple-700 rounded mb-2">
-                  {courseItem?.level || "All level"}
-                </span>
+            return (
+              <div
+                key={courseItem?._id}
+                onClick={() => handleCourseNavigate(courseItem?._id)}
+                className="bg-white rounded-2xl overflow-hidden shadow-sm border hover:shadow-md transition-all duration-300 cursor-pointer"
+              >
+                <img
+                  src={courseItem?.image}
+                  alt={courseItem?.title}
+                  className="w-full h-44 object-cover rounded-t-2xl"
+                />
 
-                {/* Title */}
-                <h3 className="text-md font-semibold mb-1">{courseItem?.title}</h3>
+                <div className="p-4">
+                  <span className="inline-block px-2 py-1 text-xs font-semibold bg-purple-100 text-purple-700 rounded mb-2">
+                    {courseItem?.level || "All level"}
+                  </span>
 
-                {/* Description or subtitle */}
-                <p className="text-gray-600 text-sm mb-2 line-clamp-2">
-                  {courseItem?.subtitle || "Course description coming soon..."}
-                </p>
+                  <h3 className="text-md font-semibold text-gray-800 mb-1 leading-snug">
+                    {courseItem?.title}
+                  </h3>
 
-                {/* Rating + Duration + Lectures */}
-                <div className="flex items-center justify-between text-sm text-gray-600 mt-3">
-                  <div className="flex items-center gap-1">
-                    <Star className="w-4 h-4 text-yellow-400 fill-yellow-400" />
-                    <span>{courseItem?.rating || 4.5}/5.0</span>
+                  <p className="text-gray-500 text-sm mb-3 line-clamp-2">
+                    {courseItem?.subtitle || "Course description coming soon..."}
+                  </p>
+
+                  <div className="flex items-center text-sm text-gray-600 mb-4">
+                    {[...Array(5)].map((_, i) => (
+                      <Star
+                        key={i}
+                        className={`w-4 h-4 mr-0.5 ${
+                          i < Math.round(courseItem?.rating || 4)
+                            ? "text-yellow-400 fill-yellow-400"
+                            : "text-gray-300"
+                        }`}
+                      />
+                    ))}
+                    <span className="ml-2 font-medium">
+                      {courseItem?.rating || "4.5"}/5.0
+                    </span>
                   </div>
-                  <div>🕒 {courseItem?.duration || "10h"}</div>
-                  <div>🎓 {courseItem?.lectures || 20} lectures</div>
-                </div>
 
-                {/* Price */}
-                <p className="mt-3 text-lg font-bold text-blue-700">
-                  ₹{courseItem?.pricing}
-                </p>
+                  <hr className="my-3" />
+
+                  <div className="flex items-center justify-between text-xs text-gray-600">
+                    <div className="flex items-center gap-1">
+                      <FaRegClock className="w-4 h-4" />
+                      {totalDuration || "1h 30m"} total duration
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <PiChalkboardTeacher className="w-4 h-4" />
+                      {lectureCount} lectures
+                    </div>
+                  </div>
+                </div>
               </div>
-            </div>
-          ))
+            );
+          })
         ) : (
           <p className="col-span-full text-center text-gray-500">No Courses Found</p>
         )}

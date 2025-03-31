@@ -3,10 +3,12 @@ import { useContext } from "react";
 import { AuthContext } from "./context/auth-context";
 
 import AuthPage from "./pages/auth";
+import InstructorAuthPage from "./pages/instructor-auth";
 import RouteGuard from "./components/route-guard";
 import InstructorDashboardpage from "./pages/instructor";
 import StudentViewCommonLayout from "./components/student-view/common-layout";
 import StudentHomePage from "./pages/student/home";
+import InstructorHomePage from "./pages/instructor/home";
 import NotFoundPage from "./pages/not-found";
 import AddNewCoursePage from "./pages/instructor/add-new-course";
 import StudentViewCoursesPage from "./pages/student/courses";
@@ -24,6 +26,8 @@ function App() {
       <Route path="/" element={<StudentViewCommonLayout />}>
         <Route path="" element={<Navigate to="/home" replace />} />
         <Route path="home" element={<StudentHomePage />} />
+        <Route path="instructor" element={<InstructorHomePage />} />
+        <Route path="/instructor-auth" element={<InstructorAuthPage />} />
       </Route>
 
       {/* 🔐 Protected Routes */}
