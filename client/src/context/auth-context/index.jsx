@@ -1,6 +1,11 @@
 import { Skeleton } from "@/components/ui/skeleton";
 import { initialSignInFormData, initialSignUpFormData } from "@/config";
-import { checkAuthService, loginService, registerService } from "@/services";
+import {
+  checkAuthService,
+  loginService,
+  registerService,
+  becomeInstructorService,
+} from "@/services";
 import { createContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
@@ -15,24 +20,42 @@ export default function AuthProvider({ children }) {
   const [auth, setAuth] = useState({ authenticate: false, user: null });
   const [loading, setLoading] = useState(true);
 
-   
-
   // ✅ Register Handler
+<<<<<<< HEAD
+  const handleRegisterUser = async (event, onSuccessNavigateToSignIn) => {
+    event.preventDefault();
+    try {
+      const formData = { ...signUpFormData };
+      const data = await registerService(formData);
+
+=======
   const handleRegisterUser = async (event) => {
     event.preventDefault();
     try {
       const data = await registerService(signUpFormData);
+>>>>>>> be1ef7f612d10f00a8223d344a430ea204dcc3e8
       if (data.success) {
         Swal.fire({
           icon: "success",
           title: "Registration Successful",
+<<<<<<< HEAD
+          text: "Redirecting to Sign In...",
+=======
           text: "Redirecting to Kattraan...",
+>>>>>>> be1ef7f612d10f00a8223d344a430ea204dcc3e8
           timer: 2000,
           showConfirmButton: false,
           timerProgressBar: true,
         });
 
+<<<<<<< HEAD
+        setTimeout(() => {
+          // ✅ Refresh the page after registration
+          window.location.reload();
+        }, 2000);
+=======
         setTimeout(() => navigate("/home"), 2000);
+>>>>>>> be1ef7f612d10f00a8223d344a430ea204dcc3e8
       } else {
         Swal.fire({
           icon: "error",
@@ -53,19 +76,19 @@ export default function AuthProvider({ children }) {
     }
   };
 
-  // ✅ Login Handler (cleaned)
+  // ✅ Login Handler
   const handleLoginUser = async (event) => {
     event.preventDefault();
     try {
       const data = await loginService(signInFormData);
-  
+
       if (data.success) {
         const user = data.data.user;
         const token = data.data.accessToken;
-  
+
         sessionStorage.setItem("accessToken", JSON.stringify(token));
         setAuth({ authenticate: true, user });
-  
+
         Swal.fire({
           icon: "success",
           title: "Login Successful",
@@ -74,10 +97,12 @@ export default function AuthProvider({ children }) {
           showConfirmButton: false,
           timerProgressBar: true,
         });
-  
+
         setTimeout(() => {
-          if (user?.role === "instructor") {
-            navigate("/instructor");
+          if (user?.roles?.includes("admin")) {
+            navigate("/admin");
+          } else if (user?.roles?.includes("instructor")) {
+            navigate("/redirect");
           } else {
             navigate("/home");
           }
@@ -98,14 +123,52 @@ export default function AuthProvider({ children }) {
           error?.response?.data?.error ||
           "Server Error. Please try again.",
       });
-  
+
       setAuth({ authenticate: false, user: null });
       console.error("Login error:", error);
     }
   };
-  
 
-  // ✅ Check Auth on Load
+  // ✅ Become Instructor Handler
+  const handleBecomeInstructor = async ({ userEmail, userName, password }) => {
+    try {
+      const data = await becomeInstructorService({
+        userEmail,
+        userName,
+        password,
+      });
+
+      if (data.success) {
+        Swal.fire({
+          icon: "success",
+          title: "You are now an Instructor",
+          text: "Redirecting to dashboard...",
+          timer: 2000,
+          showConfirmButton: false,
+        });
+
+        // Update roles
+        await checkAuthUser();
+        setTimeout(() => navigate("/redirect"), 2000);
+      } else {
+        Swal.fire({
+          icon: "info",
+          title: "Info",
+          text: data.message || "Already an instructor",
+        });
+      }
+    } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text:
+          error?.response?.data?.message ||
+          "Something went wrong while upgrading role.",
+      });
+    }
+  };
+
+  // ✅ Auth Check on Load
   const checkAuthUser = async () => {
     try {
       const data = await checkAuthService();
@@ -138,6 +201,7 @@ export default function AuthProvider({ children }) {
         setSignUpFormData,
         handleRegisterUser,
         handleLoginUser,
+        handleBecomeInstructor,
         auth,
         resetCredentials,
       }}

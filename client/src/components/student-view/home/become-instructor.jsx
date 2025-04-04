@@ -23,7 +23,7 @@ const BecomeInstructor = () => {
 
         {/* CTA BUTTON */}
         <div className="relative z-10">
-          <button className="border border-[#FFB433] text-[#FFB433] font-semibold px-6 py-2 rounded-md hover:bg-[#FFB433] hover:text-white transition">
+          <button className="border border-[#FFB433] text-[#FFB433] font-semibold px-6 py-2 rounded-md hover:bg-[#FFB433] hover:text-white transition" href="/instructor">
             Start Teaching Today
           </button>
         </div>

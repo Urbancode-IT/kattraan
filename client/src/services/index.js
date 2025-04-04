@@ -1,5 +1,17 @@
 import axiosInstance from "@/api/axiosInstance";
 
+<<<<<<< HEAD
+// services/auth.js or wherever this is defined
+
+export async function registerService(formData) {
+  const { data } = await axiosInstance.post("/auth/register", formData);
+  return data;
+}
+
+
+
+
+=======
 export async function registerService(formData) {
   const { data } = await axiosInstance.post("/auth/register", {
     ...formData,
@@ -9,6 +21,7 @@ export async function registerService(formData) {
   return data;
 }
 
+>>>>>>> be1ef7f612d10f00a8223d344a430ea204dcc3e8
 export async function loginService(formData) {
   const { data } = await axiosInstance.post("/auth/login", formData);
 
@@ -20,6 +33,19 @@ export async function checkAuthService() {
 
   return data;
 }
+
+
+export async function becomeInstructorService({ userName, userEmail, password }) {
+  const { data } = await axiosInstance.post(`/auth/become-instructor`, {
+    userName,
+    userEmail,
+    password,
+  });
+
+  return data;
+}
+
+
 
 export async function mediaUploadService(formData, onProgressCallback) {
   const { data } = await axiosInstance.post("/media/upload", formData, {
