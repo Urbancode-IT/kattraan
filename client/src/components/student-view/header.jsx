@@ -139,7 +139,7 @@ function StudentViewCommonHeader() {
 
       {/* RIGHT: Auth & User Section */}
       <div className="hidden sm:flex items-center space-x-4 relative">
-        <Button variant="outline" onClick={() => navigate("/instructor")}>
+        <Button variant="outline" onClick={() => navigate("/instructor-home")}>
           Teach Me Kattraan
         </Button>
 
@@ -230,7 +230,7 @@ function StudentViewCommonHeader() {
             variant="outline"
             className="w-full justify-start"
             onClick={() => {
-              navigate("/instructor");
+              navigate("/instructor-home");
               setMenuOpen(false);
             }}
           >
