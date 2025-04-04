@@ -15,6 +15,8 @@ import StudentViewCourseDetailsPage from "./pages/student/course-details";
 import PaypalPaymentReturnPage from "./pages/student/payment-return";
 import StudentCoursesPage from "./pages/student/student-courses";
 import StudentViewCourseProgressPage from "./pages/student/course-progress";
+import AboutUsPage from "./pages/aboutus";
+import InstructorListPage from "./pages/instructor-list";
 
 function App() {
   const { auth } = useContext(AuthContext);
@@ -25,7 +27,9 @@ function App() {
       <Route path="/" element={<StudentViewCommonLayout />}>
         <Route path="" element={<Navigate to="/home" replace />} />
         <Route path="home" element={<StudentHomePage />} />
-        <Route path="instructor" element={<InstructorHomePage />} />
+        <Route path="instructorhome" element={<InstructorHomePage />} />
+        <Route path="aboutus" element={<AboutUsPage/>} />
+        <Route path="instructorlist" element={<InstructorListPage/>} />
       </Route>
 
       {/* 🔐 Protected Routes */}
@@ -85,6 +89,7 @@ function App() {
         <Route path="payment-return" element={<PaypalPaymentReturnPage />} />
         <Route path="student-courses" element={<StudentCoursesPage />} />
         <Route path="course-progress/:id" element={<StudentViewCourseProgressPage />} />
+        
       </Route>
 
       <Route path="*" element={<NotFoundPage />} />
