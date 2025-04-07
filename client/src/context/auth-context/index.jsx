@@ -21,41 +21,26 @@ export default function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
 
   // ✅ Register Handler
-<<<<<<< HEAD
   const handleRegisterUser = async (event, onSuccessNavigateToSignIn) => {
     event.preventDefault();
     try {
       const formData = { ...signUpFormData };
       const data = await registerService(formData);
 
-=======
-  const handleRegisterUser = async (event) => {
-    event.preventDefault();
-    try {
-      const data = await registerService(signUpFormData);
->>>>>>> be1ef7f612d10f00a8223d344a430ea204dcc3e8
       if (data.success) {
         Swal.fire({
           icon: "success",
           title: "Registration Successful",
-<<<<<<< HEAD
           text: "Redirecting to Sign In...",
-=======
-          text: "Redirecting to Kattraan...",
->>>>>>> be1ef7f612d10f00a8223d344a430ea204dcc3e8
           timer: 2000,
           showConfirmButton: false,
           timerProgressBar: true,
         });
 
-<<<<<<< HEAD
         setTimeout(() => {
           // ✅ Refresh the page after registration
           window.location.reload();
         }, 2000);
-=======
-        setTimeout(() => navigate("/home"), 2000);
->>>>>>> be1ef7f612d10f00a8223d344a430ea204dcc3e8
       } else {
         Swal.fire({
           icon: "error",
