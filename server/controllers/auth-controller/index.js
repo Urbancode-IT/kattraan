@@ -114,7 +114,6 @@ const loginUser = async (req, res) => {
   }
 };
 
-<<<<<<< HEAD
 // ✅ Refresh Access Token
 const refreshAccessToken = async (req, res) => {
   try {
@@ -231,6 +230,3 @@ module.exports = {
   refreshAccessToken,
   becomeInstructor,
 };
-=======
-module.exports = { registerUser, loginUser };
->>>>>>> be1ef7f612d10f00a8223d344a430ea204dcc3e8
