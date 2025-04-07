@@ -45,11 +45,7 @@ function App() {
         <Route index element={<Navigate to="/home" replace />} />
         <Route path="home" element={<StudentHomePage />} />
         <Route path="instructor-home" element={<InstructorHomePage />} />
-<<<<<<< HEAD
         <Route path="instructor-auth" element={<InstructorAuthPage />} />
-=======
-        <Route path="/instructor-auth" element={<InstructorAuthPage />} />
->>>>>>> be1ef7f612d10f00a8223d344a430ea204dcc3e8
       </Route>
 
       {/* 🔐 Auth Page (for learners or general users) */}

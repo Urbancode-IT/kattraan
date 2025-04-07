@@ -5,12 +5,12 @@ function RouteGuard({ authenticated, user, element }) {
   const location = useLocation();
   const isInstructor = user?.roles?.includes("instructor");
 
-  // 🔐 If not logged in, block access to protected routes
+  //  If not logged in, block access to protected routes
   if (!authenticated && !location.pathname.includes("/auth")) {
     return <Navigate to="/auth" replace />;
   }
 
-  // ❌ Prevent non-instructor users from accessing instructor routes
+  //  Prevent non-instructor users from accessing instructor routes
   if (
     authenticated &&
     !isInstructor &&
@@ -19,7 +19,7 @@ function RouteGuard({ authenticated, user, element }) {
     return <Navigate to="/home" replace />;
   }
 
-  // ✅ Allow instructor access to instructor routes
+  // Allow instructor access to instructor routes
   if (authenticated && isInstructor && location.pathname.startsWith("/auth")) {
     return <Navigate to="/instructor" replace />;
   }
