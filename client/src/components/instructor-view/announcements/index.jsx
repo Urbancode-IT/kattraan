@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button } from "@/components/ui/button"; // Assuming Button is a reusable component
+import { Button } from "@/components/ui/button"; 
 import { Edit, Trash2 } from "lucide-react"; // Icons for editing and deleting
 
 const announcementsData = [

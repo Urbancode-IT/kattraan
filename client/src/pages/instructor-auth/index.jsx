@@ -21,6 +21,8 @@ function InstructorAuthPage() {
     setSignUpFormData,
     handleRegisterUser,
     handleLoginUser,
+    handleBecomeInstructor,
+    auth,
   } = useContext(AuthContext);
 
   const navigate = useNavigate();
@@ -34,22 +36,34 @@ function InstructorAuthPage() {
     signUpFormData.password &&
     signUpFormData.password === signUpFormData.confirmPassword;
 
-  const handleInstructorRegister = (e) => handleRegisterUser(e, "instructor");
+  // ✅ Sign up as learner (default), redirect to home
+  const handleInstructorRegister = (e) => handleRegisterUser(e);
 
+  // ✅ Sign in: check if instructor role exists, otherwise upgrade role
   const handleInstructorLogin = async (e) => {
     e.preventDefault();
     try {
-      const data = await handleLoginUser(e);
-      if (data?.data?.user?.role?.includes("instructor")) {
-        navigate("/instructor");
+      await handleLoginUser(e);
+
+      const user = auth?.user;
+      const isAlreadyInstructor = user?.roles?.includes("instructor");
+
+      if (isAlreadyInstructor) {
+        navigate("/instructor-home");
       } else {
-        Swal.fire({
-          icon: "error",
-          title: "Access Denied",
-          text: "You are not registered as an instructor.",
+        // Promote user to instructor role
+        await handleBecomeInstructor({
+          userEmail: user?.userEmail,
+          userName: user?.userName,
+          password: signInFormData.password,
         });
       }
     } catch (err) {
+      Swal.fire({
+        icon: "error",
+        title: "Login Failed",
+        text: "Something went wrong during instructor login.",
+      });
       console.error("Login failed:", err);
     }
   };
@@ -72,7 +86,12 @@ function InstructorAuthPage() {
             ></div>
             <div className="flex gap-2 items-center">
               {[avatar1, avatar2, avatar3, avatar4].map((avatar, index) => (
-                <img key={index} src={avatar} className="w-10 h-10 rounded-full" />
+                <img
+                  key={index}
+                  src={avatar}
+                  className="w-10 h-10 rounded-full"
+                  alt="instructor"
+                />
               ))}
               <p className="text-gray-700">Top instructors across the globe</p>
             </div>
@@ -88,31 +107,23 @@ function InstructorAuthPage() {
               </h3>
               <p className="text-sm text-gray-500">
                 {activeTab === "signin"
-                  ? "Log in with your instructor credentials."
-                  : "Join us as an instructor by filling out your details."}
+                  ? "Login to become or access your instructor dashboard."
+                  : "Join us as an instructor by signing up (you'll be registered as a learner first)."}
               </p>
             </div>
 
             <CommonForm
               formControls={
-                activeTab === "signin"
-                  ? signInFormControls
-                  : signUpFormControls
+                activeTab === "signin" ? signInFormControls : signUpFormControls
               }
               buttonText={
-                activeTab === "signin"
-                  ? "Sign In"
-                  : "Sign Up as Instructor"
+                activeTab === "signin" ? "Sign In" : "Sign Up as Instructor"
               }
               formData={
-                activeTab === "signin"
-                  ? signInFormData
-                  : signUpFormData
+                activeTab === "signin" ? signInFormData : signUpFormData
               }
               setFormData={
-                activeTab === "signin"
-                  ? setSignInFormData
-                  : setSignUpFormData
+                activeTab === "signin" ? setSignInFormData : setSignUpFormData
               }
               isButtonDisabled={
                 activeTab === "signin"
@@ -134,9 +145,7 @@ function InstructorAuthPage() {
                 <button
                   className="text-purple-600 hover:underline"
                   onClick={() =>
-                    setActiveTab(
-                      activeTab === "signin" ? "signup" : "signin"
-                    )
+                    setActiveTab(activeTab === "signin" ? "signup" : "signin")
                   }
                 >
                   {activeTab === "signin" ? "Create one" : "Sign In"}
