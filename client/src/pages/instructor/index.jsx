@@ -12,7 +12,7 @@ import {
   Clipboard,
 } from "lucide-react";
 
-// Existing imports
+// Component imports
 import InstructorDashboard from "@/components/instructor-view/dashboard";
 import InstructorCourses from "@/components/instructor-view/courses";
 import InstructorQuizzes from "@/components/instructor-view/quizzes";
@@ -34,7 +34,7 @@ import { fetchInstructorCourseListService } from "@/services";
 
 function InstructorDashboardPage() {
   const [activeTab, setActiveTab] = useState("dashboard");
-  const [currentTime, setCurrentTime] = useState(new Date()); // Declare `currentTime` state
+  const [currentTime, setCurrentTime] = useState(new Date());
   const { resetCredentials } = useContext(AuthContext);
   const { instructorCoursesList, setInstructorCoursesList } = useContext(InstructorContext);
 
@@ -48,11 +48,14 @@ function InstructorDashboardPage() {
   }, []);
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentTime(new Date()); // Update the current time every second
-    }, 1000);
-    return () => clearInterval(timer); // Clean up the timer
+    const timer = setInterval(() => setCurrentTime(new Date()), 1000);
+    return () => clearInterval(timer);
   }, []);
+
+  const handleLogout = () => {
+    resetCredentials();
+    sessionStorage.clear();
+  };
 
   const menuItems = [
     { icon: BarChart, label: "Dashboard", value: "dashboard", component: <InstructorDashboard listOfCourses={instructorCoursesList} /> },
@@ -64,7 +67,6 @@ function InstructorDashboardPage() {
     { icon: MessageSquare, label: "Messages", value: "messages", component: <InstructorMessages /> },
     { icon: Calendar, label: "Calendar", value: "calendar", component: <InstructorCalendar /> },
     { icon: Book, label: "Resources", value: "resources", component: <InstructorResources /> },
-    // New menu items for the requested pages
     { icon: FileText, label: "Announcements", value: "announcements", component: <InstructorAnnouncements /> },
     { icon: Clipboard, label: "Feedback", value: "feedback", component: <InstructorFeedback /> },
     { icon: Calendar, label: "Scheduling", value: "scheduling", component: <InstructorScheduling /> },
@@ -72,40 +74,39 @@ function InstructorDashboardPage() {
     { icon: LogOut, label: "Logout", value: "logout", component: null, action: handleLogout },
   ];
 
-  function handleLogout() {
-    resetCredentials();
-    sessionStorage.clear();
-  }
-
   return (
-    <div className="flex h-full min-h-screen bg-gray-100">
-      <aside className="w-64 bg-white shadow-md hidden md:block">
-        <div className="p-4">
-          <h2 className="text-2xl font-bold mb-4">Kattraan Instructor</h2>
-          <p className="text-sm text-gray-500">
-            {format(currentTime, "eeee, MMMM d, yyyy")} | {currentTime.toLocaleTimeString()}
+    <div className="flex h-screen bg-gray-100">
+      {/* Sidebar */}
+      <aside className="w-64 bg-white border-r shadow-md hidden md:flex flex-col">
+        <div className="p-6 border-b">
+          <h2 className="text-2xl font-extrabold text-gray-800">Kattraan Panel</h2>
+          <p className="text-sm text-gray-500 mt-1">
+            {format(currentTime, "eeee, MMMM d, yyyy")}<br />
+            <span className="font-mono">{currentTime.toLocaleTimeString()}</span>
           </p>
-          <nav>
-            {menuItems.map((menuItem) => (
-              <Button
-                className="w-full justify-start mb-2"
-                key={menuItem.value}
-                variant={activeTab === menuItem.value ? "secondary" : "ghost"}
-                onClick={() => menuItem.action ? menuItem.action() : setActiveTab(menuItem.value)}
-              >
-                <menuItem.icon className="mr-2 h-4 w-4" />
-                {menuItem.label}
-              </Button>
-            ))}
-          </nav>
         </div>
+        <nav className="flex-1 p-4 overflow-y-auto">
+          {menuItems.map((item) => (
+            <Button
+              key={item.value}
+              variant={activeTab === item.value ? "secondary" : "ghost"}
+              className="w-full justify-start mb-2 text-left"
+              onClick={() => item.action ? item.action() : setActiveTab(item.value)}
+            >
+              <item.icon className="w-4 h-4 mr-2" />
+              {item.label}
+            </Button>
+          ))}
+        </nav>
       </aside>
-      <main className="flex-1 p-8 overflow-y-auto">
+
+      {/* Main Content */}
+      <main className="flex-1 p-6 overflow-y-auto">
         <div className="max-w-7xl mx-auto">
           <Tabs value={activeTab} onValueChange={setActiveTab}>
-            {menuItems.map((menuItem) => (
-              <TabsContent value={menuItem.value} key={menuItem.value}>
-                {menuItem.component}
+            {menuItems.map((item) => (
+              <TabsContent value={item.value} key={item.value}>
+                {item.component}
               </TabsContent>
             ))}
           </Tabs>
