@@ -18,13 +18,19 @@ import PaypalPaymentReturnPage from "./pages/student/payment-return";
 import StudentCoursesPage from "./pages/student/student-courses";
 import StudentViewCourseProgressPage from "./pages/student/course-progress";
 
+// Legal Pages
+import LegalLayout from "./pages/legal/legal-layout";
+import Terms from "./pages/legal/terms";
+import Privacy from "./pages/legal/privacy";
+import Disclaimer from "./pages/legal/disclaimer";
+
 function App() {
   const { auth } = useContext(AuthContext);
 
   return (
     <Routes>
 
-      {/* ✅ Smart Redirect Based on Role */}
+      {/* ✅ Role-Based Smart Redirect */}
       <Route
         path="/redirect"
         element={
@@ -40,7 +46,7 @@ function App() {
         }
       />
 
-      {/* ✅ Public Student & Instructor Pages */}
+      {/* ✅ Public Pages for Students & Instructors */}
       <Route path="/" element={<StudentViewCommonLayout />}>
         <Route index element={<Navigate to="/home" replace />} />
         <Route path="home" element={<StudentHomePage />} />
@@ -48,7 +54,14 @@ function App() {
         <Route path="instructor-auth" element={<InstructorAuthPage />} />
       </Route>
 
-      {/* 🔐 Auth Page (for learners or general users) */}
+      {/* ✅ Legal Pages with Sidebar Layout */}
+      <Route path="/legal" element={<LegalLayout />}>
+        <Route path="terms" element={<Terms />} />
+        <Route path="privacy" element={<Privacy />} />
+        <Route path="disclaimer" element={<Disclaimer />} />
+      </Route>
+
+      {/* 🔐 Auth Page */}
       <Route
         path="/auth"
         element={
