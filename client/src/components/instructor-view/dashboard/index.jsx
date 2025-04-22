@@ -7,8 +7,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Users } from "lucide-react";
-import { FaRupeeSign } from 'react-icons/fa';  // Importing Rupee Sign
+import { Users, BarChart2, BookOpen } from "lucide-react";
+import { FaRupeeSign } from "react-icons/fa";
+import { Badge } from "@/components/ui/badge";
+import { Separator } from "@/components/ui/separator";
 
 function InstructorDashboard({ listOfCourses }) {
   function calculateTotalStudentsAndProfit() {
@@ -42,63 +44,103 @@ function InstructorDashboard({ listOfCourses }) {
     };
   }
 
-  console.log(calculateTotalStudentsAndProfit());
+  const { totalProfit, totalStudents, studentList } =
+    calculateTotalStudentsAndProfit();
 
-  const config = [
+  const stats = [
     {
       icon: Users,
       label: "Total Students",
-      value: calculateTotalStudentsAndProfit().totalStudents,
+      value: totalStudents,
+      color: "bg-yellow-100 text-yellow-800",
+    },
+    {
+      icon: BookOpen,
+      label: "Courses ",
+      value: listOfCourses.length,
+      color: " bg-blue-100 text-blue-800",
     },
     {
       icon: FaRupeeSign,
       label: "Total Revenue",
-      value: calculateTotalStudentsAndProfit().totalProfit,
+      value: `₹${totalProfit}`,
+      color: "bg-pink-100 text-pink-800",
     },
+    
   ];
 
   return (
-    <div>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-        {config.map((item, index) => (
-          <Card key={index}>
+    <div className="space-y-8 ">
+      {/* Stats Overview */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 ">
+        {stats.map((item, index) => (
+          <Card key={index} className={` ${item.color}`}>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">
-                {item.label}
-              </CardTitle>
-              <item.icon className="h-4 w-4 text-muted-foreground" />
+              <CardTitle className="text-xl font-medium">{item.label}</CardTitle>
+              <item.icon className={`h-8 w-8 text-muted-foreground ${item.color} `} />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{item.value}</div>
+              <div className="text-3xl font-bold">{item.value}</div>
+              <Badge className={`${item.color}`}>{item.label}</Badge>
             </CardContent>
           </Card>
         ))}
       </div>
+
+      {/* Course Performance Placeholder */}
       <Card>
         <CardHeader>
-          <CardTitle>Students List</CardTitle>
+          <div className="flex items-center justify-between">
+            <CardTitle className="text-xl font-medium">Course Performance</CardTitle>
+            <BarChart2 className="h-5 w-5 text-muted-foreground" />
+          </div>
         </CardHeader>
+        <CardContent>
+          <div className="text-sm text-muted-foreground">
+            📊 Chart displaying enrollment vs. profit per course will go here.
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Student Table */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-xl font-medium">Recent Enrollments</CardTitle>
+          <p className="text-sm text-muted-foreground">
+            List of students and their respective courses
+          </p>
+        </CardHeader>
+        <Separator />
         <CardContent>
           <div className="overflow-x-auto">
             <Table className="w-full">
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Course Name</TableHead>
-                  <TableHead>Student Name</TableHead>
-                  <TableHead>Student Email</TableHead>
+              <TableHeader className="sticky top-0 bg-background z-10">
+                <TableRow className="text-xl">
+                  <TableHead>Course</TableHead>
+                  <TableHead>Name</TableHead>
+                  <TableHead>Email</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {calculateTotalStudentsAndProfit().studentList.map(
-                  (studentItem, index) => (
-                    <TableRow key={index}>
+                {studentList.length > 0 ? (
+                  studentList.map((student, index) => (
+                    <TableRow
+                      key={index}
+                      className="hover:bg-muted transition-colors"
+                    >
                       <TableCell className="font-medium">
-                        {studentItem.courseTitle}
+                        {student.courseTitle}
                       </TableCell>
-                      <TableCell>{studentItem.studentName}</TableCell>
-                      <TableCell>{studentItem.studentEmail}</TableCell>
+                      <TableCell>{student.studentName}</TableCell>
+                      <TableCell>{student.studentEmail}</TableCell>
                     </TableRow>
-                  )
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell colSpan={3} className="text-center py-6">
+                      No students enrolled yet.
+                    </TableCell>
+                  </TableRow>
                 )}
               </TableBody>
             </Table>

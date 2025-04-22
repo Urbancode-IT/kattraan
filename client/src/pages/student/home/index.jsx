@@ -1,5 +1,4 @@
 import { courseCategories } from "@/config";
-
 import { Button } from "@/components/ui/button";
 import { useContext, useEffect } from "react";
 import { StudentContext } from "@/context/student-context";
@@ -8,6 +7,8 @@ import { useNavigate } from "react-router-dom";
 import Footer from "@/components/student-view/footer";
 import FeaturedCourses from "@/components/student-view/home/featured-courses";
 import StatsHighlights from "@/components/student-view/home/stats-highlights";
+import BecomeInstructor from "@/components/student-view/home/become-instructor";
+import TestimonialSection from "@/components/student-view/home/testimonial-section";
 // import CourseCategories from "@/components/student-view/home/coursecategories";
 import HeroSection from "@/components/student-view/home/hero-section";
 
@@ -91,11 +92,15 @@ function StudentHomePage() {
           ))}
         </div>
       </section>
+      
+
 {/* 
       <CourseCategories /> */}
       
        {/* Featured Courses (moved to component) */}
        <FeaturedCourses />
+       <BecomeInstructor/>
+       <TestimonialSection/>
       <Footer />
     </div>
   );

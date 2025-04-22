@@ -17,6 +17,7 @@ function InstructorHomePage() {
     <CardsSection/>
     <StepsSection/>
     <Testimonials/>
+    
     <Footer/>
   </>);
     

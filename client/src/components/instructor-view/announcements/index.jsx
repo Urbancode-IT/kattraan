@@ -1,99 +1,130 @@
 import React, { useState } from "react";
-import { Button } from "@/components/ui/button"; // Assuming Button is a reusable component
-import { Edit, Trash2 } from "lucide-react"; // Icons for editing and deleting
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Edit, Trash2, Megaphone } from "lucide-react";
+import { format } from "date-fns";
+import Modal from "react-modal";
 
-const announcementsData = [
+const initialAnnouncements = [
   {
     id: 1,
     title: "New Year Special Offer",
-    description: "Start the new year with a new skill! Enroll in our courses and get a 20% discount.",
+    description: "Start the new year with a new skill! Enroll now and get 20% off.",
     dueDate: "2024-01-01",
-    details: "Enroll in any of our courses by January 1st, 2024, and receive a 20% discount. Don’t miss out on this limited-time offer to boost your career with new skills!"
+    details: "Offer valid till January 1st, 2024. Use NEWYEAR20 during checkout."
   },
-  {
-    id: 2,
-    title: "Diwali Festival Sale",
-    description: "Celebrate Diwali with 30% off on all courses! Learn new skills this festive season.",
-    dueDate: "2023-11-15",
-    details: "Our Diwali Festival Sale offers a massive 30% discount on all courses! Hurry, the offer ends on November 15th, 2023. Use promo code DIWALI30 during checkout."
-  },
-  {
-    id: 3,
-    title: "Summer Skills Special",
-    description: "Summer’s here! Enroll in courses this summer and enjoy 25% off on select courses.",
-    dueDate: "2023-07-01",
-    details: "Get ready for summer with our skills development programs! From July 1st, 2023, enjoy 25% off on select courses. Whether it’s coding, design, or business, we have it all."
-  },
-  {
-    id: 4,
-    title: "Black Friday Flash Sale",
-    description: "Don’t miss out! 50% off all courses this Black Friday weekend only.",
-    dueDate: "2023-11-25",
-    details: "Our Black Friday Flash Sale is here! For this weekend only, get 50% off all courses. Use the promo code BLACKFRIDAY50 at checkout. Offer ends on November 25th, 2023."
-  },
-  {
-    id: 5,
-    title: "Winter Holidays Offer",
-    description: "Gift yourself a new skill this winter with 15% off on all courses.",
-    dueDate: "2023-12-25",
-    details: "Warm up your winter with learning! Get 15% off on all our courses during the holiday season. This offer is valid until December 25th, 2023. Use HOLIDAY15 to redeem."
-  }
 ];
 
-function InstructorAnnouncements() {
-  const [announcements, setAnnouncements] = useState(announcementsData);
+Modal.setAppElement('#root'); // Replace '#root' with your app root if different
 
-  const handleEdit = (id) => {
-    // Edit logic
-    console.log("Editing announcement with id:", id);
+function InstructorAnnouncements() {
+  const [announcements, setAnnouncements] = useState(initialAnnouncements);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [form, setForm] = useState({
+    title: "",
+    description: "",
+    dueDate: "",
+    details: ""
+  });
+
+  const handleOpenModal = () => {
+    setForm({ title: "", description: "", dueDate: "", details: "" });
+    setModalOpen(true);
+  };
+
+  const handleAddAnnouncement = () => {
+    if (!form.title || !form.description) {
+      alert("Title and Description are required.");
+      return;
+    }
+
+    const newAnnouncement = {
+      id: announcements.length + 1,
+      ...form,
+    };
+
+    setAnnouncements([newAnnouncement, ...announcements]);
+    setModalOpen(false);
   };
 
   const handleDelete = (id) => {
-    // Delete logic
-    setAnnouncements(announcements.filter((announcement) => announcement.id !== id));
-  };
-
-  const handleAddNew = () => {
-    // Logic to add new announcement
-    console.log("Add new announcement clicked");
+    setAnnouncements(announcements.filter(a => a.id !== id));
   };
 
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold">Announcements</h2>
-        <Button className="bg-blue-500 text-white" onClick={handleAddNew}>
+        <h2 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
+          <Megaphone className="w-6 h-6 text-blue-600" />
+          Announcements
+        </h2>
+        <Button onClick={handleOpenModal} className="bg-blue-600 text-white">
           + Add New Announcement
         </Button>
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-        {announcements.map((announcement) => (
-          <div key={announcement.id} className="bg-white shadow-md rounded-lg overflow-hidden hover:shadow-xl transition-all duration-200">
-            <div className="p-6">
-              <h3 className="text-xl font-semibold text-gray-800">{announcement.title}</h3>
-              <p className="text-gray-600 mt-2">{announcement.description}</p>
-              <p className="text-sm text-gray-500 mt-2">Due Date: {announcement.dueDate}</p>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {announcements.map((a) => (
+          <div key={a.id} className="bg-white border rounded-lg shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
+            <div className="p-5">
+              <h3 className="text-lg font-semibold text-gray-800">{a.title}</h3>
+              <p className="text-sm text-gray-600 mt-1">{a.description}</p>
+              <p className="text-xs text-gray-500 mt-2">📅 Due: {format(new Date(a.dueDate), "PPP")}</p>
             </div>
-            <div className="p-6 bg-gray-100">
-              <p className="text-sm text-gray-600">{announcement.details}</p>
-            </div>
-            <div className="flex justify-between p-4 bg-gray-100">
-              <Button
-                className="bg-gray-300 text-black"
-                onClick={() => handleEdit(announcement.id)}
-              >
+            <div className="px-5 pb-4 text-sm text-gray-700">{a.details}</div>
+            <div className="flex justify-end gap-2 p-4 border-t bg-gray-50">
+              <Button size="sm" variant="outline">
                 <Edit className="w-4 h-4" />
               </Button>
-              <Button
-                className="bg-red-500 text-white"
-                onClick={() => handleDelete(announcement.id)}
-              >
+              <Button size="sm" variant="destructive" onClick={() => handleDelete(a.id)}>
                 <Trash2 className="w-4 h-4" />
               </Button>
             </div>
           </div>
         ))}
       </div>
+
+      {/* Modal */}
+      <Modal
+        isOpen={modalOpen}
+        onRequestClose={() => setModalOpen(false)}
+        className="absolute top-20 left-1/2 transform -translate-x-1/2 w-[90%] max-w-lg bg-white rounded-xl p-6 shadow-lg"
+        overlayClassName="fixed inset-0 bg-black bg-opacity-40"
+      >
+        <h3 className="text-lg font-bold mb-4">📢 New Announcement</h3>
+        <div className="space-y-4">
+          <Input
+            placeholder="Title"
+            value={form.title}
+            onChange={(e) => setForm({ ...form, title: e.target.value })}
+          />
+          <Input
+            placeholder="Short Description"
+            value={form.description}
+            onChange={(e) => setForm({ ...form, description: e.target.value })}
+          />
+          <Input
+            type="date"
+            value={form.dueDate}
+            onChange={(e) => setForm({ ...form, dueDate: e.target.value })}
+          />
+          <Textarea
+            placeholder="Details"
+            rows={4}
+            value={form.details}
+            onChange={(e) => setForm({ ...form, details: e.target.value })}
+          />
+        </div>
+        <div className="flex justify-end mt-6 gap-3">
+          <Button variant="outline" onClick={() => setModalOpen(false)}>
+            Cancel
+          </Button>
+          <Button className="bg-blue-600 text-white" onClick={handleAddAnnouncement}>
+            Save Announcement
+          </Button>
+        </div>
+      </Modal>
     </div>
   );
 }

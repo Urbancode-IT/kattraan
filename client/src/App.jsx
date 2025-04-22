@@ -2,9 +2,11 @@ import { Route, Routes, Navigate } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "./context/auth-context";
 
+// Pages and Components
 import AuthPage from "./pages/auth";
+import InstructorAuthPage from "./pages/instructor-auth";
 import RouteGuard from "./components/route-guard";
-import InstructorDashboardpage from "./pages/instructor";
+import InstructorDashboardPage from "./pages/instructor";
 import StudentViewCommonLayout from "./components/student-view/common-layout";
 import StudentHomePage from "./pages/student/home";
 import InstructorHomePage from "./pages/instructor/home";
@@ -15,24 +17,38 @@ import StudentViewCourseDetailsPage from "./pages/student/course-details";
 import PaypalPaymentReturnPage from "./pages/student/payment-return";
 import StudentCoursesPage from "./pages/student/student-courses";
 import StudentViewCourseProgressPage from "./pages/student/course-progress";
-import AboutUsPage from "./pages/aboutus";
-import InstructorListPage from "./pages/instructor-list";
 
 function App() {
   const { auth } = useContext(AuthContext);
 
   return (
     <Routes>
-      {/* ✅ Public: Home Page and root redirect */}
+
+      {/* ✅ Smart Redirect Based on Role */}
+      <Route
+        path="/redirect"
+        element={
+          auth?.authenticate ? (
+            auth?.user?.roles?.includes("instructor") ? (
+              <Navigate to="/instructor" replace />
+            ) : (
+              <Navigate to="/home" replace />
+            )
+          ) : (
+            <Navigate to="/auth" replace />
+          )
+        }
+      />
+
+      {/* ✅ Public Student & Instructor Pages */}
       <Route path="/" element={<StudentViewCommonLayout />}>
-        <Route path="" element={<Navigate to="/home" replace />} />
+        <Route index element={<Navigate to="/home" replace />} />
         <Route path="home" element={<StudentHomePage />} />
-        <Route path="instructorhome" element={<InstructorHomePage />} />
-        <Route path="aboutus" element={<AboutUsPage/>} />
-        <Route path="instructorlist" element={<InstructorListPage/>} />
+        <Route path="instructor-home" element={<InstructorHomePage />} />
+        <Route path="instructor-auth" element={<InstructorAuthPage />} />
       </Route>
 
-      {/* 🔐 Protected Routes */}
+      {/* 🔐 Auth Page (for learners or general users) */}
       <Route
         path="/auth"
         element={
@@ -43,11 +59,13 @@ function App() {
           />
         }
       />
+
+      {/* 🔐 Instructor Dashboard Routes */}
       <Route
         path="/instructor"
         element={
           <RouteGuard
-            element={<InstructorDashboardpage />}
+            element={<InstructorDashboardPage />}
             authenticated={auth?.authenticate}
             user={auth?.user}
           />
@@ -74,6 +92,7 @@ function App() {
         }
       />
 
+      {/* 🔐 Student Authenticated Pages */}
       <Route
         path="/"
         element={
@@ -89,9 +108,9 @@ function App() {
         <Route path="payment-return" element={<PaypalPaymentReturnPage />} />
         <Route path="student-courses" element={<StudentCoursesPage />} />
         <Route path="course-progress/:id" element={<StudentViewCourseProgressPage />} />
-        
       </Route>
 
+      {/* 404 Not Found */}
       <Route path="*" element={<NotFoundPage />} />
     </Routes>
   );

@@ -1,143 +1,160 @@
 import React, { useState } from "react";
-import { Button } from "@/components/ui/button"; // Assuming Button is a reusable component
-import { Edit, Trash2 } from "lucide-react"; // Icons for edit and delete
+import { Button } from "@/components/ui/button";
+import { Edit, Trash2, CalendarClock } from "lucide-react";
 
-const schedulesData = [
+const initialSchedules = [
   {
     id: 1,
     className: "Web Development 101",
     instructor: "John Doe",
     date: "2023-09-15",
-    time: "10:00 AM - 12:00 PM",
+    time: "10:00 - 12:00",
   },
   {
     id: 2,
     className: "Python Programming",
     instructor: "Jane Smith",
     date: "2023-09-16",
-    time: "2:00 PM - 4:00 PM",
+    time: "14:00 - 16:00",
   },
   {
     id: 3,
     className: "Digital Marketing Basics",
     instructor: "Alice Johnson",
     date: "2023-09-17",
-    time: "9:00 AM - 11:00 AM",
+    time: "09:00 - 11:00",
   },
 ];
 
 function InstructorScheduling() {
-  const [schedules, setSchedules] = useState(schedulesData);
+  const [schedules, setSchedules] = useState(initialSchedules);
   const [newClass, setNewClass] = useState({
     className: "",
     instructor: "",
     date: "",
-    time: "",
+    timeStart: "",
+    timeEnd: "",
   });
 
-  const handleEdit = (id) => {
-    // Edit logic
-    console.log("Editing schedule with id:", id);
-  };
-
-  const handleDelete = (id) => {
-    // Delete logic
-    setSchedules(schedules.filter((schedule) => schedule.id !== id));
-  };
-
   const handleAddSchedule = () => {
+    const { className, instructor, date, timeStart, timeEnd } = newClass;
+    if (!className || !instructor || !date || !timeStart || !timeEnd) {
+      alert("Please fill in all fields");
+      return;
+    }
+
     const newSchedule = {
-      ...newClass,
-      id: schedules.length + 1, // Generate a new id (for demo purposes)
+      id: schedules.length + 1,
+      className,
+      instructor,
+      date,
+      time: `${timeStart} - ${timeEnd}`,
     };
-    setSchedules([...schedules, newSchedule]);
+
+    setSchedules([newSchedule, ...schedules]);
     setNewClass({
       className: "",
       instructor: "",
       date: "",
-      time: "",
+      timeStart: "",
+      timeEnd: "",
     });
   };
 
+  const handleDelete = (id) => {
+    setSchedules(schedules.filter((item) => item.id !== id));
+  };
+
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold">Class Schedule</h2>
-        <Button className="bg-blue-500 text-white" onClick={handleAddSchedule}>
-          + Add New Schedule
-        </Button>
+        <h2 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
+          <CalendarClock className="text-blue-600" /> Class Schedule
+        </h2>
       </div>
 
-      {/* New Class Form */}
-      <div className="space-y-4">
-        <div className="flex space-x-4">
+      {/* Form to Add New Schedule */}
+      <div className="bg-white shadow-md rounded-lg p-6 space-y-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
           <input
             type="text"
-            className="p-4 border-2 border-gray-300 rounded-lg w-1/3"
+            className="p-3 border border-gray-300 rounded-md"
             placeholder="Class Name"
             value={newClass.className}
             onChange={(e) => setNewClass({ ...newClass, className: e.target.value })}
           />
           <input
             type="text"
-            className="p-4 border-2 border-gray-300 rounded-lg w-1/3"
-            placeholder="Instructor Name"
+            className="p-3 border border-gray-300 rounded-md"
+            placeholder="Instructor"
             value={newClass.instructor}
             onChange={(e) => setNewClass({ ...newClass, instructor: e.target.value })}
           />
           <input
             type="date"
-            className="p-4 border-2 border-gray-300 rounded-lg"
+            className="p-3 border border-gray-300 rounded-md"
             value={newClass.date}
             onChange={(e) => setNewClass({ ...newClass, date: e.target.value })}
           />
           <input
             type="time"
-            className="p-4 border-2 border-gray-300 rounded-lg"
-            value={newClass.time}
-            onChange={(e) => setNewClass({ ...newClass, time: e.target.value })}
+            className="p-3 border border-gray-300 rounded-md"
+            value={newClass.timeStart}
+            onChange={(e) => setNewClass({ ...newClass, timeStart: e.target.value })}
+          />
+          <input
+            type="time"
+            className="p-3 border border-gray-300 rounded-md"
+            value={newClass.timeEnd}
+            onChange={(e) => setNewClass({ ...newClass, timeEnd: e.target.value })}
           />
         </div>
-        <Button className="bg-green-500 text-white" onClick={handleAddSchedule}>
-          Add Schedule
-        </Button>
+        <div className="text-right">
+          <Button className="bg-blue-600 text-white" onClick={handleAddSchedule}>
+            + Add Schedule
+          </Button>
+        </div>
       </div>
 
-      {/* Class Schedule List */}
+      {/* Schedule List Table */}
       <div className="overflow-x-auto">
-        <table className="min-w-full table-auto mt-6">
-          <thead className="bg-gray-100">
+        <table className="w-full table-auto text-left border shadow-sm bg-white rounded-lg">
+          <thead className="bg-gray-100 text-sm text-gray-700">
             <tr>
-              <th className="py-2 px-4 text-left">Class Name</th>
-              <th className="py-2 px-4 text-left">Instructor</th>
-              <th className="py-2 px-4 text-left">Date</th>
-              <th className="py-2 px-4 text-left">Time</th>
-              <th className="py-2 px-4 text-left">Actions</th>
+              <th className="px-4 py-3">Class Name</th>
+              <th className="px-4 py-3">Instructor</th>
+              <th className="px-4 py-3">Date</th>
+              <th className="px-4 py-3">Time</th>
+              <th className="px-4 py-3 text-right">Actions</th>
             </tr>
           </thead>
           <tbody>
             {schedules.map((schedule) => (
-              <tr key={schedule.id} className="border-b">
-                <td className="py-2 px-4">{schedule.className}</td>
-                <td className="py-2 px-4">{schedule.instructor}</td>
-                <td className="py-2 px-4">{schedule.date}</td>
-                <td className="py-2 px-4">{schedule.time}</td>
-                <td className="py-2 px-4">
-                  <Button
-                    className="bg-gray-300 text-black mr-2"
-                    onClick={() => handleEdit(schedule.id)}
-                  >
+              <tr
+                key={schedule.id}
+                className="border-t hover:bg-gray-50 transition duration-150"
+              >
+                <td className="px-4 py-3">{schedule.className}</td>
+                <td className="px-4 py-3">{schedule.instructor}</td>
+                <td className="px-4 py-3">{schedule.date}</td>
+                <td className="px-4 py-3">{schedule.time}</td>
+                <td className="px-4 py-3 text-right space-x-2">
+                  <Button size="sm" variant="outline">
                     <Edit className="w-4 h-4" />
                   </Button>
-                  <Button
-                    className="bg-red-500 text-white"
-                    onClick={() => handleDelete(schedule.id)}
-                  >
+                  <Button size="sm" variant="destructive" onClick={() => handleDelete(schedule.id)}>
                     <Trash2 className="w-4 h-4" />
                   </Button>
                 </td>
               </tr>
             ))}
+            {schedules.length === 0 && (
+              <tr>
+                <td colSpan="5" className="text-center py-6 text-gray-400 text-sm">
+                  No schedules found.
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
       </div>
