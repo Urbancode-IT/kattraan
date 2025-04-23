@@ -23,6 +23,8 @@ import LegalLayout from "./pages/legal/legal-layout";
 import Terms from "./pages/legal/terms";
 import Privacy from "./pages/legal/privacy";
 import Disclaimer from "./pages/legal/disclaimer";
+import ContactPage from "./pages/contact";
+
 
 function App() {
   const { auth } = useContext(AuthContext);
@@ -52,6 +54,7 @@ function App() {
         <Route path="home" element={<StudentHomePage />} />
         <Route path="instructor-home" element={<InstructorHomePage />} />
         <Route path="instructor-auth" element={<InstructorAuthPage />} />
+        <Route path="/contact" element={<ContactPage />} />
       </Route>
 
       {/* ✅ Legal Pages with Sidebar Layout */}
