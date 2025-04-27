@@ -31,14 +31,15 @@ function FeaturedCourses() {
 
   function formatTotalDuration(curriculum) {
     let totalSeconds = 0;
-
     curriculum?.forEach((item) => {
       if (item?.duration) {
-        const parts = item.duration.split(":").map(Number).reverse();
+        const parts = item.duration.split(":").map(Number);
         if (parts.length === 2) {
-          totalSeconds += parts[0] + parts[1] * 60;
+          const [minutes, seconds] = parts;
+          totalSeconds += minutes * 60 + seconds;
         } else if (parts.length === 3) {
-          totalSeconds += parts[0] + parts[1] * 60 + parts[2] * 3600;
+          const [hours, minutes, seconds] = parts;
+          totalSeconds += hours * 3600 + minutes * 60 + seconds;
         }
       }
     });
@@ -74,19 +75,23 @@ function FeaturedCourses() {
                 />
 
                 <div className="p-4">
+                  {/* Course Level */}
                   <span className="inline-block px-2 py-1 text-xs font-semibold bg-purple-100 text-purple-700 rounded mb-2">
                     {courseItem?.level || "All level"}
                   </span>
 
+                  {/* Course Title */}
                   <h3 className="text-md font-semibold text-gray-800 mb-1 leading-snug">
                     {courseItem?.title}
                   </h3>
 
+                  {/* Course Subtitle */}
                   <p className="text-gray-500 text-sm mb-3 line-clamp-2">
                     {courseItem?.subtitle || "Course description coming soon..."}
                   </p>
 
-                  <div className="flex items-center text-sm text-gray-600 mb-4">
+                  {/* Rating */}
+                  <div className="flex items-center text-sm text-gray-600 mb-2">
                     {[...Array(5)].map((_, i) => (
                       <Star
                         key={i}
@@ -102,8 +107,14 @@ function FeaturedCourses() {
                     </span>
                   </div>
 
+                  {/* Price */}
+                  <div className="text-gray-800 font-bold text-md mb-3">
+                    ₹{courseItem?.pricing ? courseItem.pricing.toLocaleString() : "Free"}
+                  </div>
+
                   <hr className="my-3" />
 
+                  {/* Course Meta */}
                   <div className="flex items-center justify-between text-xs text-gray-600">
                     <div className="flex items-center gap-1">
                       <FaRegClock className="w-4 h-4" />

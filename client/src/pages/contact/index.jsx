@@ -5,6 +5,11 @@ const ContactPage = () => {
   return (
     <div className="bg-gray-50 min-h-screen flex flex-col">
 
+
+
+
+      
+
       <main className="flex-1 max-w-5xl w-full mx-auto px-4 py-12">
         <h1 className="text-4xl font-bold text-blue-700 mb-6">Contact Us</h1>
         <p className="text-gray-600 mb-10 max-w-2xl">
