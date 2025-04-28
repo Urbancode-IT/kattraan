@@ -1,12 +1,12 @@
 import axios from "axios";
 
-// const axiosInstance = axios.create({
-//   baseURL: "http://localhost:5001",
-// });
-
 const axiosInstance = axios.create({
-  baseURL: "https://api.kattraan.com",
+  baseURL: "http://localhost:5001",
 });
+
+// const axiosInstance = axios.create({
+//   baseURL: "https://api.kattraan.com",
+// });
 
 
 axiosInstance.interceptors.request.use(
