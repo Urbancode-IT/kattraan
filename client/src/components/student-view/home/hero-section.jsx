@@ -11,7 +11,7 @@ import { FaPlay, FaCheckCircle } from "react-icons/fa";
 import { BadgeCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { AuthContext } from "@/context/auth-context";
-import "./hero-section.css";
+import "../home/hero-section.css"; // Import the CSS file for animations
 
 const HeroSection = () => {
   const { auth } = useContext(AuthContext);
@@ -82,18 +82,24 @@ const HeroSection = () => {
           )}
         </div>
 
-        {/* CTA BUTTONS */}
-        <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-6">
-          <Button className="text-base sm:text-lg bg-[#f23d5c] text-white px-6 py-3 sm:px-8 sm:py-4 rounded-md hover:bg-[#d8314d] shadow">
-            Get Started
-          </Button>
-          <button className="flex items-center gap-2 text-[#0e3eaf] font-medium">
-            <span className="bg-blue-100 p-3 sm:p-4 rounded-full">
-              <FaPlay />
-            </span>
-            Watch video
-          </button>
-        </div>
+{/*        
+<div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-6">
+  {/* Get Started Button with Link *
+  <a href="/get-started" className="inline-block">
+    <Button className="text-base sm:text-lg bg-[#f23d5c] text-white px-6 py-3 sm:px-8 sm:py-4 rounded-md hover:bg-[#d8314d] shadow">
+      Get Started
+    </Button>
+  </a>
+
+  {/* Watch Video Button with Link 
+  <a href="" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-[#0e3eaf] font-medium">
+    <span className="bg-blue-100 p-3 sm:p-4 rounded-full">
+      <FaPlay />
+    </span>
+    Watch video
+  </a>
+</div> */}
+
       </div>
 
       {/* RIGHT IMAGE & GRAPHICS */}

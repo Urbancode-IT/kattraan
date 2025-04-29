@@ -52,36 +52,35 @@ function InstructorDashboard({ listOfCourses }) {
       icon: Users,
       label: "Total Students",
       value: totalStudents,
-      color: "bg-yellow-100 text-yellow-800",
-    },
-    {
-      icon: BookOpen,
-      label: "Courses ",
-      value: listOfCourses.length,
-      color: " bg-blue-100 text-blue-800",
+      color: "bg-blue-100 text-blue-800",
     },
     {
       icon: FaRupeeSign,
       label: "Total Revenue",
       value: `₹${totalProfit}`,
-      color: "bg-pink-100 text-pink-800",
+      color: "bg-green-100 text-green-800",
     },
-    
+    {
+      icon: BookOpen,
+      label: "Courses",
+      value: listOfCourses.length,
+      color: "bg-purple-100 text-purple-800",
+    },
   ];
 
   return (
-    <div className="space-y-8 ">
+    <div className="space-y-8">
       {/* Stats Overview */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 ">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {stats.map((item, index) => (
-          <Card key={index} className={` ${item.color}`}>
+          <Card key={index}>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-xl font-medium">{item.label}</CardTitle>
-              <item.icon className={`h-8 w-8 text-muted-foreground ${item.color} `} />
+              <CardTitle className="text-sm font-medium">{item.label}</CardTitle>
+              <item.icon className="h-5 w-5 text-muted-foreground" />
             </CardHeader>
             <CardContent>
               <div className="text-3xl font-bold">{item.value}</div>
-              <Badge className={`${item.color}`}>{item.label}</Badge>
+              <Badge className={`mt-2 ${item.color}`}>{item.label}</Badge>
             </CardContent>
           </Card>
         ))}
@@ -91,7 +90,7 @@ function InstructorDashboard({ listOfCourses }) {
       <Card>
         <CardHeader>
           <div className="flex items-center justify-between">
-            <CardTitle className="text-xl font-medium">Course Performance</CardTitle>
+            <CardTitle>Course Performance</CardTitle>
             <BarChart2 className="h-5 w-5 text-muted-foreground" />
           </div>
         </CardHeader>
@@ -105,7 +104,7 @@ function InstructorDashboard({ listOfCourses }) {
       {/* Student Table */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-xl font-medium">Recent Enrollments</CardTitle>
+          <CardTitle>Recent Enrollments</CardTitle>
           <p className="text-sm text-muted-foreground">
             List of students and their respective courses
           </p>
@@ -115,7 +114,7 @@ function InstructorDashboard({ listOfCourses }) {
           <div className="overflow-x-auto">
             <Table className="w-full">
               <TableHeader className="sticky top-0 bg-background z-10">
-                <TableRow className="text-xl">
+                <TableRow>
                   <TableHead>Course</TableHead>
                   <TableHead>Name</TableHead>
                   <TableHead>Email</TableHead>
