@@ -1,137 +1,134 @@
 import React, { useState } from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Star } from "lucide-react";
+import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { Edit, Trash2, MessageCircle } from "lucide-react";
+import { Input } from "@/components/ui/input";
 
-const feedbackData = [
+const initialReviews = [
   {
     id: 1,
-    studentName: "John Doe",
-    courseName: "Web Development 101",
-    feedbackMessage:
-      "The course content is very comprehensive and well-structured. However, the pace was a bit fast for beginners.",
-    date: "2023-09-10",
-    response:
-      "We appreciate your feedback! We will review the pace of the course in upcoming sessions.",
+    name: "Frances Guerrero",
+    date: "Jan 19, 2025",
+    time: "11:40 AM",
+    title: "How to implement cleanup on useEffect",
+    content:
+      "Satisfied conveying a dependent contented gentleman elsewhere supported do. Warrant private blushes removed an in equally totally if. Delivered dejection necessary objection do Mr prevailed. Mr feeling does chiefly cordial in do.",
+    rating: 4.5,
+    image: "https://randomuser.me/api/portraits/women/1.jpg",
   },
   {
     id: 2,
-    studentName: "Jane Smith",
-    courseName: "Introduction to Python",
-    feedbackMessage:
-      "The Python course was great! I enjoyed the practical examples and hands-on coding exercises.",
-    date: "2023-09-12",
-    response:
-      "Thank you for your positive feedback! We're glad you enjoyed the exercises.",
+    name: "Louis Ferguson",
+    date: "Jan 20, 2025",
+    time: "09:15 AM",
+    title: "How does an Angular application work?",
+    content:
+      "Offended entirely finished you welcome goodness ham. On marrying painted pasture. Satisfied conveying a dependent contented gentleman supported do.",
+    rating: 4,
+    image: "https://randomuser.me/api/portraits/men/2.jpg",
   },
   {
     id: 3,
-    studentName: "Alice Johnson",
-    courseName: "Digital Marketing Basics",
-    feedbackMessage:
-      "I found the course very informative, but I would love more content on SEO.",
-    date: "2023-09-14",
-    response:
-      "Thanks for your suggestion! We will add more SEO content in the next update of the course.",
+    name: "Carolyn Ortiz",
+    date: "Jan 21, 2025",
+    time: "01:30 PM",
+    title: "What is React useEffect and describe any elaborate on its mount and unmount properties?",
+    content:
+      "Offended entirely finished you welcome goodness ham. On marrying painted pasture. Satisfied conveying a dependent contented gentleman supported do. Warrant private blushes removed an in equally totally if.",
+    rating: 5,
+    image: "https://randomuser.me/api/portraits/women/3.jpg",
+  },
+  {
+    id: 4,
+    name: "Dennis Barrett",
+    date: "Jan 22, 2025",
+    time: "10:20 AM",
+    title: "What are the different data types present in JavaScript?",
+    content:
+      "Satisfied conveying a dependent contented gentleman supported do. Warrant private blushes removed an in equally totally if. Delivered dejection necessary objection do Mr prevailed.",
+    rating: 4,
+    image: "https://randomuser.me/api/portraits/men/4.jpg",
+  },
+  {
+    id: 5,
+    name: "Carolyn Ortiz",
+    date: "Jan 23, 2025",
+    time: "04:45 PM",
+    title: "What are JavaScript prototypes?",
+    content:
+      "Satisfied conveying a dependent contented gentleman supported do. Warrant private blushes removed an in equally totally if. Delivered dejection necessary objection do Mr prevailed.",
+    rating: 4.5,
+    image: "https://randomuser.me/api/portraits/women/3.jpg",
   },
 ];
 
-function InstructorFeedback() {
-  const [feedback, setFeedback] = useState(feedbackData);
-  const [selectedId, setSelectedId] = useState(null);
-  const [responseText, setResponseText] = useState("");
+const StarRating = ({ rating }) => {
+  const fullStars = Math.floor(rating);
+  const halfStar = rating % 1 >= 0.5;
+  return (
+    <div className="flex items-center space-x-1">
+      {[...Array(fullStars)].map((_, i) => (
+        <Star key={i} className="text-yellow-400 fill-yellow-400 w-4 h-4" />
+      ))}
+      {halfStar && <Star className="text-yellow-400 w-4 h-4" />}
+    </div>
+  );
+};
 
-  const handleDelete = (id) => {
-    setFeedback(feedback.filter((item) => item.id !== id));
-  };
+export default function InstructorFeedback() {
+  const [reviews, setReviews] = useState(initialReviews);
 
-  const handleRespond = (id) => {
-    setSelectedId(id);
-    const existingResponse = feedback.find((f) => f.id === id)?.response || "";
-    setResponseText(existingResponse);
-  };
-
-  const handleSubmitResponse = () => {
-    if (!responseText.trim()) return;
-    setFeedback((prev) =>
-      prev.map((item) =>
-        item.id === selectedId ? { ...item, response: responseText } : item
-      )
-    );
-    setSelectedId(null);
-    setResponseText("");
-  };
+ ;
 
   return (
-    <div className="space-y-8">
-      <h2 className="text-2xl font-bold text-gray-800">📢 Course Feedback</h2>
-
-      {/* Feedback Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {feedback.map((item) => (
-          <div
-            key={item.id}
-            className="bg-white shadow-md rounded-lg p-6 hover:shadow-lg transition-all"
-          >
-            <div className="space-y-1">
-              <h3 className="text-lg font-semibold text-gray-900">
-                {item.courseName}
-              </h3>
-              <p className="text-sm text-gray-600">
-                {item.studentName} — {item.date}
-              </p>
-              <p className="text-gray-700 mt-2">{item.feedbackMessage}</p>
-            </div>
-
-            <div className="mt-4 text-sm text-gray-700">
-              <strong>Instructor's Response:</strong>
-              <p className="mt-1">
-                {item.response ? item.response : <span className="text-gray-400 italic">No response yet</span>}
-              </p>
-            </div>
-
-            <div className="flex justify-end gap-2 mt-6">
-              <Button size="sm" variant="outline">
-                <Edit className="w-4 h-4" />
-              </Button>
-              <Button size="sm" variant="destructive" onClick={() => handleDelete(item.id)}>
-                <Trash2 className="w-4 h-4" />
-              </Button>
-              <Button
-                size="sm"
-                className="bg-blue-600 text-white"
-                onClick={() => handleRespond(item.id)}
-              >
-                <MessageCircle className="w-4 h-4 mr-1" />
-                Respond
-              </Button>
-            </div>
-          </div>
-        ))}
+    <div className="max-w-4xl mx-auto p-4 space-y-6">
+      <div className="flex justify-between items-center">
+        <h2 className="text-3xl font-bold text-left text-[#0d2b45] p-3">Student Feedback</h2>
+        <div className="flex items-center space-x-2">
+          <Input placeholder="Search..." className="w-60" />
+          
+        </div>
       </div>
 
-      {/* Respond Modal (Inline) */}
-      {selectedId && (
-        <div className="bg-white shadow-lg p-6 rounded-lg border mt-4">
-          <h3 className="text-lg font-semibold text-gray-800 mb-2">✍️ Respond to Feedback</h3>
-          <textarea
-            rows="4"
-            className="w-full p-3 border border-gray-300 rounded-md"
-            placeholder="Write your response here..."
-            value={responseText}
-            onChange={(e) => setResponseText(e.target.value)}
-          />
-          <div className="flex justify-end gap-3 mt-4">
-            <Button variant="outline" onClick={() => setSelectedId(null)}>
-              Cancel
-            </Button>
-            <Button className="bg-green-600 text-white" onClick={handleSubmitResponse}>
-              Submit Response
-            </Button>
-          </div>
+      {reviews.map((review) => (
+        <Card key={review.id}>
+          <CardContent className="p-4">
+            <div className="flex items-start space-x-4">
+              <img
+                src={review.image}
+                alt={review.name}
+                className="w-12 h-12 rounded-full object-cover"
+              />
+              <div className="flex-1">
+                <div className="flex justify-between items-center">
+                  <div>
+                    <div className="text-lg">{review.name}</div>
+                    <p className="text-xs text-gray-500">
+                      {review.date} | {review.time}
+                    </p>
+                  </div>
+                  <StarRating rating={review.rating} />
+                </div>
+                <p className="mt-2 text-lg">{review.title}</p>
+                <p className="text-md text-gray-600 mt-1">{review.content}</p>
+                
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      ))}
+
+      <div className="flex justify-between items-center text-sm text-gray-500">
+        <p>Showing 1 to 5 of 20 entries</p>
+        <div className="space-x-2">
+          <Button variant="outline" size="sm">&lt;</Button>
+          <Button variant="outline" size="sm">1</Button>
+          <Button variant="outline" size="sm">2</Button>
+          <Button variant="outline" size="sm">3</Button>
+          <Button variant="outline" size="sm">&gt;</Button>
         </div>
-      )}
+      </div>
     </div>
   );
 }
-
-export default InstructorFeedback;

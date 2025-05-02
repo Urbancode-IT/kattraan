@@ -13,6 +13,7 @@ import { Eye, EyeOff } from "lucide-react"; // 👈 use your icon library
 
 function FormControls({ formControls = [], formData, setFormData }) {
   const [showPassword, setShowPassword] = useState({});
+  const [isFree, setIsFree] = useState(false);
 
   function togglePasswordVisibility(fieldName) {
     setShowPassword((prev) => ({
@@ -63,7 +64,8 @@ function FormControls({ formControls = [], formData, setFormData }) {
 
       case "select":
         element = (
-          <Select
+          <Select 
+           
             onValueChange={(value) =>
               setFormData({
                 ...formData,
@@ -73,7 +75,7 @@ function FormControls({ formControls = [], formData, setFormData }) {
             value={currentControlItemValue}
           >
             <SelectTrigger className="w-full">
-              <SelectValue placeholder={getControlItem.label} />
+              <SelectValue placeholder=""/>
             </SelectTrigger>
             <SelectContent>
               {getControlItem.options?.map((optionItem) => (
@@ -102,6 +104,23 @@ function FormControls({ formControls = [], formData, setFormData }) {
           />
         );
         break;
+
+        case "checkbox":
+          element = (
+            <Input
+              id={getControlItem.name}
+              name={getControlItem.name}
+              type="checkbox"
+              checked={currentControlItemValue}
+              onChange={(event) =>
+                setFormData({
+                  ...formData,
+                  [getControlItem.name]: event.target.checked,
+                })
+              }
+            />
+          );
+          break;
 
       default:
         element = (

@@ -7,15 +7,53 @@ const createOrder = async (req, res) => {
   try {
     const { userId, courseId, coursePricing, courseTitle } = req.body;
 
-    // Generate unique receipt
+    // First check if the user is already enrolled in this course
+    const existingEnrollment = await StudentCourses.findOne({
+      userId,
+      "courses.courseId": courseId
+    });
+
+    if (existingEnrollment) {
+      return res.status(400).json({
+        success: false,
+        message: "You are already enrolled in this course",
+      });
+    }
+
+    // If course is free (price = 0), skip Razorpay and create order directly
+    if (coursePricing === 0) {
+      const newOrder = new Order({
+        userId,
+        courseId,
+        coursePricing,
+        courseTitle,
+        paymentId: "free-course-no-payment",
+        orderStatus: "confirmed",
+        paymentMethod: "none",
+        paymentStatus: "paid",
+      });
+
+      await newOrder.save();
+      await enrollStudentInCourse(userId, courseId, courseTitle);
+
+      return res.status(201).json({
+        success: true,
+        data: { 
+          razorpayOrderId: null, 
+          isFreeCourse: true 
+        },
+        message: "Free course enrolled successfully"
+      });
+    }
+
+    // For paid courses, proceed with Razorpay flow
     const crypto = require("crypto");
     const uniqueReceipt = crypto.randomBytes(10).toString("hex");
 
-    // Create Razorpay order
     const options = {
-      amount: coursePricing * 100, // Convert to smallest currency unit
+      amount: coursePricing * 100,
       currency: "INR",
-      receipt: `order_${uniqueReceipt}`, // Ensure receipt length <= 40
+      receipt: `order_${uniqueReceipt}`,
     };
 
     const razorpayOrder = await Razorpay.orders.create(options);
@@ -27,7 +65,6 @@ const createOrder = async (req, res) => {
       });
     }
 
-    // Save the order to the database
     const newOrder = new Order({
       userId,
       courseId,
@@ -43,14 +80,13 @@ const createOrder = async (req, res) => {
 
     res.status(201).json({
       success: true,
-      data: { razorpayOrderId: razorpayOrder.id },
+      data: { razorpayOrderId: razorpayOrder.id, isFreeCourse: false },
     });
   } catch (error) {
     console.error(error);
     res.status(500).json({ success: false, message: "Error creating order" });
   }
 };
-
 const capturePaymentAndFinalizeOrder = async (req, res) => {
   try {
     const { orderId, paymentId } = req.body;
@@ -62,7 +98,32 @@ const capturePaymentAndFinalizeOrder = async (req, res) => {
         .json({ success: false, message: "Order not found" });
     }
 
-    // Verify the payment with Razorpay
+    // Check if user is already enrolled in this course (safety net)
+    const existingEnrollment = await StudentCourses.findOne({
+      userId: order.userId,
+      "courses.courseId": order.courseId
+    });
+
+    if (existingEnrollment) {
+      // Update order status to prevent hanging orders
+      order.orderStatus = "duplicate";
+      await order.save();
+      
+      return res.status(400).json({
+        success: false,
+        message: "You are already enrolled in this course",
+      });
+    }
+
+    // Skip payment verification for free courses
+    if (order.coursePricing === 0) {
+      return res.status(200).json({ 
+        success: true, 
+        message: "Free course already enrolled" 
+      });
+    }
+
+    // For paid courses, verify payment with Razorpay
     const paymentDetails = await Razorpay.payments.fetch(paymentId);
     if (!paymentDetails || paymentDetails.status !== "captured") {
       return res.status(400).json({
@@ -76,35 +137,8 @@ const capturePaymentAndFinalizeOrder = async (req, res) => {
     order.orderStatus = "confirmed";
     await order.save();
 
-    // Add the course to the student's purchased courses
-    let studentCourses = await StudentCourses.findOne({ userId: order.userId });
-
-    if (!studentCourses) {
-      studentCourses = new StudentCourses({
-        userId: order.userId,
-        courses: [],
-      });
-    }
-
-    studentCourses.courses.push({
-      courseId: order.courseId,
-      title: order.courseTitle,
-      dateOfPurchase: new Date(),
-    });
-
-    await studentCourses.save();
-
-    // Add the student to the course schema's student list
-    await Course.findByIdAndUpdate(order.courseId, {
-      $addToSet: {
-        students: {
-          studentId: order.userId,
-          studentName: order.userName,
-          studentEmail: order.userEmail,
-          paidAmount: order.coursePricing,
-        },
-      },
-    });
+    // Enroll student in the course
+    await enrollStudentInCourse(order.userId, order.courseId, order.courseTitle);
 
     res.status(200).json({ success: true, message: "Order confirmed" });
   } catch (error) {
