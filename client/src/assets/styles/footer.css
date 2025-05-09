@@ -1,0 +1,45 @@
+/* Responsive Design */
+@media screen and (max-width: 768px) {
+    /* Adjust the grid layout for smaller screens */
+    footer .skills-section {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+  
+    footer .bottom-links {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+  
+    /* Center align footer bottom items for mobile */
+    footer .footer-bottom {
+      flex-direction: column;
+      text-align: center;
+      gap: 1rem;
+    }
+  
+    footer .footer-bottom select {
+      margin-top: 0.5rem;
+    }
+  }
+  
+  @media screen and (max-width: 480px) {
+    /* Make font sizes smaller for very small screens */
+    footer .skills-section h4,
+    footer .bottom-links h4 {
+      font-size: 1rem;
+    }
+  
+    footer .skills-section ul li,
+    footer .bottom-links ul li,
+    footer .footer-bottom span,
+    footer .footer-bottom a {
+      font-size: 0.8rem;
+    }
+  
+    footer .footer-bottom select {
+      font-size: 0.8rem;
+      padding: 0.4rem;
+    }
+  }
+  
