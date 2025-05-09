@@ -163,6 +163,7 @@ function CourseCurriculum() {
           })),
         ];
         setCourseCurriculumFormData(cpyCourseCurriculumFormdata);
+        
         setMediaUploadProgress(false);
       }
     } catch (e) {
