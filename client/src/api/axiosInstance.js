@@ -8,7 +8,6 @@ const axiosInstance = axios.create({
 //   baseURL: "https://api.kattraan.com",
 // });
 
-
 axiosInstance.interceptors.request.use(
   (config) => {
     const accessToken = JSON.parse(sessionStorage.getItem("accessToken")) || "";

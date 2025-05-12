@@ -1,70 +1,61 @@
 const express = require("express");
 const multer = require("multer");
 const {
-  uploadMediaToCloudinary,
-  deleteMediaFromCloudinary,
-} = require("../../helpers/cloudinary");
+  uploadMediaToLinode,
+  deleteMediaFromLinode,
+} = require("../../helpers/linodeStorage");
 
 const router = express.Router();
-
 const upload = multer({ dest: "uploads/" });
 
+// Single file
 router.post("/upload", upload.single("file"), async (req, res) => {
+  if (!req.file) {
+    return res
+      .status(400)
+      .json({ success: false, message: "No file provided" });
+  }
   try {
-    const result = await uploadMediaToCloudinary(req.file.path);
-    res.status(200).json({
-      success: true,
-      data: result,
-    });
+    const { key, url } = await uploadMediaToLinode(req.file.path);
+    res.json({ success: true, data: { key, url } });
   } catch (e) {
-    console.log(e);
-
+    console.error("Upload error:", e);
     res.status(500).json({ success: false, message: "Error uploading file" });
   }
 });
 
-router.delete("/delete/:id", async (req, res) => {
+// Bulk
+router.post("/bulk-upload", upload.array("files", 10), async (req, res) => {
+  if (!req.files || !req.files.length) {
+    return res
+      .status(400)
+      .json({ success: false, message: "No files provided" });
+  }
   try {
-    const { id } = req.params;
-
-    if (!id) {
-      return res.status(400).json({
-        success: false,
-        message: "Assest Id is required",
-      });
-    }
-
-    await deleteMediaFromCloudinary(id);
-
-    res.status(200).json({
-      success: true,
-      message: "Assest deleted successfully from cloudinary",
-    });
+    const uploads = await Promise.all(
+      req.files.map((f) => uploadMediaToLinode(f.path))
+    );
+    res.json({ success: true, data: uploads });
   } catch (e) {
-    console.log(e);
-
-    res.status(500).json({ success: false, message: "Error deleting file" });
+    console.error("Bulk upload error:", e);
+    res.status(500).json({ success: false, message: "Bulk upload failed" });
   }
 });
 
-router.post("/bulk-upload", upload.array("files", 10), async (req, res) => {
+// Delete
+router.delete("/delete/:key", async (req, res) => {
+  const key = decodeURIComponent(req.params.key);
+  if (!key) {
+    return res
+      .status(400)
+      .json({ success: false, message: "Asset key is required" });
+  }
   try {
-    const uploadPromises = req.files.map((fileItem) =>
-      uploadMediaToCloudinary(fileItem.path)
-    );
-
-    const results = await Promise.all(uploadPromises);
-
-    res.status(200).json({
-      success: true,
-      data: results,
-    });
-  } catch (event) {
-    console.log(event);
-
-    res
-      .status(500)
-      .json({ success: false, message: "Error in bulk uploading files" });
+    await deleteMediaFromLinode(key);
+    res.json({ success: true, message: "Asset deleted", key });
+  } catch (e) {
+    console.error("Delete error:", e);
+    res.status(500).json({ success: false, message: "Error deleting file" });
   }
 });
 
