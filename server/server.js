@@ -5,8 +5,12 @@ const mongoose = require("mongoose");
 const morgan = require("morgan");
 const helmet = require("helmet");
 const Razorpay = require("razorpay");
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocument = require('./swagger.json'); // <-- Make sure this file exists
+
 
 // Import Routes
+
 const authRoutes = require("./routes/auth-routes/index");
 const mediaRoutes = require("./routes/instructor-routes/media-routes");
 const instructorCourseRoutes = require("./routes/instructor-routes/course-routes");
@@ -31,6 +35,9 @@ app.use(helmet());
 app.use(morgan("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.use(
   cors({
