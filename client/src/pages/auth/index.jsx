@@ -9,6 +9,8 @@ import avatar4 from "../../assets/avatar/04.jpg";
 import elementImg from "../../assets/element/02.svg";
 import Footer from "@/components/student-view/footer";
 import Header from "@/components/student-view/header";
+import VoiceAssistant from "@/components/voice/VoiceAssistant";
+
 
 
 
@@ -32,6 +34,26 @@ function AuthPage() {
     signUpFormData.userEmail &&
     signUpFormData.password &&
     signUpFormData.password === signUpFormData.confirmPassword;
+
+
+    const handleVoiceCommand = ({ type, value }) => {
+  if (type === "switch-tab") {
+    setActiveTab(value === "sign up" ? "signup" : "signin");
+  } else if (type === "set-email") {
+    const setter = activeTab === "signin" ? setSignInFormData : setSignUpFormData;
+    setter(prev => ({ ...prev, userEmail: value }));
+  } else if (type === "set-password") {
+    const setter = activeTab === "signin" ? setSignInFormData : setSignUpFormData;
+    setter(prev => ({ ...prev, password: value }));
+  } else if (type === "set-confirm-password") {
+    setSignUpFormData(prev => ({ ...prev, confirmPassword: value }));
+  } else if (type === "set-name") {
+    setSignUpFormData(prev => ({ ...prev, userName: value }));
+  } else if (type === "submit") {
+    activeTab === "signin" ? handleLoginUser() : handleRegisterUser();
+  }
+};
+
     
 
   return (
@@ -92,6 +114,7 @@ function AuthPage() {
         </div>
       </div>
     </div>
+    <VoiceAssistant onCommand={handleVoiceCommand} />
     <Footer />
     </div>
   );
