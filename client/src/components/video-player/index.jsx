@@ -140,135 +140,79 @@ function VideoPlayer({
 
   // Voice Recognition Handler
   useEffect(() => {
-  if (!recognition) return;
+    if (!recognition) return;
 
-  recognition.continuous = true;
-  recognition.interimResults = false;
-  recognition.lang = "en-US";
+    recognition.continuous = true;
+    recognition.interimResults = false;
+    recognition.lang = "en-US";
 
-  recognition.onresult = (event) => {
-    const transcript = event.results[event.results.length - 1][0].transcript
-      .trim()
-      .toLowerCase();
-    console.log("Voice Command:", transcript);
-    speak(transcript); // Echo voice
+    recognition.onresult = (event) => {
+      const transcript = event.results[event.results.length - 1][0].transcript
+        .trim()
+        .toLowerCase();
+      console.log("Voice Command:", transcript);
+      speak(transcript); // Echo voice
 
-    // Play / Pause
-    if (["play", "resume", "start video"].some(cmd => transcript.includes(cmd))) {
-      setPlaying(true);
-    } else if (["pause", "stop video", "halt"].some(cmd => transcript.includes(cmd))) {
-      setPlaying(false);
-    }
-
-    // Mute / Unmute
-    else if (["mute", "turn off sound", "silent"].some(cmd => transcript.includes(cmd))) {
-      setMuted(true);
-    } else if (["unmute", "restore sound", "turn on audio"].some(cmd => transcript.includes(cmd))) {
-      setMuted(false);
-    }
-
-    // Volume Controls
-    else if (["volume up", "increase volume", "louder"].some(cmd => transcript.includes(cmd))) {
-      setVolume((prev) => Math.min(prev + 0.1, 1));
-    } else if (["volume down", "decrease volume", "quieter"].some(cmd => transcript.includes(cmd))) {
-      setVolume((prev) => Math.max(prev - 0.1, 0));
-    } else if (transcript.match(/volume (\d{1,2})/)) {
-      const match = transcript.match(/volume (\d{1,2})/);
-      const vol = parseInt(match[1]) / 100;
-      setVolume(Math.min(Math.max(vol, 0), 1));
-    }
-
-    // Seek Controls
-    else if (["forward", "skip ahead", "next part"].some(cmd => transcript.includes(cmd))) {
-      handleForward();
-    } else if (["rewind", "go back", "previous part"].some(cmd => transcript.includes(cmd))) {
-      handleRewind();
-    } else if (transcript.match(/seek to (\d{1,3}) percent/)) {
-      const match = transcript.match(/seek to (\d{1,3}) percent/);
-      const percent = parseInt(match[1]) / 100;
-      const duration = playerRef.current?.getDuration?.();
-      if (duration && percent <= 1) {
-        playerRef.current.seekTo(percent);
-      }
-    }
-
-    // Go to Specific Time
-    else if (transcript.includes("go to")) {
-      let minutes = 0;
-      let seconds = 0;
-
-      const matchFull = transcript.match(/go to (\d+) minutes? (\d+) seconds?/);
-      const matchSeconds = transcript.match(/go to (\d+) seconds?/);
-      const matchMinutes = transcript.match(/go to (\d+) minutes?/);
-      const matchColon = transcript.match(/go to (\d+):(\d+)/);
-
-      if (matchFull) {
-        minutes = parseInt(matchFull[1]);
-        seconds = parseInt(matchFull[2]);
-      } else if (matchColon) {
-        minutes = parseInt(matchColon[1]);
-        seconds = parseInt(matchColon[2]);
-      } else if (matchMinutes) {
-        minutes = parseInt(matchMinutes[1]);
-      } else if (matchSeconds) {
-        seconds = parseInt(matchSeconds[1]);
+      if (transcript.includes("play")) {
+        setPlaying(true);
+      } else if (transcript.includes("pause")) {
+        setPlaying(false);
+      } else if (transcript.includes("mute")) {
+        setMuted(true);
+      } else if (transcript.includes("unmute")) {
+        setMuted(false);
+      } else if (transcript.includes("forward")) {
+        handleForward();
+      } else if (transcript.includes("rewind")) {
+        handleRewind();
+      } else if (transcript.includes("volume up")) {
+        setVolume((prev) => Math.min(prev + 0.1, 1));
+      } else if (transcript.includes("volume down")) {
+        setVolume((prev) => Math.max(prev - 0.1, 0));
+      } else if (transcript.includes("fullscreen")) {
+        if (!isFullScreen) handleFullScreen();
+      } else if (transcript.includes("exit fullscreen")) {
+        if (isFullScreen) handleFullScreen();
       }
 
-      const totalSeconds = minutes * 60 + seconds;
-      const duration = playerRef?.current?.getDuration?.();
-      if (duration && totalSeconds <= duration) {
-        playerRef?.current?.seekTo(totalSeconds);
+      // Custom time formats
+      else if (transcript.includes("go to")) {
+        let minutes = 0;
+        let seconds = 0;
+
+        const matchFull = transcript.match(/go to (\d+) minutes? (\d+) seconds?/);
+        const matchSeconds = transcript.match(/go to (\d+) seconds?/);
+        const matchMinutes = transcript.match(/go to (\d+) minutes?/);
+        const matchColon = transcript.match(/go to (\d+):(\d+)/);
+
+        if (matchFull) {
+          minutes = parseInt(matchFull[1]);
+          seconds = parseInt(matchFull[2]);
+        } else if (matchColon) {
+          minutes = parseInt(matchColon[1]);
+          seconds = parseInt(matchColon[2]);
+        } else if (matchMinutes) {
+          minutes = parseInt(matchMinutes[1]);
+        } else if (matchSeconds) {
+          seconds = parseInt(matchSeconds[1]);
+        }
+
+        const totalSeconds = minutes * 60 + seconds;
+        const duration = playerRef?.current?.getDuration?.();
+        if (duration && totalSeconds <= duration) {
+          playerRef?.current?.seekTo(totalSeconds);
+        }
       }
-    }
+    };
 
-    // Fullscreen
-    else if (["fullscreen", "enter fullscreen", "maximize"].some(cmd => transcript.includes(cmd))) {
-      if (!isFullScreen) handleFullScreen();
-    } else if (["exit fullscreen", "minimize", "normal view"].some(cmd => transcript.includes(cmd))) {
-      if (isFullScreen) handleFullScreen();
-    }
+    recognition.onerror = (event) => {
+      console.error("Voice error:", event);
+    };
 
-    // Speed Control
-    else if (["speed up", "increase speed", "faster"].some(cmd => transcript.includes(cmd))) {
-      const current = playerRef.current.getPlaybackRate?.() || 1;
-      playerRef.current.setPlaybackRate?.(Math.min(current + 0.25, 2));
-    } else if (["slow down", "decrease speed", "slower"].some(cmd => transcript.includes(cmd))) {
-      const current = playerRef.current.getPlaybackRate?.() || 1;
-      playerRef.current.setPlaybackRate?.(Math.max(current - 0.25, 0.25));
-    }
+    if (isListening) recognition.start();
 
-    // Replay or Restart
-    else if (["restart", "replay", "start over"].some(cmd => transcript.includes(cmd))) {
-      playerRef.current.seekTo(0);
-      setPlaying(true);
-    }
-
-    // Listening control
-    else if (["stop listening", "disable voice", "mute mic"].some(cmd => transcript.includes(cmd))) {
-      recognition.stop();
-      setIsListening(false);
-    } else if (["start listening", "enable voice", "voice on"].some(cmd => transcript.includes(cmd))) {
-      recognition.start();
-      setIsListening(true);
-    }
-
-    // Feedback / AI talk
-    else if (["who are you", "what can you do"].some(cmd => transcript.includes(cmd))) {
-      speak("I am your video assistant. I can play, pause, mute, rewind, and more!");
-    } else if (["thank you", "thanks"].some(cmd => transcript.includes(cmd))) {
-      speak("You're welcome!");
-    }
-  };
-
-  recognition.onerror = (event) => {
-    console.error("Voice error:", event);
-  };
-
-  if (isListening) recognition.start();
-
-  return () => recognition.stop();
-}, [isListening, isFullScreen]);
-
+    return () => recognition.stop();
+  }, [isListening, isFullScreen]);
 
   return (
     <div
