@@ -7,9 +7,12 @@ export async function registerService(formData) {
   return data;
 }
 
+<<<<<<< HEAD
 
 
 
+=======
+>>>>>>> ac9372921a5b054b26ec48282b3edfe2ef40e9b7
 export async function loginService(formData) {
   const { data } = await axiosInstance.post("/auth/login", formData);
 
@@ -22,8 +25,16 @@ export async function checkAuthService() {
   return data;
 }
 
+<<<<<<< HEAD
 
 export async function becomeInstructorService({ userName, userEmail, password }) {
+=======
+export async function becomeInstructorService({
+  userName,
+  userEmail,
+  password,
+}) {
+>>>>>>> ac9372921a5b054b26ec48282b3edfe2ef40e9b7
   const { data } = await axiosInstance.post(`/auth/become-instructor`, {
     userName,
     userEmail,
@@ -33,6 +44,7 @@ export async function becomeInstructorService({ userName, userEmail, password })
   return data;
 }
 
+<<<<<<< HEAD
 
 
 export async function mediaUploadService(formData, onProgressCallback) {
@@ -51,6 +63,24 @@ export async function mediaUploadService(formData, onProgressCallback) {
 export async function mediaDeleteService(id) {
   const { data } = await axiosInstance.delete(`/media/delete/${id}`);
 
+=======
+export async function mediaUploadService(formData, onProgress) {
+  // Let Axios/browser set the multipart headers & boundary
+  const { data } = await axiosInstance.post("/media/upload", formData, {
+    onUploadProgress: (e) => {
+      if (onProgress) {
+        onProgress(Math.round((e.loaded * 100) / e.total));
+      }
+    },
+  });
+  return data;
+}
+
+export async function mediaDeleteService(key) {
+  const { data } = await axiosInstance.delete(
+    `/media/delete/${encodeURIComponent(key)}`
+  );
+>>>>>>> ac9372921a5b054b26ec48282b3edfe2ef40e9b7
   return data;
 }
 
@@ -60,9 +90,17 @@ export async function fetchInstructorCourseListService() {
   return data;
 }
 
+<<<<<<< HEAD
 export async function addNewCourseService(formData) {
   const { data } = await axiosInstance.post(`/instructor/course/add`, formData);
 
+=======
+export async function addNewCourseService(courseData) {
+  const { data } = await axiosInstance.post(
+    `/instructor/course/add`,
+    courseData
+  );
+>>>>>>> ac9372921a5b054b26ec48282b3edfe2ef40e9b7
   return data;
 }
 
@@ -83,6 +121,7 @@ export async function updateCourseByIdService(id, formData) {
   return data;
 }
 
+<<<<<<< HEAD
 export async function mediaBulkUploadService(formData, onProgressCallback) {
   const { data } = await axiosInstance.post("/media/bulk-upload", formData, {
     onUploadProgress: (progressEvent) => {
@@ -93,6 +132,16 @@ export async function mediaBulkUploadService(formData, onProgressCallback) {
     },
   });
 
+=======
+export async function mediaBulkUploadService(formData, onProgress) {
+  const { data } = await axiosInstance.post("/media/bulk-upload", formData, {
+    onUploadProgress: (e) => {
+      if (onProgress) {
+        onProgress(Math.round((e.loaded * 100) / e.total));
+      }
+    },
+  });
+>>>>>>> ac9372921a5b054b26ec48282b3edfe2ef40e9b7
   return data;
 }
 
@@ -122,14 +171,28 @@ export async function checkCoursePurchaseInfoService(courseId, studentId) {
 
 export async function createPaymentService(orderDetails) {
   // Sends user, course, and pricing details to the backend to create Razorpay order
+<<<<<<< HEAD
   const { data } = await axiosInstance.post(`/student/order/create`, orderDetails);
+=======
+  const { data } = await axiosInstance.post(
+    `/student/order/create`,
+    orderDetails
+  );
+>>>>>>> ac9372921a5b054b26ec48282b3edfe2ef40e9b7
 
   return data; // Contains razorpayOrderId
 }
 
 export async function capturePaymentService(paymentDetails) {
   // Sends paymentId and orderId to capture and finalize the payment
+<<<<<<< HEAD
   const { data } = await axiosInstance.post(`/student/order/capture`, paymentDetails);
+=======
+  const { data } = await axiosInstance.post(
+    `/student/order/capture`,
+    paymentDetails
+  );
+>>>>>>> ac9372921a5b054b26ec48282b3edfe2ef40e9b7
 
   return data; // Contains success or failure of payment capture
 }
@@ -173,4 +236,8 @@ export async function resetCourseProgressService(userId, courseId) {
   );
 
   return data;
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> ac9372921a5b054b26ec48282b3edfe2ef40e9b7

@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 // You posted this block twice 👇
+=======
+
+>>>>>>> ac9372921a5b054b26ec48282b3edfe2ef40e9b7
 const express = require("express");
 const {
   registerUser,
