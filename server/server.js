@@ -18,11 +18,7 @@ const studentViewCourseRoutes = require("./routes/student-routes/course-routes")
 const studentViewOrderRoutes = require("./routes/student-routes/order-routes");
 const studentCoursesRoutes = require("./routes/student-routes/student-courses-routes");
 const studentCourseProgressRoutes = require("./routes/student-routes/course-progress-routes");
-<<<<<<< HEAD
-const courseraRoutes = require("./routes/thirdparty/coursera"); // ✅ NEW
-=======
 const courseraRoutes = require("./routes/thirdparty/coursera"); 
->>>>>>> ac9372921a5b054b26ec48282b3edfe2ef40e9b7
 
 const app = express();
 const PORT = process.env.PORT || 5001;
@@ -45,7 +41,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.use(
   cors({
-    origin: "https://kattraan.com", // Allow requests from this origin
+    origin: "http://localhost:5173", // Allow requests from this origin
     credentials: true, // Allow cookies and authorization headers
     methods: ["GET", "POST", "PUT", "DELETE"], // Allowed HTTP methods
     allowedHeaders: ["Content-Type", "Authorization"], // Allowed headers
@@ -53,7 +49,7 @@ app.use(
 );
 
 app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "https://kattraan.com");
+  res.header("Access-Control-Allow-Origin", "http://localhost:5173");
   res.header(
     "Access-Control-Allow-Headers",
     "Origin, X-Requested-With, Content-Type, Accept, Authorization"

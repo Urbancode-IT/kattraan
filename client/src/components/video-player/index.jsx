@@ -11,7 +11,20 @@ import {
   RotateCw,
   Volume2,
   VolumeX,
+  Mic,
 } from "lucide-react";
+
+// Voice Recognition Setup
+const SpeechRecognition =
+  window.SpeechRecognition || window.webkitSpeechRecognition;
+const recognition = SpeechRecognition ? new SpeechRecognition() : null;
+
+// Speak the command back
+function speak(text) {
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.lang = "en-US";
+  window.speechSynthesis.speak(utterance);
+}
 
 function VideoPlayer({
   width = "100%",
@@ -27,6 +40,7 @@ function VideoPlayer({
   const [seeking, setSeeking] = useState(false);
   const [isFullScreen, setIsFullScreen] = useState(false);
   const [showControls, setShowControls] = useState(true);
+  const [isListening, setIsListening] = useState(true);
 
   const playerRef = useRef(null);
   const playerContainerRef = useRef(null);
@@ -103,13 +117,13 @@ function VideoPlayer({
     controlsTimeoutRef.current = setTimeout(() => setShowControls(false), 3000);
   }
 
+  // Fullscreen listener
   useEffect(() => {
     const handleFullScreenChange = () => {
       setIsFullScreen(document.fullscreenElement);
     };
 
     document.addEventListener("fullscreenchange", handleFullScreenChange);
-
     return () => {
       document.removeEventListener("fullscreenchange", handleFullScreenChange);
     };
@@ -123,6 +137,82 @@ function VideoPlayer({
       });
     }
   }, [played]);
+
+  // Voice Recognition Handler
+  useEffect(() => {
+    if (!recognition) return;
+
+    recognition.continuous = true;
+    recognition.interimResults = false;
+    recognition.lang = "en-US";
+
+    recognition.onresult = (event) => {
+      const transcript = event.results[event.results.length - 1][0].transcript
+        .trim()
+        .toLowerCase();
+      console.log("Voice Command:", transcript);
+      speak(transcript); // Echo voice
+
+      if (transcript.includes("play")) {
+        setPlaying(true);
+      } else if (transcript.includes("pause")) {
+        setPlaying(false);
+      } else if (transcript.includes("mute")) {
+        setMuted(true);
+      } else if (transcript.includes("unmute")) {
+        setMuted(false);
+      } else if (transcript.includes("forward")) {
+        handleForward();
+      } else if (transcript.includes("rewind")) {
+        handleRewind();
+      } else if (transcript.includes("volume up")) {
+        setVolume((prev) => Math.min(prev + 0.1, 1));
+      } else if (transcript.includes("volume down")) {
+        setVolume((prev) => Math.max(prev - 0.1, 0));
+      } else if (transcript.includes("fullscreen")) {
+        if (!isFullScreen) handleFullScreen();
+      } else if (transcript.includes("exit fullscreen")) {
+        if (isFullScreen) handleFullScreen();
+      }
+
+      // Custom time formats
+      else if (transcript.includes("go to")) {
+        let minutes = 0;
+        let seconds = 0;
+
+        const matchFull = transcript.match(/go to (\d+) minutes? (\d+) seconds?/);
+        const matchSeconds = transcript.match(/go to (\d+) seconds?/);
+        const matchMinutes = transcript.match(/go to (\d+) minutes?/);
+        const matchColon = transcript.match(/go to (\d+):(\d+)/);
+
+        if (matchFull) {
+          minutes = parseInt(matchFull[1]);
+          seconds = parseInt(matchFull[2]);
+        } else if (matchColon) {
+          minutes = parseInt(matchColon[1]);
+          seconds = parseInt(matchColon[2]);
+        } else if (matchMinutes) {
+          minutes = parseInt(matchMinutes[1]);
+        } else if (matchSeconds) {
+          seconds = parseInt(matchSeconds[1]);
+        }
+
+        const totalSeconds = minutes * 60 + seconds;
+        const duration = playerRef?.current?.getDuration?.();
+        if (duration && totalSeconds <= duration) {
+          playerRef?.current?.seekTo(totalSeconds);
+        }
+      }
+    };
+
+    recognition.onerror = (event) => {
+      console.error("Voice error:", event);
+    };
+
+    if (isListening) recognition.start();
+
+    return () => recognition.stop();
+  }, [isListening, isFullScreen]);
 
   return (
     <div
@@ -206,7 +296,7 @@ function VideoPlayer({
                 max={100}
                 step={1}
                 onValueChange={(value) => handleVolumeChange([value[0] / 100])}
-                className="w-24 "
+                className="w-24"
               />
             </div>
             <div className="flex items-center space-x-2">
@@ -225,6 +315,17 @@ function VideoPlayer({
                 ) : (
                   <Maximize className="h-6 w-6" />
                 )}
+              </Button>
+              <Button
+                onClick={() => {
+                  if (isListening) recognition.stop();
+                  else recognition.start();
+                  setIsListening(!isListening);
+                }}
+                className="text-white bg-transparent hover:bg-gray-700"
+              >
+                <Mic className="h-5 w-5 mr-1" />
+                {isListening ? "Listening" : "Start Voice"}
               </Button>
             </div>
           </div>
