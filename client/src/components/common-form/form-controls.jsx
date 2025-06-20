@@ -52,9 +52,9 @@ function FormControls({ formControls = [], formData, setFormData }) {
                 className="absolute top-1/2 right-3 transform -translate-y-1/2 cursor-pointer text-gray-500"
               >
                 {showPassword[getControlItem.name] ? (
-                  <EyeOff size={18} />
-                ) : (
                   <Eye size={18} />
+                ) : (
+                  <EyeOff size={18} />
                 )}
               </span>
             )}

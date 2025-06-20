@@ -29,11 +29,22 @@ function AuthPage() {
   const checkIfSignInFormIsValid = () =>
     signInFormData.userEmail && signInFormData.password;
 
-  const checkIfSignUpFormIsValid = () =>
-    signUpFormData.userName &&
-    signUpFormData.userEmail &&
-    signUpFormData.password &&
-    signUpFormData.password === signUpFormData.confirmPassword;
+  const checkIfSignUpFormIsValid = () => {
+  const { userName, userEmail, password, confirmPassword } = signUpFormData;
+
+  const isNotEmpty = (value) => value && value.trim() !== '';
+  const isValidEmail = (email) =>
+    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  const isStrongPassword = (pwd) => pwd.length >= 6;
+
+  return (
+    isNotEmpty(userName) &&
+    isValidEmail(userEmail) &&
+    isStrongPassword(password) &&
+    password === confirmPassword
+  );
+};
+
 
 
     const handleVoiceCommand = ({ type, value }) => {
