@@ -45,6 +45,12 @@ function AuthPage() {
   );
 };
 
+=======
+  const checkIfSignUpFormIsValid = () =>
+    signUpFormData.userName &&
+    signUpFormData.userEmail &&
+    signUpFormData.password &&
+    signUpFormData.password === signUpFormData.confirmPassword;
 
 
     const handleVoiceCommand = ({ type, value }) => {
