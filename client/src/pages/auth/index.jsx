@@ -29,6 +29,23 @@ function AuthPage() {
   const checkIfSignInFormIsValid = () =>
     signInFormData.userEmail && signInFormData.password;
 
+  const checkIfSignUpFormIsValid = () => {
+  const { userName, userEmail, password, confirmPassword } = signUpFormData;
+
+  const isNotEmpty = (value) => value && value.trim() !== '';
+  const isValidEmail = (email) =>
+    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  const isStrongPassword = (pwd) => pwd.length >= 6;
+
+  return (
+    isNotEmpty(userName) &&
+    isValidEmail(userEmail) &&
+    isStrongPassword(password) &&
+    password === confirmPassword
+  );
+};
+
+=======
   const checkIfSignUpFormIsValid = () =>
     signUpFormData.userName &&
     signUpFormData.userEmail &&

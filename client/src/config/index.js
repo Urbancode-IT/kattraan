@@ -17,7 +17,7 @@ export const signUpFormControls = [
   {
     name: "password",
     label: "Password",
-    placeholder: "Enter your password",
+    placeholder: "Password must be at least 6 characters",
     type: "password",
     componentType: "input",
   },
