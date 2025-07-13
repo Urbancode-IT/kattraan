@@ -6,221 +6,243 @@ const User = require("../../models/User");
 const Role = require("../../models/Role");
 require("dotenv").config();
 
-// ✅ Register User (default: learner)
+// =======================
+// ✅ Register User
+// =======================
 const registerUser = async (req, res) => {
   try {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ success: false, errors: errors.array() });
+    const { userName, userEmail, password, roles } = req.body;
+
+    if (!userName || !userEmail || !password) {
+      return res.status(400).json({
+        success: false,
+        message: "Username, email, and password are required",
+      });
     }
 
-    const { userName, userEmail, password } = req.body;
-
-    const existingUser = await User.findOne({ userEmail });
+    const existingUser = await User.findOne({
+      userEmail: userEmail.toLowerCase(),
+    });
     if (existingUser) {
       return res
-        .status(400)
+        .status(409)
         .json({ success: false, message: "User already exists" });
     }
 
-    const learnerRole = await Role.findOne({ roleName: "learner" });
-    if (!learnerRole) {
+    // Default to 'learner' if no roles provided
+    const providedRoles = roles?.length > 0 ? roles : [1];
+
+    // Find matching Role ObjectIds
+    const validRoles = await Role.find({ roleId: { $in: providedRoles } });
+
+    if (validRoles.length !== providedRoles.length) {
       return res
-        .status(500)
-        .json({ success: false, message: "Learner role not found in DB" });
+        .status(400)
+        .json({ success: false, message: "Invalid role(s)" });
     }
 
-    const hashPassword = await bcrypt.hash(password, 12);
+    const hashedPassword = await bcrypt.hash(password, 10);
 
     const newUser = new User({
       userName,
-      userEmail,
-      roles: [learnerRole._id],
-      password: hashPassword,
+      userEmail: userEmail.toLowerCase(),
+      password: hashedPassword,
+      roles: validRoles.map((role) => role._id),
     });
 
     await newUser.save();
 
-    return res.status(201).json({
-      success: true,
-      message: "User registered successfully as a learner!",
-    });
-  } catch (error) {
-    console.error("Error registering user:", error);
-    return res.status(500).json({
-      success: false,
-      message: "An error occurred. Please try again later.",
-    });
+    return res
+      .status(201)
+      .json({ success: true, message: "User registered successfully" });
+  } catch (err) {
+    console.error("Register Error:", err);
+    return res.status(500).json({ success: false, message: "Server error" });
   }
 };
 
-// ✅ Login User (for learner/instructor/admin)
+// =======================
+// ✅ Login User
+// =======================
 const loginUser = async (req, res) => {
   try {
     const { userEmail, password } = req.body;
+
     if (!userEmail || !password) {
       return res
         .status(400)
-        .json({ success: false, message: "Email and password are required" });
+        .json({ success: false, message: "Email and password required" });
     }
 
-    const checkUser = await User.findOne({ userEmail }).populate("roles");
-    if (!checkUser || !(await bcrypt.compare(password, checkUser.password))) {
+    const user = await User.findOne({
+      userEmail: userEmail.toLowerCase(),
+    }).populate("roles");
+
+    if (!user || !(await bcrypt.compare(password, user.password))) {
       return res
         .status(401)
         .json({ success: false, message: "Invalid credentials" });
     }
 
+    const roleIds = user.roles.map((role) => role.roleId); // e.g., [1, 2]
+
     const accessToken = jwt.sign(
-      {
-        _id: checkUser._id,
-        userName: checkUser.userName,
-        userEmail: checkUser.userEmail,
-        roles: checkUser.roles.map((role) => role.roleName),
-      },
+      { user_id: user._id, role_id: roleIds },
       process.env.JWT_SECRET,
-      { expiresIn: "90m" }
+      { expiresIn: "30m" }
     );
 
     const refreshToken = jwt.sign(
-      { _id: checkUser._id },
+      { user_id: user._id },
       process.env.JWT_REFRESH_SECRET,
       { expiresIn: "7d" }
     );
 
-    checkUser.refreshToken = refreshToken;
-    await checkUser.save();
+    const hashedRefreshToken = await bcrypt.hash(refreshToken, 10);
+    user.refreshToken = hashedRefreshToken;
+    await user.save();
 
-    res.status(200).json({
-      success: true,
-      message: "Logged in successfully",
-      data: {
-        accessToken,
-        refreshToken,
-        user: {
-          _id: checkUser._id,
-          userName: checkUser.userName,
-          userEmail: checkUser.userEmail,
-          roles: checkUser.roles.map((role) => role.roleName),
-        },
-      },
-    });
+    res
+      .cookie("refreshToken", refreshToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production", // set true in production
+        sameSite: "Strict",
+        maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+      })
+      .status(200)
+      .json({ success: true, message: "Login successful", accessToken });
   } catch (error) {
-    console.error("Error during login:", error);
-    return res.status(500).json({
-      success: false,
-      message: "An error occurred. Please try again later.",
-    });
+    console.error("Login Error:", error);
+    return res.status(500).json({ success: false, message: "Server error" });
   }
 };
 
+// ===========================
 // ✅ Refresh Access Token
+// ===========================
 const refreshAccessToken = async (req, res) => {
   try {
-    const { refreshToken } = req.body;
+    const refreshToken = req.cookies.refreshToken;
+
     if (!refreshToken) {
       return res
-        .status(400)
-        .json({ success: false, message: "Refresh token is required" });
+        .status(401)
+        .json({ success: false, message: "No refresh token" });
     }
 
     const decoded = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET);
-    const checkUser = await User.findById(decoded._id).populate("roles");
+    const user = await User.findById(decoded.user_id).populate("roles");
 
-    if (!checkUser || checkUser.refreshToken !== refreshToken) {
-      return res
-        .status(401)
-        .json({ success: false, message: "Invalid refresh token" });
+    if (!user || !user.refreshToken) {
+      return res.status(403).json({ success: false, message: "Unauthorized" });
     }
 
+    const isValid = await bcrypt.compare(refreshToken, user.refreshToken);
+    if (!isValid) {
+      return res
+        .status(403)
+        .json({ success: false, message: "Token mismatch" });
+    }
+
+    const roleIds = user.roles.map((role) => role.roleId);
+
     const newAccessToken = jwt.sign(
-      {
-        _id: checkUser._id,
-        userName: checkUser.userName,
-        userEmail: checkUser.userEmail,
-        roles: checkUser.roles.map((role) => role.roleName),
-      },
+      { user_id: user._id, role_id: roleIds },
       process.env.JWT_SECRET,
-      { expiresIn: "120m" }
+      { expiresIn: "30m" }
     );
 
-    res.status(200).json({
-      success: true,
-      message: "Access token refreshed successfully",
-      data: {
-        accessToken: newAccessToken,
-      },
-    });
+    return res.status(200).json({ success: true, accessToken: newAccessToken });
   } catch (error) {
-    console.error("Error refreshing access token:", error);
-    return res.status(500).json({
-      success: false,
-      message: "An error occurred. Please try again later.",
-    });
+    console.error("Token Refresh Error:", error);
+    return res
+      .status(401)
+      .json({ success: false, message: "Invalid or expired token" });
   }
 };
 
-// ✅ Become Instructor API
+// ===========================
+// ✅ Become Instructor
+// ===========================
 const becomeInstructor = async (req, res) => {
   try {
     const { userName, userEmail, password } = req.body;
 
-    if (!userEmail || !password || !userName) {
-      return res.status(400).json({
-        success: false,
-        message: "Email, username, and password are required",
-      });
-    }
-
-    const user = await User.findOne({ userEmail });
-    if (!user) {
+    const user = await User.findOne({ userEmail: userEmail.toLowerCase() });
+    if (!user)
       return res
         .status(404)
         .json({ success: false, message: "User not found" });
-    }
 
     if (user.userName !== userName) {
-      return res.status(401).json({
-        success: false,
-        message: "Username does not match",
-      });
+      return res
+        .status(401)
+        .json({ success: false, message: "Username mismatch" });
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
+    if (!isMatch)
       return res
         .status(401)
         .json({ success: false, message: "Invalid password" });
-    }
 
     const instructorRole = await Role.findOne({ roleName: "instructor" });
-    if (!instructorRole) {
+    if (!instructorRole)
       return res
         .status(404)
-        .json({ success: false, message: "Instructor role not found" });
-    }
+        .json({ success: false, message: "Role not found" });
 
-    const alreadyInstructor = user.roles.some(
-      (roleId) => roleId.toString() === instructorRole._id.toString()
+    const alreadyAdded = user.roles.some(
+      (r) => r.toString() === instructorRole._id.toString()
     );
-
-    if (alreadyInstructor) {
+    if (alreadyAdded)
       return res
         .status(200)
-        .json({ success: true, message: "You are already an instructor" });
-    }
+        .json({ success: true, message: "Already an instructor" });
 
     user.roles.push(instructorRole._id);
     await user.save();
 
     return res
       .status(200)
-      .json({ success: true, message: "You are now an instructor" });
+      .json({ success: true, message: "Upgraded to instructor" });
   } catch (error) {
-    console.error("Error in becomeInstructor:", error);
+    console.error("Become Instructor Error:", error);
+    return res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
+// ===========================
+// ✅ Logout User
+// ===========================
+const logoutUser = async (req, res) => {
+  try {
+    const refreshToken = req.cookies.refreshToken;
+    if (!refreshToken)
+      return res
+        .clearCookie("refreshToken")
+        .status(200)
+        .json({ success: true, message: "Logged out" });
+
+    const decoded = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET);
+    const user = await User.findById(decoded.user_id);
+    if (user) {
+      user.refreshToken = null;
+      await user.save();
+    }
+
+    res.clearCookie("refreshToken", {
+      httpOnly: true,
+      sameSite: "Strict",
+      secure: process.env.NODE_ENV === "production",
+    });
+
     return res
-      .status(500)
-      .json({ success: false, message: "Something went wrong" });
+      .status(200)
+      .json({ success: true, message: "Logged out successfully" });
+  } catch (error) {
+    console.error("Logout Error:", error);
+    return res.status(500).json({ success: false, message: "Server error" });
   }
 };
 
@@ -229,4 +251,5 @@ module.exports = {
   loginUser,
   refreshAccessToken,
   becomeInstructor,
+  logoutUser,
 };

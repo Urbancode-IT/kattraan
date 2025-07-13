@@ -14,8 +14,8 @@ const UserSchema = new mongoose.Schema({
     required: true, 
   },
   roles: [{ 
-    type: mongoose.Schema.Types.ObjectId,  // Use ObjectId to reference the Role model
-    ref: 'Role', // Reference to the Role collection
+    type: Number,  // Now storing roleId like 1, 2, 3
+    required: true
   }],
   refreshToken: { 
     type: String, 
