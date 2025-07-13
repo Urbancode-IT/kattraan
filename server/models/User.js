@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-
+const crypto = require("crypto");
 // Define User Schema
 const UserSchema = new mongoose.Schema({
   userName: { type: String, required: true },
@@ -21,6 +21,8 @@ const UserSchema = new mongoose.Schema({
     type: String, 
     default: null, 
   },
+  resetPasswordToken: { type: String, default: null },
+  resetPasswordExpires: { type: Date, default: null },
 });
 
 module.exports = mongoose.model('User', UserSchema);

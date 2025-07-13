@@ -7,6 +7,7 @@ const {
   refreshAccessToken,
   becomeInstructor,
   logoutUser,
+  requestPasswordReset, resetPassword 
 } = require("../../controllers/auth-controller/index");
 
 const authenticateMiddleware = require("../../middleware/auth-middleware");
@@ -38,6 +39,9 @@ router.post("/login", loginLimiter, loginUser);
 router.post("/refresh", refreshAccessToken);
 router.post("/become-instructor", becomeInstructor);
 router.post("/logout", logoutUser);
+router.post("/forgot-password", requestPasswordReset);
+router.post("/reset-password", resetPassword);
+
 
 // Protected route to check authentication
 router.get("/check-auth", authenticateMiddleware, (req, res) => {

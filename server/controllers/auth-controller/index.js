@@ -5,6 +5,9 @@ const { validationResult } = require("express-validator");
 const User = require("../../models/User");
 const Role = require("../../models/Role");
 require("dotenv").config();
+const crypto = require("crypto");
+const { sendEmail } = require("../../services/gmailService"); 
+const { createEmailTemplate } = require("../../services/emailTemplates");
 
 // =======================
 // ✅ Register User
@@ -47,7 +50,7 @@ const registerUser = async (req, res) => {
       userName,
       userEmail: userEmail.toLowerCase(),
       password: hashedPassword,
-      roles: validRoles.map((role) => role._id),
+      roles: validRoles.map((role) => role.roleId),
     });
 
     await newUser.save();
@@ -200,7 +203,7 @@ const becomeInstructor = async (req, res) => {
         .status(200)
         .json({ success: true, message: "Already an instructor" });
 
-    user.roles.push(instructorRole._id);
+    user.roles.push(instructorRole.roleId);
     await user.save();
 
     return res
@@ -246,10 +249,89 @@ const logoutUser = async (req, res) => {
   }
 };
 
+// ─── Request Password Reset ──────────────────────────────────────────────────
+const requestPasswordReset = async (req, res) => {
+  const { userEmail } = req.body;
+  if (!userEmail) {
+    return res.status(400).json({ success: false, message: "Email required" });
+  }
+
+  const user = await User.findOne({ userEmail: userEmail.toLowerCase() });
+  if (!user) {
+    // don't reveal if user exists
+    return res
+      .status(200)
+      .json({
+        success: true,
+        message: "If that email is registered, you’ll receive a reset link.",
+      });
+  }
+
+  // Generate a token and expiry (e.g. 1 hour)
+  const token = crypto.randomBytes(32).toString("hex");
+  user.resetPasswordToken = token;
+  user.resetPasswordExpires = Date.now() + 3600_000; // 1h
+  await user.save();
+
+  // Send email
+  const resetUrl = `https://kattraan.com/reset-password?token=${token}`;
+  const message = `
+    <p>Hi ${user.userName},</p>
+    <p>You requested a password reset. Click the link below to set a new password:</p>
+    <p><a href="${resetUrl}">Reset your password</a></p>
+    <p>This link will expire in 1 hour.</p>
+    <p>If you didn’t request this, you can safely ignore this email.</p>
+  `;
+
+  await sendEmail({
+    to: user.userEmail,
+    subject: "Kattraan Password Reset",
+    message: createEmailTemplate("Reset Your Password", message),
+  });
+
+  return res
+    .status(200)
+    .json({ success: true, message: "Password reset email sent" });
+};
+
+// ─── Perform Password Reset ──────────────────────────────────────────────────
+const resetPassword = async (req, res) => {
+  const { token, newPassword } = req.body;
+  if (!token || !newPassword) {
+    return res
+      .status(400)
+      .json({ success: false, message: "Token and new password required" });
+  }
+
+  // Find user by token and ensure token not expired
+  const user = await User.findOne({
+    resetPasswordToken: token,
+    resetPasswordExpires: { $gt: Date.now() },
+  });
+  if (!user) {
+    return res
+      .status(400)
+      .json({ success: false, message: "Invalid or expired token" });
+  }
+
+  // Hash new password and clear token fields
+  user.password = await bcrypt.hash(newPassword, 10);
+  user.resetPasswordToken = null;
+  user.resetPasswordExpires = null;
+  await user.save();
+
+  // (Optionally) log the user in by issuing tokens
+  return res
+    .status(200)
+    .json({ success: true, message: "Password has been reset" });
+};
+
 module.exports = {
   registerUser,
   loginUser,
   refreshAccessToken,
   becomeInstructor,
   logoutUser,
+  requestPasswordReset,
+  resetPassword,
 };
