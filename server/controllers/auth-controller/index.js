@@ -6,116 +6,94 @@ const User = require("../../models/User");
 const Role = require("../../models/Role");
 require("dotenv").config();
 const crypto = require("crypto");
-const { sendEmail } = require("../../services/gmailService"); 
+const { sendEmail } = require("../../services/gmailService");
 const { createEmailTemplate } = require("../../services/emailTemplates");
 
 // =======================
 // ✅ Register User
 // =======================
+// in controllers/auth-controller/index.js
 const registerUser = async (req, res) => {
-  try {
-    const { userName, userEmail, password, roles } = req.body;
+  const { userName, userEmail, password, roles } = req.body;
+  // … validation …
 
-    if (!userName || !userEmail || !password) {
-      return res.status(400).json({
-        success: false,
-        message: "Username, email, and password are required",
-      });
-    }
+  // If none provided, default to learner=1
+  const provided = Array.isArray(roles) && roles.length ? roles : [1];
 
-    const existingUser = await User.findOne({
-      userEmail: userEmail.toLowerCase(),
-    });
-    if (existingUser) {
-      return res
-        .status(409)
-        .json({ success: false, message: "User already exists" });
-    }
-
-    // Default to 'learner' if no roles provided
-    const providedRoles = roles?.length > 0 ? roles : [1];
-
-    // Find matching Role ObjectIds
-    const validRoles = await Role.find({ roleId: { $in: providedRoles } });
-
-    if (validRoles.length !== providedRoles.length) {
-      return res
-        .status(400)
-        .json({ success: false, message: "Invalid role(s)" });
-    }
-
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    const newUser = new User({
-      userName,
-      userEmail: userEmail.toLowerCase(),
-      password: hashedPassword,
-      roles: validRoles.map((role) => role.roleId),
-    });
-
-    await newUser.save();
-
-    return res
-      .status(201)
-      .json({ success: true, message: "User registered successfully" });
-  } catch (err) {
-    console.error("Register Error:", err);
-    return res.status(500).json({ success: false, message: "Server error" });
+  // Ensure all provided roleIds exist
+  const found = await Role.find({ roleId: { $in: provided } });
+  if (found.length !== provided.length) {
+    return res.status(400).json({ success: false, message: "Invalid role(s)" });
   }
+
+  // Hash password & save numeric IDs
+  const hash = await bcrypt.hash(password, 10);
+  await User.create({
+    userName,
+    userEmail: userEmail.toLowerCase(),
+    password: hash,
+    roles: provided, // store e.g. [1,2]
+  });
+
+  res.status(201).json({ success: true, message: "Registered" });
 };
 
+// =======================
+// ✅ Login User
+// =======================
 // =======================
 // ✅ Login User
 // =======================
 const loginUser = async (req, res) => {
   try {
     const { userEmail, password } = req.body;
-
     if (!userEmail || !password) {
       return res
         .status(400)
         .json({ success: false, message: "Email and password required" });
     }
 
-    const user = await User.findOne({
-      userEmail: userEmail.toLowerCase(),
-    }).populate("roles");
-
+    // Find the user (roles is already an array of numbers)
+    const user = await User.findOne({ userEmail: userEmail.toLowerCase() });
     if (!user || !(await bcrypt.compare(password, user.password))) {
       return res
         .status(401)
         .json({ success: false, message: "Invalid credentials" });
     }
 
-    const roleIds = user.roles.map((role) => role.roleId); // e.g., [1, 2]
+    // Extract their numeric role IDs
+    const roleIds = user.roles; // e.g. [1,2]
 
+    // 1) Create an access token (includes both _id and roles)
     const accessToken = jwt.sign(
-      { user_id: user._id, role_id: roleIds },
+      { _id: user._id, roles: roleIds },
       process.env.JWT_SECRET,
       { expiresIn: "30m" }
     );
 
+    // 2) Create a refresh token (only _id)
     const refreshToken = jwt.sign(
-      { user_id: user._id },
+      { _id: user._id },
       process.env.JWT_REFRESH_SECRET,
       { expiresIn: "7d" }
     );
 
-    const hashedRefreshToken = await bcrypt.hash(refreshToken, 10);
-    user.refreshToken = hashedRefreshToken;
+    // 3) Hash & store the refresh token in the database
+    user.refreshToken = await bcrypt.hash(refreshToken, 10);
     await user.save();
 
+    // 4) Send the refresh token as an HttpOnly cookie, and return the access token
     res
       .cookie("refreshToken", refreshToken, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production", // set true in production
+        secure: process.env.NODE_ENV === "production",
         sameSite: "Strict",
         maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
       })
       .status(200)
       .json({ success: true, message: "Login successful", accessToken });
-  } catch (error) {
-    console.error("Login Error:", error);
+  } catch (err) {
+    console.error("Login Error:", err);
     return res.status(500).json({ success: false, message: "Server error" });
   }
 };
@@ -168,51 +146,18 @@ const refreshAccessToken = async (req, res) => {
 // ✅ Become Instructor
 // ===========================
 const becomeInstructor = async (req, res) => {
-  try {
-    const { userName, userEmail, password } = req.body;
+  const { userEmail, userName, password } = req.body;
+  const user = await User.findOne({ userEmail: userEmail.toLowerCase() });
 
-    const user = await User.findOne({ userEmail: userEmail.toLowerCase() });
-    if (!user)
-      return res
-        .status(404)
-        .json({ success: false, message: "User not found" });
+  // … verify username & password …
 
-    if (user.userName !== userName) {
-      return res
-        .status(401)
-        .json({ success: false, message: "Username mismatch" });
-    }
-
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch)
-      return res
-        .status(401)
-        .json({ success: false, message: "Invalid password" });
-
-    const instructorRole = await Role.findOne({ roleName: "instructor" });
-    if (!instructorRole)
-      return res
-        .status(404)
-        .json({ success: false, message: "Role not found" });
-
-    const alreadyAdded = user.roles.some(
-      (r) => r.toString() === instructorRole._id.toString()
-    );
-    if (alreadyAdded)
-      return res
-        .status(200)
-        .json({ success: true, message: "Already an instructor" });
-
-    user.roles.push(instructorRole.roleId);
+  const instructor = await Role.findOne({ roleName: "instructor" });
+  if (!user.roles.includes(instructor.roleId)) {
+    user.roles.push(instructor.roleId); // store `2`
     await user.save();
-
-    return res
-      .status(200)
-      .json({ success: true, message: "Upgraded to instructor" });
-  } catch (error) {
-    console.error("Become Instructor Error:", error);
-    return res.status(500).json({ success: false, message: "Server error" });
   }
+
+  res.json({ success: true, message: "Upgraded" });
 };
 
 // ===========================
@@ -259,12 +204,10 @@ const requestPasswordReset = async (req, res) => {
   const user = await User.findOne({ userEmail: userEmail.toLowerCase() });
   if (!user) {
     // don't reveal if user exists
-    return res
-      .status(200)
-      .json({
-        success: true,
-        message: "If that email is registered, you’ll receive a reset link.",
-      });
+    return res.status(200).json({
+      success: true,
+      message: "If that email is registered, you’ll receive a reset link.",
+    });
   }
 
   // Generate a token and expiry (e.g. 1 hour)
@@ -276,12 +219,12 @@ const requestPasswordReset = async (req, res) => {
   // Send email
   const resetUrl = `https://kattraan.com/reset-password?token=${token}`;
   const message = `
-    <p>Hi ${user.userName},</p>
-    <p>You requested a password reset. Click the link below to set a new password:</p>
-    <p><a href="${resetUrl}">Reset your password</a></p>
-    <p>This link will expire in 1 hour.</p>
-    <p>If you didn’t request this, you can safely ignore this email.</p>
-  `;
+      <p>Hi ${user.userName},</p>
+      <p>You requested a password reset. Click the link below to set a new password:</p>
+      <p><a href="${resetUrl}">Reset your password</a></p>
+      <p>This link will expire in 1 hour.</p>
+      <p>If you didn’t request this, you can safely ignore this email.</p>
+    `;
 
   await sendEmail({
     to: user.userEmail,

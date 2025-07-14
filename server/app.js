@@ -16,6 +16,9 @@ const studentViewOrderRoutes = require("./routes/student-routes/order-routes");
 const studentCoursesRoutes = require("./routes/student-routes/student-courses-routes");
 const studentCourseProgressRoutes = require("./routes/student-routes/course-progress-routes");
 const courseraRoutes = require("./routes/thirdparty/coursera");
+const userRoutes = require('./routes/users-routes/users-routes');
+
+
 
 const app = express();
 
@@ -60,6 +63,7 @@ app.use("/api/student/order", studentViewOrderRoutes);
 app.use("/api/student/courses-bought", studentCoursesRoutes);
 app.use("/api/student/course-progress", studentCourseProgressRoutes);
 app.use("/api/coursera", courseraRoutes);
+app.use('/api/users', userRoutes);
 
 // 404 Handler
 app.use((req, res) => {
