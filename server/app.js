@@ -21,6 +21,7 @@ const userRoutes = require('./routes/users-routes/users-routes');
 
 
 const app = express();
+app.use(express.json());
 
 // Middleware
 app.use(helmet());
