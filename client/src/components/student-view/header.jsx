@@ -1,11 +1,4 @@
-import {
-  GraduationCap,
-  TvMinimalPlay,
-  Search,
-  User,
-  Menu,
-  X,
-} from "lucide-react";
+import { Search, User, ShoppingCart, Globe } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "../ui/button";
 import { useContext, useState } from "react";
@@ -30,7 +23,6 @@ function StudentViewCommonHeader() {
   const navigate = useNavigate();
   const { auth, resetCredentials } = useContext(AuthContext);
   const [dropdownOpen, setDropdownOpen] = useState(null);
-  const [menuOpen, setMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
 
   const userName = auth.user?.userName || "User";
@@ -60,29 +52,62 @@ function StudentViewCommonHeader() {
   };
 
   return (
-    <header className="w-full bg-white border-b shadow-sm px-4 sm:px-6 py-3 flex items-center justify-between relative z-50">
-      {/* LEFT: Logo + Explore Dropdown */}
-      <div className="flex items-center gap-4">
+    <header className="w-full sticky top-0 bg-white border-b border-gray-200 z-50">
+      <div className="max-w-[1440px] mx-auto flex items-center gap-2 px-1 py-2">
+        {/* Logo */}
         <Link
           to="/home"
-          className="flex items-center text-black hover:text-blue-700 transition"
+          className="flex items-center text-gray-900 font-extrabold text-2xl tracking-tight mr-2"
         >
-          <GraduationCap className="h-7 w-7 mr-1" />
-          <span className="font-extrabold text-lg sm:text-xl">Kattraan</span>
+          <span className="mr-1">
+            <svg
+              width="32"
+              height="32"
+              viewBox="0 0 32 32"
+              fill="none"
+            >
+              <rect
+                width="32"
+                height="32"
+                rx="8"
+                fill="#fff"
+              />
+              <path
+                d="M8 24V8h16v16"
+                fill="#fff"
+              />
+              <path
+                d="M8 24V8h16v16"
+                stroke="#A435F0"
+                strokeWidth="2"
+                strokeLinejoin="round"
+              />
+              <rect
+                x="12"
+                y="16"
+                width="8"
+                height="8"
+                rx="2"
+                fill="#A435F0"
+              />
+            </svg>
+          </span>
+          Kattraan
         </Link>
-
-        {/* Explore Dropdown */}
+        {/* Explore */}
         <div className="relative">
           <Button
             variant="ghost"
-            className="flex items-center gap-1"
+            className="font-semibold text-gray-700 hover:text-purple-700 px-3"
             onClick={() =>
-              setDropdownOpen(dropdownOpen === "explore" ? null : "explore")
+              setDropdownOpen(
+                dropdownOpen === "explore" ? null : "explore"
+              )
             }
           >
-            Explore Courses
+            Explore
             <svg
-              className={`w-4 h-4 transition-transform ${
+              className={`w-4 h-4 ml-1 transition-transform ${
                 dropdownOpen === "explore" ? "rotate-180" : ""
               }`}
               viewBox="0 0 20 20"
@@ -95,14 +120,13 @@ function StudentViewCommonHeader() {
               />
             </svg>
           </Button>
-
           {dropdownOpen === "explore" && (
             <div className="absolute left-0 mt-2 w-64 bg-white shadow-lg rounded-md p-4 z-50">
               <div className="grid grid-cols-1 gap-2">
                 {courseCategories.map((category) => (
                   <button
                     key={category.id}
-                    className="text-left text-sm hover:text-blue-600 transition"
+                    className="text-left text-sm hover:text-purple-700 transition"
                     onClick={() => {
                       handleNavigateToCoursesPage(category.id);
                       setDropdownOpen(null);
@@ -115,52 +139,82 @@ function StudentViewCommonHeader() {
             </div>
           )}
         </div>
-      </div>
-
-      {/* CENTER: Search */}
-      <form
-        onSubmit={handleSearch}
-        className="relative w-32 sm:w-48 md:w-64 lg:w-72"
-      >
-        <input
-          type="text"
-          placeholder="Search..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          className="w-full border border-gray-300 rounded-full px-4 py-1.5 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500"
-        />
-        <button
-          type="submit"
-          className="absolute right-3 top-2 text-gray-500 hover:text-black"
+        {/* Search Bar */}
+        <form
+          onSubmit={handleSearch}
+          className="flex-1 flex justify-center mx-2"
         >
-          <Search className="w-4 h-4" />
-        </button>
-      </form>
-
-      {/* RIGHT: Auth & User Section */}
-      <div className="hidden sm:flex items-center space-x-4 relative">
-        <Button variant="outline" onClick={() => navigate("/instructor-home")}>
-          Teach Me Kattraan
-        </Button>
-
-        {auth.authenticate && (
-          <div
-            onClick={() => navigate("/student-courses")}
-            className="flex items-center gap-2 cursor-pointer text-sm sm:text-base hover:text-blue-700"
-          >
-            <span className="font-semibold">My Courses</span>
-            <TvMinimalPlay className="w-5 h-5" />
+          <div className="relative w-full max-w-lg">
+            <input
+              type="text"
+              placeholder="Search for anything"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full border border-gray-300 bg-white rounded-full px-5 py-2 text-base focus:outline-none focus:ring-2 focus:ring-purple-400 shadow-sm"
+            />
+            <button
+              type="submit"
+              className="absolute right-3 top-2 text-purple-600 hover:text-purple-800"
+            >
+              <Search className="w-5 h-5" />
+            </button>
           </div>
-        )}
-
+        </form>
+        {/* Nav Links */}
+        <Button
+          variant="ghost"
+          className="font-semibold text-gray-700 hover:text-purple-700 px-3 hidden xl:inline-block"
+          onClick={() => navigate("/pricing")}
+        >
+          Plans & Pricing
+        </Button>
+          <Button
+            variant="ghost"
+            className="font-semibold text-gray-700 hover:text-purple-700 px-3 hidden xl:inline-block"
+            onClick={() => navigate("/business")}
+          >
+            Kattraan Business
+          </Button>
+        <Button
+          variant="ghost"
+          className="font-semibold text-gray-700 hover:text-purple-700 px-3 hidden xl:inline-block"
+          onClick={() => navigate("/instructor-home")}
+        >
+          Teach on Kattraan
+        </Button>
+        {/* Cart Icon */}
+        <button className="ml-2 p-2 rounded-full hover:bg-gray-100 transition">
+          <ShoppingCart className="w-5 h-5 text-gray-700" />
+        </button>
+        {/* Language Selector */}
+        <button className="ml-2 flex items-center gap-1 p-2 rounded-full hover:bg-gray-100 transition">
+          <Globe className="w-5 h-5 text-gray-700" />
+          <span className="text-sm font-medium text-gray-700">EN</span>
+        </button>
+        {/* Auth Buttons */}
         {!auth.authenticate ? (
-          <Button onClick={() => navigate("/auth")}>Sign In</Button>
+          <>
+            <Button
+              onClick={() => navigate("/auth")}
+              className="font-semibold border border-purple-600 text-purple-700 bg-white hover:bg-purple-50 px-5 py-2 rounded-full ml-2"
+            >
+              Log in
+            </Button>
+            <Button
+              onClick={() => navigate("/auth")}
+              className="font-semibold bg-purple-600 text-white hover:bg-purple-700 px-5 py-2 rounded-full ml-2"
+            >
+              Sign up
+            </Button>
+          </>
         ) : (
-          <div className="relative">
+          <div className="relative ml-2">
             <div
-              className={`w-9 h-9 flex items-center justify-center rounded-full text-white font-bold cursor-pointer ${bgColor}`}
+              className={`w-9 h-9 flex items-center justify-center rounded-full text-white font-bold cursor-pointer shadow-lg ring-2 ring-purple-200 ${bgColor}`}
               onClick={() =>
-                setDropdownOpen(dropdownOpen === "user" ? null : "user")
+                setDropdownOpen(
+                  dropdownOpen === "user" ? null : "user"
+                )
               }
             >
               {userInitial}
@@ -186,71 +240,6 @@ function StudentViewCommonHeader() {
           </div>
         )}
       </div>
-
-      {/* MOBILE MENU */}
-      <div className="flex items-center gap-3 sm:hidden">
-        {!auth.authenticate ? (
-          <Button
-            onClick={() => navigate("/auth")}
-            className="text-sm px-4 py-1.5"
-          >
-            Sign In
-          </Button>
-        ) : (
-          <div
-            className={`w-9 h-9 flex items-center justify-center rounded-full text-white font-bold cursor-pointer ${bgColor}`}
-            onClick={() =>
-              setDropdownOpen(dropdownOpen === "user" ? null : "user")
-            }
-          >
-            {userInitial}
-          </div>
-        )}
-        <button
-          onClick={() => setMenuOpen(!menuOpen)}
-          className="focus:outline-none"
-        >
-          {menuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-        </button>
-      </div>
-
-      {menuOpen && (
-        <div className="absolute top-16 left-0 w-full bg-white shadow-md border-t sm:hidden z-40 px-6 py-4 space-y-3">
-          <Button
-            variant="ghost"
-            className="w-full justify-start"
-            onClick={() => {
-              navigate("/courses");
-              setMenuOpen(false);
-            }}
-          >
-            Explore Courses
-          </Button>
-          <Button
-            variant="outline"
-            className="w-full justify-start"
-            onClick={() => {
-              navigate("/instructor-home");
-              setMenuOpen(false);
-            }}
-          >
-            Teach Me Kattraan
-          </Button>
-
-          {auth.authenticate && (
-            <Button
-              variant="ghost"
-              className="w-full justify-start"
-              onClick={() => {
-                navigate("/student-courses");
-                setMenuOpen(false);
-              }}
-            >
-              My Courses
-            </Button>
-          )}
-        </div>
-      )}
     </header>
   );
 }

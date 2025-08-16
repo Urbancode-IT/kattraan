@@ -51,7 +51,7 @@ const HeroSection = () => {
         {/* Welcome Message */}
         <div className="space-y-1">
           <p className="text-base sm:text-lg text-gray-700 font-semibold">
-            {greeting}, <span className="text-[#f23d5c]">{userName}!</span>
+            {greeting}, <span className="text-purple-600">{userName}!</span>
           </p>
           <p className="text-sm sm:text-base text-gray-500 italic">
             {randomMsg}
@@ -59,8 +59,8 @@ const HeroSection = () => {
         </div>
 
         <h1 className="text-3xl sm:text-4xl lg:text-6xl font-extrabold text-gray-900 leading-tight sm:leading-snug">
-          Level Up Your Skills{" "}
-          <span className="highlighted-text">Anytime, Anywhere</span>
+          Level Up Your Skills{' '}
+          <span className="text-purple-600">Anytime, Anywhere</span>
         </h1>
         <p className="text-gray-600 text-base sm:text-lg lg:text-xl max-w-xl mx-auto lg:mx-0">
           Whether you're aiming for your dream job or just curious, Kattraan
@@ -75,7 +75,7 @@ const HeroSection = () => {
                 key={i}
                 className="text-sm sm:text-base flex items-center gap-2"
               >
-                <BadgeCheck className="text-black w-4 h-4 sm:w-5 sm:h-5" />
+                <BadgeCheck className="text-purple-600 w-4 h-4 sm:w-5 sm:h-5" />
                 {text}
               </span>
             )
@@ -93,8 +93,8 @@ const HeroSection = () => {
 
   {/* Watch Video Button with Link 
   <a href="" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-[#0e3eaf] font-medium">
-    <span className="bg-blue-100 p-3 sm:p-4 rounded-full">
-      <FaPlay />
+    <span className="bg-purple-100 p-3 sm:p-4 rounded-full">
+      <FaPlay className="text-purple-600" />
     </span>
     Watch video
   </a>
@@ -128,8 +128,8 @@ const HeroSection = () => {
           className="w-[240px] sm:w-[320px] md:w-[450px] lg:max-w-[800px] z-10"
         />
 
-        <div className="hidden sm:flex absolute top-[21%] right-[3%] bg-green-100 px-4 py-3 rounded-lg shadow-md items-center gap-2 z-20">
-          <FiUsers className="text-green-600 w-6 h-6 lg:w-7 lg:h-7" />
+        <div className="hidden sm:flex absolute top-[21%] right-[3%] bg-purple-100 px-4 py-3 rounded-lg shadow-md items-center gap-2 z-20">
+          <FiUsers className="text-purple-600 w-6 h-6 lg:w-7 lg:h-7" />
           <div>
             <p className="text-sm sm:text-base lg:text-lg text-gray-700 font-semibold">
               Our daily new students
@@ -143,8 +143,8 @@ const HeroSection = () => {
             <FaCheckCircle />
           </span>
           <div>
-            <p className="font-semibold text-lg text-black">Congratulations</p>
-            <p className="text-[14px] text-black/80">
+            <p className="font-semibold text-lg text-purple-700">Congratulations</p>
+            <p className="text-[14px] text-gray-700">
               Your admission completed
             </p>
           </div>

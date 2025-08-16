@@ -1,12 +1,12 @@
 import axios from "axios";
 
-const axiosInstance = axios.create({
-  baseURL: "http://localhost:5000",
-});
-
 // const axiosInstance = axios.create({
-//   baseURL: "https://api.kattraan.com",
+//   baseURL: "http://localhost:5000/api",
 // });
+
+const axiosInstance = axios.create({
+  baseURL: "https://api.kattraan.com/",
+});
 
 axiosInstance.interceptors.request.use(
   (config) => {

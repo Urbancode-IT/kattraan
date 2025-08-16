@@ -2,34 +2,36 @@ import axiosInstance from "@/api/axiosInstance";
 
 // services/auth.js or wherever this is defined
 
+
+// Register: must send userName, userEmail, password (min 8 chars, 1 uppercase, 1 lowercase, 1 number, 1 special char)
 export async function registerService(formData) {
+  // Optionally, validate password here before sending
   const { data } = await axiosInstance.post("/auth/register", formData);
   return data;
 }
 
+
+// Login: expects userEmail and password
 export async function loginService(formData) {
   const { data } = await axiosInstance.post("/auth/login", formData);
-
   return data;
 }
 
-export async function checkAuthService() {
-  const { data } = await axiosInstance.get("/auth/check-auth");
 
-  return data;
-}
+// There is no /auth/check-auth in backend, so this should be implemented if needed
+// export async function checkAuthService() {
+//   const { data } = await axiosInstance.get("/auth/check-auth");
+//   return data;
+// }
 
-export async function becomeInstructorService({
-  userName,
-  userEmail,
-  password,
-}) {
+
+// Become Instructor: expects userEmail, userName, password
+export async function becomeInstructorService({ userName, userEmail, password }) {
   const { data } = await axiosInstance.post(`/auth/become-instructor`, {
     userName,
     userEmail,
     password,
   });
-
   return data;
 }
 

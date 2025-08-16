@@ -73,34 +73,34 @@ function StudentHomePage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-gradient-to-br from-white to-purple-50">
       <HeroSection />
       <StatsHighlights />
 
-      <section className="py-8 px-4 lg:px-8 bg-gray-100">
-        <h2 className="text-2xl font-bold mb-6">Course Categories</h2>
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-          {courseCategories.map((categoryItem) => (
-            <Button
-              className="justify-start"
-              variant="outline"
-              key={categoryItem.id}
-              onClick={() => handleNavigateToCoursesPage(categoryItem.id)}
-            >
-              {categoryItem.label}
-            </Button>
-          ))}
+      {/* Course Categories Section */}
+      <section className="py-12 px-4 lg:px-16 bg-white border-b border-gray-100">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-3xl font-extrabold text-gray-900 mb-3 text-center">Browse Top Categories</h2>
+          <p className="text-base text-gray-500 mb-8 text-center">Explore trending topics and find your next skill to master.</p>
+          <div className="flex flex-wrap justify-center gap-4">
+            {courseCategories.map((categoryItem) => (
+              <Button
+                className="px-6 py-3 rounded-full font-semibold text-base bg-purple-50 text-purple-700 border border-purple-200 hover:bg-purple-100 hover:text-purple-900 shadow-sm transition-all duration-200"
+                variant="outline"
+                key={categoryItem.id}
+                onClick={() => handleNavigateToCoursesPage(categoryItem.id)}
+              >
+                {categoryItem.label}
+              </Button>
+            ))}
+          </div>
         </div>
       </section>
-      
 
-{/* 
-      <CourseCategories /> */}
-      
-       {/* Featured Courses (moved to component) */}
-       <FeaturedCourses />
-       <BecomeInstructor/>
-       <TestimonialSection/>
+      {/* Featured Courses */}
+      <FeaturedCourses />
+      <BecomeInstructor />
+      <TestimonialSection />
       <Footer />
     </div>
   );

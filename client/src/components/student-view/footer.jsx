@@ -1,82 +1,103 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import { FaFacebookF, FaInstagram, FaTwitter, FaLinkedinIn } from "react-icons/fa";
-import googlePlayImg from "@/assets/client/google-play.svg";
-import appStoreImg from "@/assets/client/app-store.svg";
 
 const Footer = () => {
   return (
-    <footer className="bg-white text-black pt-12 border-t border-gray-200 px-4 sm:px-8 lg:px-20">
-      {/* Grid Top Section */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8 pb-12 border-b border-gray-200">
-        {/* Brand Info */}
-        <div className="col-span-1 sd:col-span-2">
-          <h1 className="text-3xl font-bold text-orange-600 mb-2">Kattraan</h1>
-          <p className="text-sm text-gray-600 leading-relaxed">
-            Kattraan – Your gateway to limitless learning. Upskill, get certified, and grow with expert-led courses tailored for your success.
-          </p>
-          <div className="flex gap-3 mt-4">
-            <a href="#"><FaFacebookF className="text-blue-600 hover:scale-110 transition" /></a>
-            <a href="#"><FaInstagram className="text-pink-500 hover:scale-110 transition" /></a>
-            <a href="#"><FaTwitter className="text-sky-500 hover:scale-110 transition" /></a>
-            <a href="#"><FaLinkedinIn className="text-blue-700 hover:scale-110 transition" /></a>
+    <footer className="bg-[#1c1d1f] text-gray-200 pt-12 pb-0 mt-12 border-t border-gray-800">
+      <div className="max-w-7xl mx-auto px-4">
+        {/* Top multi-column links */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-10">
+          <div>
+            <h4 className="font-bold mb-3 text-white">Certifications by Skill</h4>
+            <ul className="space-y-1 text-sm">
+              <li><a href="#" className="hover:underline">Cybersecurity Certification</a></li>
+              <li><a href="#" className="hover:underline">Project Management Certification</a></li>
+              <li><a href="#" className="hover:underline">Cloud Certification</a></li>
+              <li><a href="#" className="hover:underline">Data Analytics Certification</a></li>
+              <li><a href="#" className="hover:underline">HR Management Certification</a></li>
+              <li><a href="#" className="hover:underline">See all Certifications</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4 className="font-bold mb-3 text-white">Data Science</h4>
+            <ul className="space-y-1 text-sm">
+              <li><a href="#" className="hover:underline">Data Science</a></li>
+              <li><a href="#" className="hover:underline">Python</a></li>
+              <li><a href="#" className="hover:underline">Machine Learning</a></li>
+              <li><a href="#" className="hover:underline">ChatGPT</a></li>
+              <li><a href="#" className="hover:underline">Deep Learning</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4 className="font-bold mb-3 text-white">Communication</h4>
+            <ul className="space-y-1 text-sm">
+              <li><a href="#" className="hover:underline">Communication Skills</a></li>
+              <li><a href="#" className="hover:underline">Presentation Skills</a></li>
+              <li><a href="#" className="hover:underline">Public Speaking</a></li>
+              <li><a href="#" className="hover:underline">Writing</a></li>
+              <li><a href="#" className="hover:underline">PowerPoint</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4 className="font-bold mb-3 text-white">Business Analytics & Intelligence</h4>
+            <ul className="space-y-1 text-sm">
+              <li><a href="#" className="hover:underline">Microsoft Excel</a></li>
+              <li><a href="#" className="hover:underline">SQL</a></li>
+              <li><a href="#" className="hover:underline">Microsoft Power BI</a></li>
+              <li><a href="#" className="hover:underline">Data Analysis</a></li>
+              <li><a href="#" className="hover:underline">Business Analysis</a></li>
+            </ul>
           </div>
         </div>
 
-        {/* Company */}
-        <div>
-          <h4 className="font-bold text-lg mb-3">Company</h4>
-          <ul className="space-y-2 text-sm text-gray-700">
-            <li><Link to="/about" className="hover:text-blue-600">About us</Link></li>
-            <li><Link to="/contact" className="hover:text-blue-600">Contact us</Link></li>
-            <li><Link to="/blog" className="hover:text-blue-600">News and Blogs</Link></li>
-            <li><Link to="/library" className="hover:text-blue-600">Library</Link></li>
-            <li><Link to="/careers" className="hover:text-blue-600">Career</Link></li>
-          </ul>
-        </div>
-
-        {/* Community */}
-        <div>
-          <h4 className="font-bold text-lg mb-3">Community</h4>
-          <ul className="space-y-2 text-sm text-gray-700">
-            <li><Link to="/docs" className="hover:text-blue-600">Documentation</Link></li>
-            <li><Link to="/faq" className="hover:text-blue-600">FAQ</Link></li>
-            <li><Link to="/forum" className="hover:text-blue-600">Forum</Link></li>
-            <li><Link to="/sitemap" className="hover:text-blue-600">Sitemap</Link></li>
-          </ul>
-        </div>
-
-        {/* Teaching */}
-        <div>
-          <h4 className="font-bold text-lg mb-3">Teaching</h4>
-          <ul className="space-y-2 text-sm text-gray-700">
-            <li><Link to="/instructor-home" className="hover:text-blue-600">Become a Instructor</Link></li>
-            <li><Link to="/teaching-guide" className="hover:text-blue-600">How to guide</Link></li>
-            <li><Link to="/legal/terms" className="hover:text-blue-600">Terms & Conditions</Link></li>
-          </ul>
-        </div>
-
-        {/* Contact */}
-        <div>
-          <h4 className="font-bold text-lg mb-3">Contact</h4>
-          <p className="text-sm text-gray-700">Toll free: <strong>+91 9878798797</strong></p>
-          <p className="text-xs text-gray-500 mb-2">(9AM to 8PM IST)</p>
-          <p className="text-sm text-gray-700">Email: <strong>admin@urbancode.in</strong></p>
-          <div className="flex gap-3 mt-3">
-            <img src={googlePlayImg} alt="Google Play" className="w-28 shadow-md rounded-md" />
-            <img src={appStoreImg} alt="App Store" className="w-28 shadow-md rounded-md" />
+        {/* Bottom grouped links */}
+        <div className="border-t border-gray-700 pt-8 pb-4 grid grid-cols-2 md:grid-cols-4 gap-8 text-sm">
+          <div>
+            <h4 className="font-bold mb-2 text-white">About</h4>
+            <ul className="space-y-1">
+                <li><a href="#" className="hover:text-purple-400">About us</a></li>
+                <li><a href="#" className="hover:text-purple-400">Careers</a></li>
+                <li><a href="#" className="hover:text-purple-400">Contact us</a></li>
+                <li><a href="#" className="hover:text-purple-400">Blog</a></li>
+                <li><a href="#" className="hover:text-purple-400">Investors</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4 className="font-bold mb-2 text-white">Discover Kattraan</h4>
+            <ul className="space-y-1">
+                <li><a href="#" className="hover:text-purple-400">Get the app</a></li>
+                <li><a href="#" className="hover:text-purple-400">Teach on Kattraan</a></li>
+                <li><a href="#" className="hover:text-purple-400">Plans and Pricing</a></li>
+                <li><a href="#" className="hover:text-purple-400">Affiliate</a></li>
+                <li><a href="#" className="hover:text-purple-400">Help and Support</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4 className="font-bold mb-2 text-white">Kattraan for Business</h4>
+            <ul className="space-y-1">
+                <li><a href="#" className="hover:text-purple-400">Kattraan Business</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4 className="font-bold mb-2 text-white">Legal & Accessibility</h4>
+            <ul className="space-y-1">
+                <li><a href="#" className="hover:text-purple-400">Accessibility statement</a></li>
+                <li><a href="#" className="hover:text-purple-400">Privacy policy</a></li>
+                <li><a href="#" className="hover:text-purple-400">Sitemap</a></li>
+                <li><a href="#" className="hover:text-purple-400">Terms</a></li>
+            </ul>
           </div>
         </div>
-      </div>
 
-      {/* Bottom Row */}
-      <div className="flex flex-col sm:flex-row justify-between items-center py-6 text-sm text-gray-500 gap-3">
-        <p>&copy; 2025 Kattraan. URBAN CODE TRAINING AND SOLUTIONS.</p>
-        <div className="flex items-center gap-4 flex-wrap">
-          <span className="flex items-center gap-1">🌐 Language</span>
-          <Link to="/legal/terms" className="hover:text-blue-600">Terms of Use</Link>
-          <Link to="/legal/privacy" className="hover:text-blue-600">Privacy Policy</Link>
-          <Link to="/legal/disclaimer" className="hover:text-blue-600">Disclaimer</Link>
+        {/* Bottom bar */}
+        <div className="border-t border-gray-700 mt-6 py-4 flex flex-col md:flex-row justify-between items-center text-xs text-gray-400">
+            <div className="flex items-center mb-2 md:mb-0">
+              <span className="font-bold text-lg text-gray-200">Kattraan</span>
+              <span className="ml-2">© {new Date().getFullYear()} Kattraan, Inc.</span>
+          </div>
+          <div className="flex items-center space-x-2 mt-2 md:mt-0">
+            <span>Cookie settings</span>
+            <span className="hidden md:inline-block">|</span>
+            <span className="flex items-center"><svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6l4 2" /></svg>English</span>
+          </div>
         </div>
       </div>
     </footer>

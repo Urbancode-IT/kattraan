@@ -1,7 +1,6 @@
 import { Skeleton } from "@/components/ui/skeleton";
 import { initialSignInFormData, initialSignUpFormData } from "@/config";
 import {
-  checkAuthService,
   loginService,
   registerService,
   becomeInstructorService,
@@ -153,20 +152,10 @@ export default function AuthProvider({ children }) {
     }
   };
 
-  // ✅ Auth Check on Load
+
+  // ✅ Auth Check on Load (no backend endpoint, so just set loading to false)
   const checkAuthUser = async () => {
-    try {
-      const data = await checkAuthService();
-      if (data.success) {
-        setAuth({ authenticate: true, user: data.data.user });
-      } else {
-        setAuth({ authenticate: false, user: null });
-      }
-    } catch {
-      setAuth({ authenticate: false, user: null });
-    } finally {
-      setLoading(false);
-    }
+    setLoading(false);
   };
 
   const resetCredentials = () => {

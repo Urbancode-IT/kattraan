@@ -24,7 +24,7 @@ function CourseCategories() {
   };
 
   return (
-    <section className="py-20 px-4 sm:px-6 lg:px-20 bg-[#f6f8fa] text-center">
+  <section className="py-20 px-4 sm:px-6 lg:px-20 bg-gradient-to-br from-white to-purple-50 text-center">
       <div className="max-w-4xl mx-auto">
         <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-gray-900 mb-3">
           🚀 Most Popular Courses
@@ -35,7 +35,7 @@ function CourseCategories() {
         </p>
       </div>
 
-      <div className="bg-gradient-to-br from-white via-white to-blue-50 px-6 py-8 rounded-2xl shadow-lg border border-gray-200 max-w-5xl mx-auto">
+  <div className="bg-white px-6 py-8 rounded-2xl shadow-lg border border-gray-200 max-w-5xl mx-auto">
         <div className="flex flex-wrap justify-center gap-3 sm:gap-4">
           {courseCategories.map((category) => (
             <button
@@ -44,8 +44,8 @@ function CourseCategories() {
               className={`flex items-center px-5 py-3 rounded-full font-semibold text-base sm:text-lg transition-all duration-300 ease-in-out
             ${
               activeCategory === category.id
-                ? "bg-blue-600 text-white shadow-lg"
-                : "bg-blue-50 text-blue-700 hover:bg-blue-100"
+                ? "bg-purple-600 text-white shadow-lg"
+                : "bg-purple-50 text-purple-700 hover:bg-purple-100"
             }`}
             >
               {iconMap[category.icon] || null}

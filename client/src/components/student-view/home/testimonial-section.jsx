@@ -38,12 +38,12 @@ const mentors = [
 
 const TestimonialSection = () => {
   return (
-    <section className="relative bg-[#f3f7fb] py-32 px-6 sm:px-10 lg:px-24 overflow-hidden">
+  <section className="relative bg-gradient-to-br from-white to-purple-50 py-32 px-6 sm:px-10 lg:px-24 overflow-hidden">
       {/* Background Circle */}
-      <div className="absolute w-[200px] h-[200px] bg-pink-200 rounded-full top-10 left-10 opacity-30 z-0"></div>
+  <div className="absolute w-[200px] h-[200px] bg-purple-200 rounded-full top-10 left-10 opacity-20 z-0"></div>
 
       {/* Dot Pattern */}
-      <div className="absolute bottom-14 left-[250px] z-0 opacity-50">
+  <div className="absolute bottom-14 left-[250px] z-0 opacity-40">
         <svg width="150" height="80" fill="none" viewBox="0 0 120 60">
           {[...Array(10)].map((_, i) =>
             [...Array(6)].map((_, j) => (
@@ -87,13 +87,13 @@ const TestimonialSection = () => {
           </div>
 
           {/* Rating Summary Box */}
-          <div className="bg-[#064bde] text-white p-4 rounded-xl w-60 shadow-lg absolute -bottom-20 left-0">
+          <div className="bg-purple-600 text-white p-4 rounded-xl w-60 shadow-lg absolute -bottom-20 left-0">
             <p className="text-lg font-bold mb-1">4.5/5.0</p>
             <div className="flex gap-1 mb-1">
               {[...Array(5)].map((_, i) => (
                 <Star
                   key={i}
-                  className="w-4 h-4 text-yellow-400 fill-yellow-400"
+                  className="w-4 h-4 text-yellow-300 fill-yellow-300"
                 />
               ))}
             </div>
@@ -162,7 +162,7 @@ const TestimonialSection = () => {
               We’re proud to share the stories of learners who have experienced
               transformation with Kattraan. Real people. Real growth.
             </p>
-            <button className="bg-blue-600 hover:bg-blue-700 transition text-white px-6 py-2 rounded-md font-medium">
+            <button className="bg-purple-600 hover:bg-purple-700 transition text-white px-6 py-2 rounded-md font-medium">
               View Reviews
             </button>
           </div>

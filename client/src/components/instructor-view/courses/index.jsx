@@ -34,78 +34,81 @@ function InstructorCourses({ listOfCourses }) {
   };
 
   return (
-    <div className="p-6">
-      <div className="flex justify-between items-center mb-4">
-      <h2 className="text-3xl font-bold text-left text-[#0d2b45] p-3">My Courses<span className="ml-auto"></span></h2>
-      <button className="bg-sky-900 text-white p-2 rounded-lg" onClick={() => navigate(`/instructor/create-new-course`)}>+ Add new Course</button></div>
-      <Card>
-        <CardHeader className="flex justify-between items-center">
-          
-          
-        </CardHeader>
-        <CardContent className="space-y-6">
+    <div className="w-full px-0 md:px-6">
+      <div className="flex justify-between items-center mb-6">
+        <h2 className="text-3xl font-bold text-purple-700 pl-2">My Courses</h2>
+        <button
+          className="bg-purple-600 hover:bg-purple-700 text-white px-5 py-2 rounded-full font-semibold shadow transition flex items-center gap-2"
+          onClick={() => navigate(`/instructor/create-new-course`)}
+        >
+          <Plus className="w-5 h-5" /> Add new Course
+        </button>
+      </div>
+      <Card className="rounded-2xl shadow-lg border border-gray-100 bg-white w-full">
+        <CardHeader className="px-8 py-6">
           <div className="flex justify-between items-center">
             <Input
               placeholder="Search Courses"
-              className="w-1/3"
+              className="w-1/3 rounded-lg"
               onChange={(e) => setSearchTerm(e.target.value)}
             />
             <Select>
-              <SelectTrigger className="w-40">
+              <SelectTrigger className="w-40 rounded-lg">
                 <SelectValue placeholder="Sort by" />
               </SelectTrigger>
             </Select>
           </div>
-
+        </CardHeader>
+        <CardContent className="space-y-6 px-8 pb-10">
           <div className="overflow-x-auto">
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead className="bg-sky-900 text-white hover:none text-lg">Course Title</TableHead>
-                  <TableHead  className="bg-sky-900 text-white text-lg">Enrolled</TableHead>
-                  <TableHead  className="bg-sky-900 text-white text-lg">Revenue</TableHead>
-                  <TableHead  className="bg-sky-900 text-white text-lg">Status</TableHead>
-                  <TableHead  className="bg-sky-900 text-white text-lg text-right">Actions</TableHead>
+                  <TableHead className="bg-purple-600 text-white text-lg font-semibold">Course Title</TableHead>
+                  <TableHead className="bg-purple-600 text-white text-lg font-semibold">Enrolled</TableHead>
+                  <TableHead className="bg-purple-600 text-white text-lg font-semibold">Revenue</TableHead>
+                  <TableHead className="bg-purple-600 text-white text-lg font-semibold">Status</TableHead>
+                  <TableHead className="bg-purple-600 text-white text-lg font-semibold text-right">Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {filteredCourses.length > 0 ? (
                   filteredCourses.map(course => (
-                    <TableRow key={course._id} className=" text-lg hover:bg-muted transition-all">
-                      <TableCell className="font-semibold text-gray-600 text-lg"> 
+                    <TableRow key={course._id} className="text-lg hover:bg-purple-50 transition-all">
+                      <TableCell className="font-semibold text-gray-700 text-lg"> 
                         {course.title}
                       </TableCell>
-                      <TableCell >
-                         {course.students?.length || 0}
-                       
+                      <TableCell>
+                        {course.students?.length || 0}
                       </TableCell>
                       <TableCell>
-                          ₹{(course.students?.length || 0) * course.pricing}
+                        ₹{(course.students?.length || 0) * course.pricing}
                       </TableCell>
                       <TableCell>
-                        <Badge variant="success">
-                          Live
-                        </Badge>
+                        <Badge variant="success" className="bg-green-100 text-green-700 px-3 py-1 rounded-full font-semibold">Live</Badge>
                       </TableCell>
                       <TableCell className="text-right">
                         <Button
                           onClick={() => navigate(`/instructor/edit-course/${course._id}`)}
                           variant="outline"
                           size="sm"
+                          className="rounded-full border-gray-300 hover:border-purple-400"
                         >
-                          <FaEdit className="h-4 w-4 mr-1 text-gray-600 hover:text-gray-900" />
-                          
+                          <FaEdit className="h-4 w-4 mr-1 text-gray-600 hover:text-purple-700" />
                         </Button>
-                        <Button variant="outline" size="sm">
-                          <FaTrash className="h-4 w-4 mr-1 text-red-900 hover:text-red-600" />
-                          
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="rounded-full border-gray-300 hover:border-red-400 ml-2"
+                        >
+                          <FaTrash className="h-4 w-4 mr-1 text-red-700 hover:text-red-900" />
                         </Button>
                       </TableCell>
                     </TableRow>
                   ))
                 ) : (
                   <TableRow>
-                    <TableCell colSpan="4" className="text-center py-6 text-muted">
+                    <TableCell colSpan="5" className="text-center py-8 text-gray-400 text-lg">
                       No courses available. Start by creating one!
                     </TableCell>
                   </TableRow>
