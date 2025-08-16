@@ -75,9 +75,8 @@ const getAllStudentViewCourses = async (req, res) => {
 
 const getStudentViewCourseDetails = async (req, res) => {
   try {
-    const { id } = req.params;
-    const courseDetails = await Course.findById(id);
-
+    const { courseId } = req.params;
+    const courseDetails = await Course.findById(courseId);
     if (!courseDetails) {
       return res.status(404).json({
         success: false,
@@ -85,7 +84,6 @@ const getStudentViewCourseDetails = async (req, res) => {
         data: null,
       });
     }
-
     res.status(200).json({
       success: true,
       data: courseDetails,
@@ -101,21 +99,18 @@ const getStudentViewCourseDetails = async (req, res) => {
 
 const checkCoursePurchaseInfo = async (req, res) => {
   try {
-    const { id, studentId } = req.params;
-
-    const studentCourses = await StudentCourses.findOne({ userId: studentId });
-
+    const { courseId } = req.params;
+    const userId = req.user._id;
+    const studentCourses = await StudentCourses.findOne({ userId });
     if (!studentCourses) {
       return res.status(200).json({
         success: true,
         data: false, // Student hasn't purchased any courses
       });
     }
-
     const ifStudentAlreadyBoughtCurrentCourse = studentCourses.courses.some(
-      (item) => item.courseId === id
+      (item) => item.courseId.toString() === courseId
     );
-
     res.status(200).json({
       success: true,
       data: ifStudentAlreadyBoughtCurrentCourse,

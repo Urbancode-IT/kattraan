@@ -14,27 +14,43 @@ const authenticate = require("../../middleware/auth-middleware");
 const checkRole = require("../../middleware/role-middleware");
 const router = express.Router();
 
-router.get("/get", getAllStudentViewCourses);
-router.get("/get/details/:id", getStudentViewCourseDetails);
-router.get("/purchase-info/:id/:studentId", checkCoursePurchaseInfo);
-router.get("/featured", getFeaturedCourses);
+// RESTful: List all courses (with filters as query params)
+router.get("/courses", getAllStudentViewCourses);
+
+// RESTful: Get course details
+router.get("/courses/:courseId", getStudentViewCourseDetails);
+
+// RESTful: Get featured courses
+router.get("/courses/featured", getFeaturedCourses);
+
+// RESTful: Check if current user purchased course (use /me)
+router.get(
+  "/courses/:courseId/purchase-info",
+  authenticate,
+  checkRole(["learner"]),
+  checkCoursePurchaseInfo
+);
 
 // Course reviews
 
-// Anyone can view reviews
-router.get("/:courseId/reviews", getCourseReviews);
-
-// Only authenticated users with 'student' role can add/edit/delete reviews
-router.post("/:courseId/reviews", authenticate,checkRole(["learner"]), addCourseReview
+// RESTful: Reviews as nested resource under courses
+router.get("/courses/:courseId/reviews", getCourseReviews);
+router.post(
+  "/courses/:courseId/reviews",
+  authenticate,
+  checkRole(["learner"]),
+  addCourseReview
 );
+
 router.put(
-  "/:courseId/reviews/:reviewId",
+  "/courses/:courseId/reviews/:reviewId",
   authenticate,
   checkRole(["learner"]),
   editCourseReview
 );
+
 router.delete(
-  "/:courseId/reviews/:reviewId",
+  "/courses/:courseId/reviews/:reviewId",
   authenticate,
   checkRole(["learner"]),
   deleteCourseReview
